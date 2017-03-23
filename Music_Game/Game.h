@@ -6,6 +6,7 @@
 #include "SimpleShader.h"
 #include <DirectXMath.h>
 #include "SceneManager.h"
+#include "SceneBuilder.h"
 #include "Renderer.h"
 #include "Camera.h"
 
@@ -42,8 +43,11 @@ private:
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 
-	Scene* entities;
+	Scene* menueScene;
+	Scene* gameScene;
+	Scene* endScene;
 
+	SceneBuilder SceneBuild;
 	SceneManager SceneManag;
 	Renderer Render;
 	Camera Cam;

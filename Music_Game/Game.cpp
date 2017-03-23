@@ -26,6 +26,8 @@ Game::Game(HINSTANCE hInstance)
 	vertexShader = 0;
 	pixelShader = 0;
 
+	SceneBuilder SceneBuild();
+
 	SceneManager SceneManag();
 	Renderer Render();
 	Camera Cam(width, height);
@@ -67,10 +69,12 @@ void Game::Init()
 
 	Render.SetShaders(vertexShader, pixelShader);
 
-	SceneManag.Init(device, context);
+	SceneBuild.Init(device, context);
+	SceneManag.AddScene(SceneBuild.GetScene());
 
-	entities = SceneManag.GetScene(); //Get the list of entities in our scene
-	Render.SetScene(entities);
+	//Tell the game which scene it should be rendering, uses 1 based indexing
+	gameScene = SceneManag.GetScene(1); //Get the list of entities in our scene
+	Render.SetScene(gameScene);
 
 	Render.Init(&Cam, context, backBufferRTV, swapChain, depthStencilView);
 
