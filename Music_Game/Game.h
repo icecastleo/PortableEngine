@@ -9,6 +9,7 @@
 #include "SceneBuilder.h"
 #include "Renderer.h"
 #include "Camera.h"
+#include "Player.h"
 
 class Game 
 	: public DXCore
@@ -51,5 +52,6 @@ private:
 	SceneManager SceneManag;
 	Renderer Render;
 	Camera Cam;
+	Player player;
 };
 

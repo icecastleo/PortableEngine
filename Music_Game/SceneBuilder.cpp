@@ -105,6 +105,9 @@ void SceneBuilder::CreateEntities()
 
 	ent2 = new Entity(mesh2, mat2, XMFLOAT3(+8.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 	scene1->entities.push_back(ent2);
+
+	playerEnt = new Entity(mesh2, mat, XMFLOAT3(0.0f, -4.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	scene1->entities.push_back(playerEnt);
 }
 
 //---------------------------------------------------------
@@ -113,4 +116,9 @@ void SceneBuilder::CreateEntities()
 Scene* SceneBuilder::GetScene()
 {
 	return scene1;
+}
+
+Entity* SceneBuilder::GetPlayerEntity()
+{
+	return playerEnt;
 }

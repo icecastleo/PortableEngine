@@ -78,6 +78,8 @@ void Game::Init()
 
 	Render.Init(&Cam, context, backBufferRTV, swapChain, depthStencilView);
 
+	player = Player(SceneBuild.GetPlayerEntity());
+
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
 	// Essentially: "What kind of shape should the GPU draw with our data?"
@@ -124,6 +126,8 @@ void Game::Update(float deltaTime, float totalTime)
 		Quit();
 
 	Cam.Update(prevMousePos, deltaTime);
+
+	player.Update(deltaTime);
 }
 
 // --------------------------------------------------------

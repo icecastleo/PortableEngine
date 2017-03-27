@@ -21,6 +21,7 @@ public:
 	void Init(ID3D11Device*, ID3D11DeviceContext*);
 	void NewScene();
 	Scene* GetScene();
+	Entity* GetPlayerEntity();
 
 private:
 	void CreateMeshes();
@@ -41,6 +42,7 @@ private:
 
 	Entity* ent1;
 	Entity* ent2;
+	Entity* playerEnt;
 
 	GlobalLight* ambient;
 
