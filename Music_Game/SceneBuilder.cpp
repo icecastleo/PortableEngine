@@ -81,7 +81,15 @@ void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 //Sets up new scenes
 //may or may not be used later for better structering
 //---------------------------------------------------------
-void SceneBuilder::NewScene() {}
+void SceneBuilder::NewScene(int sceneNum) 
+{
+	//will be for scene 1
+	
+	//Scene 2
+	
+	
+	//Scene 3
+}
 
 //---------------------------------------------------------
 //Create Meshes based on an imported model
