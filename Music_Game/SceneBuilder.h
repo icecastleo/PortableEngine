@@ -19,7 +19,7 @@ public:
 	~SceneBuilder();
 
 	void Init(ID3D11Device*, ID3D11DeviceContext*);
-	void NewScene();
+	void NewScene(int);
 	Scene* GetScene();
 
 private:
