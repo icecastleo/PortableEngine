@@ -70,7 +70,9 @@ void Game::Init()
 	Render.SetShaders(vertexShader, pixelShader);
 
 	SceneBuild.Init(device, context);
-	SceneManag.AddScene(SceneBuild.GetScene());
+	SceneManag.AddScene(SceneBuild.GetScene(1));
+	SceneManag.AddScene(SceneBuild.GetScene(2));
+	SceneManag.AddScene(SceneBuild.GetScene(3));
 
 	//Tell the game which scene it should be rendering, uses 1 based indexing
 	gameScene = SceneManag.GetScene(1); //Get the list of entities in our scene

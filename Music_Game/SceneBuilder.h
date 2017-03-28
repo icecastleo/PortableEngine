@@ -20,11 +20,11 @@ public:
 
 	void Init(ID3D11Device*, ID3D11DeviceContext*);
 	void NewScene(int);
-	Scene* GetScene();
+	Scene* GetScene(int);
 
 private:
 	void CreateMeshes();
-	void CreateEntities();
+	void CreateEntities(Scene*);
 
 	Scene* scene1;
 	Scene* scene2;
@@ -35,17 +35,22 @@ private:
 
 	Mesh* mesh1;
 	Mesh* mesh2;
+	Mesh* mesh3;
 
 	Material* mat;
 	Material* mat2;
+	Material* mat3;
 
 	Entity* ent1;
 	Entity* ent2;
+	Entity* ent3;
 
 	GlobalLight* ambient;
 
 	DirectionalLight* light;
 	DirectionalLight* light2;
+	DirectionalLight* light5;
+	DirectionalLight* light6;
 
 	PointLight* light3;
 
