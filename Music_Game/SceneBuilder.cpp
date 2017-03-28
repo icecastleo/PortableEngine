@@ -144,7 +144,19 @@ void SceneBuilder::CreateMeshes()
 //---------------------------------------------------------
 void SceneBuilder::CreateEntities(Scene* s)
 {
+<<<<<<< HEAD
 	
+=======
+	ent1 = new Entity(mesh1, mat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	scene1->entities.push_back(ent1);
+	//scene.push_back(new Entity(mesh3, mat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f)) );
+
+	ent2 = new Entity(mesh2, mat2, XMFLOAT3(+8.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	scene1->entities.push_back(ent2);
+
+	playerEnt = new Entity(mesh2, mat, XMFLOAT3(0.0f, -4.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	scene1->entities.push_back(playerEnt);
+>>>>>>> 68dcfaf344dd0fb7bc16b5c2ae6d1c2165c30622
 }
 
 //---------------------------------------------------------
@@ -152,8 +164,17 @@ void SceneBuilder::CreateEntities(Scene* s)
 //---------------------------------------------------------
 Scene* SceneBuilder::GetScene(int num)
 {
+<<<<<<< HEAD
 	if (num == 1) { return scene1; }
 	else if (num == 2) { return scene2; }
 	else if (num == 3) { return scene3; }
 	else { return nullptr; }
+=======
+	return scene1;
+}
+
+Entity* SceneBuilder::GetPlayerEntity()
+{
+	return playerEnt;
+>>>>>>> 68dcfaf344dd0fb7bc16b5c2ae6d1c2165c30622
 }

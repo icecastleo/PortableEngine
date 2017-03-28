@@ -25,15 +25,15 @@ Entity::Entity(Mesh* _mesh, Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _rot, XMFLOA
 	XMStoreFloat4x4(&worldMat, XMMatrixIdentity());
 	mesh = _mesh;
 	mat = _mat;
-	pos = _pos;
-	rot = _rot;
-	scale = _scale;
+	transform.position = _pos;
+	transform.rotation = _rot;
+	transform.scale = _scale;
 
 	SetWorldMat();
 
-	posOrig = pos;
-	rotOrig = rot;
-	scaleOrig = scale;
+	posOrig = transform.position;
+	rotOrig = transform.rotation;
+	scaleOrig = transform.scale;
 }
 
 // --------------------------------------------------------
@@ -51,10 +51,10 @@ void Entity::Update()
 // --------------------------------------------------------
 void Entity::SetWorldMat()
 {
-	XMMATRIX _scale = XMMatrixScaling(scale.x, scale.y, scale.z);
-	XMVECTOR _rotT = XMLoadFloat3(&rot);
+	XMMATRIX _scale = XMMatrixScaling(transform.scale.x, transform.scale.y, transform.scale.z);
+	XMVECTOR _rotT = XMLoadFloat3(&(transform.rotation));
 	XMMATRIX _rot = XMMatrixRotationRollPitchYawFromVector(_rotT);
-	XMMATRIX _trans = XMMatrixTranslation(pos.x, pos.y, pos.z);
+	XMMATRIX _trans = XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z);
 
 	XMMATRIX world = _scale * _rot * _trans;
 	XMStoreFloat4x4(&worldMat, XMMatrixTranspose(world));
@@ -64,19 +64,19 @@ void Entity::SetWorldMat()
 //Set the position of the entity
 // --------------------------------------------------------
 void Entity::SetPosition(XMFLOAT3 newPos)
-{ pos = newPos; }
+{ transform.position = newPos; }
 
 // --------------------------------------------------------
 //Set the rotation of the entity
 // --------------------------------------------------------
 void Entity::SetRotation(XMFLOAT3 newRot)
-{ rot = newRot; }
+{ transform.rotation = newRot; }
 
 // --------------------------------------------------------
 //Set the scale of the entity
 // --------------------------------------------------------
 void Entity::SetScale(XMFLOAT3 newScale)
-{ scale = newScale; }
+{ transform.scale = newScale; }
 
 // --------------------------------------------------------
 //Return the entities world matrix
@@ -88,19 +88,19 @@ XMFLOAT4X4 Entity::GetWorldMat()
 //Return the entities position
 // --------------------------------------------------------
 XMFLOAT3 Entity::GetPosition()
-{ return pos; }
+{ return transform.position; }
 
 // --------------------------------------------------------
 //Return the entities rotation
 // --------------------------------------------------------
 XMFLOAT3 Entity::GetRotation()
-{ return rot; }
+{ return transform.rotation; }
 
 // --------------------------------------------------------
 //Return the entities scale
 // --------------------------------------------------------
 XMFLOAT3 Entity::GetScale()
-{ return scale; }
+{ return transform.scale; }
 
 // --------------------------------------------------------
 //Return the entities mesh
@@ -119,8 +119,8 @@ Material* Entity::GetMat()
 // --------------------------------------------------------
 void Entity::Reset()
 {
-	pos = posOrig;
-	rot = rotOrig;
-	scale = scaleOrig;
+	transform.position = posOrig;
+	transform.rotation = rotOrig;
+	transform.scale = scaleOrig;
 	Update();
 }
