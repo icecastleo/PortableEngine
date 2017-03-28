@@ -62,6 +62,9 @@ Game::~Game()
 // --------------------------------------------------------
 void Game::Init()
 {
+	//Start with scene 1
+	SceneNumber = 1;
+
 	Cam.SetWidthHeight(width, height);
 	Cam.Init();
 
@@ -75,8 +78,7 @@ void Game::Init()
 	SceneManag.AddScene(SceneBuild.GetScene(3));
 
 	//Tell the game which scene it should be rendering, uses 1 based indexing
-	gameScene = SceneManag.GetScene(1); //Get the list of entities in our scene
-	Render.SetScene(gameScene);
+	Render.SetScene(SceneManag.GetScene(SceneNumber));
 
 	Render.Init(&Cam, context, backBufferRTV, swapChain, depthStencilView);
 
@@ -126,6 +128,13 @@ void Game::Update(float deltaTime, float totalTime)
 	// Quit if the escape key is pressed
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
+
+	//If in scene 1 go to scene 2
+	if (GetAsyncKeyState(VK_RETURN) && SceneNumber == 1)
+	{
+		SceneNumber = 2;
+		Render.SetScene(SceneManag.GetScene(SceneNumber));
+	}
 
 	Cam.Update(prevMousePos, deltaTime);
 

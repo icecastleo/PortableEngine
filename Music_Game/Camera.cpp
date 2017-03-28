@@ -11,7 +11,7 @@ Camera::Camera()
 {
 	width = 0;
 	height = 0;
-	mouseDown = false;
+	//mouseDown = false;
 }
 
 //---------------------------------------------------------
@@ -21,7 +21,7 @@ Camera::Camera(unsigned int _width, unsigned int _height)
 {
 	width = _width;
 	height = _height;
-	mouseDown = false;
+	//mouseDown = false;
 }
 
 //---------------------------------------------------------
@@ -44,8 +44,8 @@ void Camera::Init()
 	rotationX = 0.0f;
 	rotationY = 100.0f;
 	CreateMatrices(position, direction);
-	lastMouse.x = 0;
-	lastMouse.y = 0;
+	//lastMouse.x = 0;
+	//lastMouse.y = 0;
 }
 
 //---------------------------------------------------------
@@ -92,6 +92,7 @@ void Camera::MouseDown(bool down)
 //---------------------------------------------------------
 void Camera::Update(POINT mouse, float deltaTime)
 {
+	/*
 	XMFLOAT3 temp;
 	XMVECTOR pos = XMLoadFloat4(&position);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
@@ -175,6 +176,7 @@ void Camera::Update(POINT mouse, float deltaTime)
 	}
 
 	XMStoreFloat4(&position, pos);	
+	*/
 }
 
 //---------------------------------------------------------

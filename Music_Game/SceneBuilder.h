@@ -19,17 +19,19 @@ public:
 	~SceneBuilder();
 
 	void Init(ID3D11Device*, ID3D11DeviceContext*);
-	void NewScene(int);
-<<<<<<< HEAD
+	void BuildMaterials();
+	void BuildLights();
+	void BuildMeshes();
+	void BuildEntities();
+
+
+	Entity* CreateEntity(Mesh*, Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
-=======
-	Scene* GetScene();
 	Entity* GetPlayerEntity();
->>>>>>> 68dcfaf344dd0fb7bc16b5c2ae6d1c2165c30622
+
 
 private:
-	void CreateMeshes();
-	void CreateEntities(Scene*);
+	void SetupScenes();
 
 	Scene* scene1;
 	Scene* scene2;
@@ -38,30 +40,29 @@ private:
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
 
-	Mesh* mesh1;
-	Mesh* mesh2;
-	Mesh* mesh3;
+	Mesh* cubeMesh;
+	Mesh* boxMesh;
+	Mesh* quadMesh;
+	Mesh* playerMesh;
 
-	Material* mat;
-	Material* mat2;
-	Material* mat3;
+	Material* quadMat;
+	Material* boxMat;
+	Material* menuMat;
+	Material* playerMat;
 
 	Entity* ent1;
 	Entity* ent2;
-<<<<<<< HEAD
 	Entity* ent3;
-=======
 	Entity* playerEnt;
->>>>>>> 68dcfaf344dd0fb7bc16b5c2ae6d1c2165c30622
 
 	GlobalLight* ambient;
 
-	DirectionalLight* light;
-	DirectionalLight* light2;
-	DirectionalLight* light5;
-	DirectionalLight* light6;
+	DirectionalLight* dirLight;
+	DirectionalLight* dirLight2;
+	DirectionalLight* dirLight3;
+	DirectionalLight* dirLight4;
 
-	PointLight* light3;
+	PointLight* pointLight;
 
-	SpotLight* light4;
+	SpotLight* spotLight;
 };

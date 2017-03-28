@@ -13,21 +13,32 @@ SceneBuilder::SceneBuilder() {}
 //---------------------------------------------------------
 SceneBuilder::~SceneBuilder()
 {
-	delete mat;
-	delete mat2;
-	delete mat3;
-	delete mesh1;
-	delete mesh2;
+	delete quadMat;
+	delete boxMat;
+	delete menuMat;
+	delete playerMat;
+
+	delete cubeMesh;
+	delete boxMesh;
+	delete quadMesh;
+	delete playerMesh;
+
 	delete ent1;
 	delete ent2;
+	delete ent3;
+	delete playerEnt;
+
 	delete ambient;
-	delete light;
-	delete light2;
-	delete light3;
-	delete light4;
-	delete light5;
-	delete light6;
+	delete dirLight;
+	delete dirLight2;
+	delete dirLight3;
+	delete dirLight4;
+	delete pointLight;
+	delete spotLight;
+
 	delete scene1;
+	delete scene2;
+	delete scene3;
 
 }
 
@@ -38,125 +49,146 @@ void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 {
 	device = _device;
 	context = _context;
-	NewScene(0);
+	BuildMaterials();
+	BuildLights();
+	BuildMeshes();
+	BuildEntities();
+	SetupScenes();
 }
 
 //---------------------------------------------------------
-//Sets up new scenes
-//may or may not be used later for better structering
+//Build Materials Here
 //---------------------------------------------------------
-void SceneBuilder::NewScene(int sceneNum) 
+void SceneBuilder::BuildMaterials()
+{
+	const wchar_t* path = L"Assets/textures/quad.png";
+	quadMat = new Material(device, context, path);
+
+	path = L"Assets/textures/box.png";
+	boxMat = new Material(device, context, path);
+
+	path = L"Assets/textures/menu.png";
+	menuMat = new Material(device, context, path);
+
+	path = L"Assets/textures/player.png";
+	playerMat = new Material(device, context, path);
+}
+
+//---------------------------------------------------------
+//Setup lights
+//---------------------------------------------------------
+void SceneBuilder::BuildLights()
+{
+	//global ambient light
+	ambient = new GlobalLight();
+	ambient->AmbientColor = XMFLOAT4(0.2f, 0.2f, 0.2f, 1);
+
+	//Directional Lights
+	//-----------------------------------------------------------
+	dirLight = new DirectionalLight();
+	dirLight->DiffuseColor = XMFLOAT4(0, 0, 1, 1);
+	dirLight->Direction = XMFLOAT3(1, -1, 0);
+
+	dirLight2 = new DirectionalLight();
+	dirLight2->DiffuseColor = XMFLOAT4(1, 0, 0, 1);
+	dirLight2->Direction = XMFLOAT3(1, 1, 0);
+
+	dirLight3 = new DirectionalLight();
+	dirLight3->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
+	dirLight3->Direction = XMFLOAT3(0, 0, 1);
+
+	dirLight4 = new DirectionalLight();
+	dirLight4->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
+	dirLight4->Direction = XMFLOAT3(0, 0, -1);
+
+	//Point Lights
+	//-----------------------------------------------------------
+	pointLight = new PointLight();
+	pointLight->DiffuseColor = XMFLOAT4(1, 1, 0, 1);
+	pointLight->Position = XMFLOAT3(2, 2, -6);
+
+	//Spot Lights
+	//-----------------------------------------------------------
+	spotLight = new SpotLight();
+	spotLight->DiffuseColor = XMFLOAT4(0.85f, 0.85f, 0.85f, 1);
+	spotLight->Direction = XMFLOAT3(0, 0, 1);
+	spotLight->phi = 0.0f;
+	spotLight->Position = XMFLOAT3(0, 0, 0);
+	spotLight->theta = 90.0f;
+}
+
+//---------------------------------------------------------
+//Build Meshes Here
+//---------------------------------------------------------
+void SceneBuilder::BuildMeshes()
+{
+	cubeMesh = new Mesh("cube", device);
+
+	boxMesh = new Mesh("box", device);
+
+	quadMesh = new Mesh("quad", device);
+
+	playerMesh = new Mesh("box", device);
+}
+
+//---------------------------------------------------------
+//Build Base Entities Here
+//---------------------------------------------------------
+void SceneBuilder::BuildEntities()
+{
+	ent1 = new Entity(cubeMesh, quadMat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+
+	ent2 = new Entity(boxMesh, boxMat, XMFLOAT3(+8.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+
+	ent3 = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+
+	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -4.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+}
+
+//---------------------------------------------------------
+//Setup the 3 built in scenes here
+//---------------------------------------------------------
+void SceneBuilder::SetupScenes()
 {
 	//will be for scene 1
 	scene1 = new Scene();
 	scene1->name = "Menu";
 	scene1->entities = std::vector<Entity*>();
-
-	const wchar_t* path = L"Assets/textures/menu.png";
-	mat3 = new Material(device, context, path);
-
-	light5 = new DirectionalLight();
-	light5->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
-	light5->Direction = XMFLOAT3(0, 0, -1);
-	scene1->directionalLights.push_back(light5);
-
-	mesh3 = new Mesh("quad", device);
-
-	ent3 = new Entity(mesh3, mat3, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	scene1->directionalLights.push_back(dirLight3);
 	scene1->entities.push_back(ent3);
 	
+
 	//Scene 2
 	//------------------------------------------------------------------
 	scene2 = new Scene();
 	scene2->name = "MainGame";
 	scene2->entities = std::vector<Entity*>();
-
-
-	path = L"Assets/textures/quad.png";
-	mat = new Material(device, context, path);
-
-	path = L"Assets/textures/box.png";
-	mat2 = new Material(device, context, path);
-
-	ambient = new GlobalLight();
-	ambient->AmbientColor = XMFLOAT4(0.2f, 0.2f, 0.2f, 1);
 	scene2->globalLights.push_back(ambient);
-
-	light = new DirectionalLight();
-	light->DiffuseColor = XMFLOAT4(0, 0, 1, 1);
-	light->Direction = XMFLOAT3(1, -1, 0);
-	scene2->directionalLights.push_back(light);
-
-	light2 = new DirectionalLight();
-	light2->DiffuseColor = XMFLOAT4(1, 0, 0, 1);
-	light2->Direction = XMFLOAT3(1, 1, 0);
-	scene2->directionalLights.push_back(light2);
-
-	light3 = new PointLight();
-	light3->DiffuseColor = XMFLOAT4(1, 1, 0, 1);
-	light3->Position = XMFLOAT3(2, 2, -6);
-	scene2->pointLights.push_back(light3);
-
-	light4 = new SpotLight();
-	light4->DiffuseColor = XMFLOAT4(0.85f, 0.85f, 0.85f, 1);
-	light4->Direction = XMFLOAT3(0, 0, 1);
-	light4->phi = 0.0f;
-	light4->Position = XMFLOAT3(0, 0, 0);
-	light4->theta = 90.0f;
-	scene2->spotLights.push_back(light4);
-
-	mesh1 = new Mesh("cube", device);
-
-	mesh2 = new Mesh("box", device);
-
-	ent1 = new Entity(mesh1, mat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	scene2->directionalLights.push_back(dirLight);
+	scene2->directionalLights.push_back(dirLight2);
+	scene2->pointLights.push_back(pointLight);
+	scene2->spotLights.push_back(spotLight);
 	scene2->entities.push_back(ent1);
-	//scene.push_back(new Entity(mesh3, mat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f)) );
-
-	ent2 = new Entity(mesh2, mat2, XMFLOAT3(+8.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 	scene2->entities.push_back(ent2);
 
-	//CreateMeshes();
-	//CreateEntities(scene2);
 	
 	//Scene 3
+	//------------------------------------------------------------------
 	scene3 = new Scene();
 	scene3->name = "Menu";
 	scene3->entities = std::vector<Entity*>();
-
-	light6 = new DirectionalLight();
-	light6->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
-	light6->Direction = XMFLOAT3(0, 0, -1);
-	scene3->directionalLights.push_back(light6);
+	scene3->directionalLights.push_back(dirLight4);
 }
 
-//---------------------------------------------------------
-//Create Meshes based on an imported model
-//---------------------------------------------------------
-void SceneBuilder::CreateMeshes()
-{
-	//Load a model from file
-	
-}
 
 //---------------------------------------------------------
 //Create Entities found in the scene
 //---------------------------------------------------------
-void SceneBuilder::CreateEntities(Scene* s)
+Entity* SceneBuilder::CreateEntity(Mesh* mesh, Material* mat, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scale)
 {
-<<<<<<< HEAD
-	
-=======
-	ent1 = new Entity(mesh1, mat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
-	scene1->entities.push_back(ent1);
-	//scene.push_back(new Entity(mesh3, mat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f)) );
+	Entity* ent = new Entity(mesh, mat, pos, rot, scale);
 
-	ent2 = new Entity(mesh2, mat2, XMFLOAT3(+8.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
-	scene1->entities.push_back(ent2);
-
-	playerEnt = new Entity(mesh2, mat, XMFLOAT3(0.0f, -4.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
-	scene1->entities.push_back(playerEnt);
->>>>>>> 68dcfaf344dd0fb7bc16b5c2ae6d1c2165c30622
+	return ent;
 }
 
 //---------------------------------------------------------
@@ -164,17 +196,18 @@ void SceneBuilder::CreateEntities(Scene* s)
 //---------------------------------------------------------
 Scene* SceneBuilder::GetScene(int num)
 {
-<<<<<<< HEAD
 	if (num == 1) { return scene1; }
 	else if (num == 2) { return scene2; }
 	else if (num == 3) { return scene3; }
 	else { return nullptr; }
-=======
+
 	return scene1;
 }
 
+//---------------------------------------------------------
+//Return the player Entity
+//---------------------------------------------------------
 Entity* SceneBuilder::GetPlayerEntity()
 {
 	return playerEnt;
->>>>>>> 68dcfaf344dd0fb7bc16b5c2ae6d1c2165c30622
 }
