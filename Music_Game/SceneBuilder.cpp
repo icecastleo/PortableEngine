@@ -134,7 +134,7 @@ void SceneBuilder::BuildMeshes()
 
 	quadMesh = new Mesh("quad", device);
 
-	playerMesh = new Mesh("sphere", device);
+	playerMesh = new Mesh("cube", device);
 
 	asteroidMesh = new Mesh("sphere", device);
 }

@@ -30,6 +30,8 @@ public:
 	Entity* GetPlayerEntity();
 	Entity* GetAsteroidEntity();
 
+	
+
 
 private:
 	void SetupScenes();
