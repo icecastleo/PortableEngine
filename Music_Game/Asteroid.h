@@ -14,7 +14,7 @@ public:
 	void Update(float deltaTime);
 private:
 	Entity* asterEntity;
-	void Move(int x, int y, int z, float deltaTime);
+	void Move(float x, float y, float z, float deltaTime);
 	void RandomPos();
 };
 

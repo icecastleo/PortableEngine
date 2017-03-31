@@ -18,7 +18,7 @@ Asteroid::Asteroid(Entity * asterEntity)
 
 void Asteroid::Update(float deltaTime)
 {
-	Move(0, 0, 1,deltaTime);
+	Move(0, 0, 2,deltaTime);
 	XMVECTOR pos = XMLoadFloat3(&(asterEntity->GetPosition()));
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);
@@ -33,13 +33,13 @@ void Asteroid::Update(float deltaTime)
 }
 
 void Asteroid::RandomPos() {
-	XMVECTOR pos = XMVectorSet(rand()%4-2, rand() % 4 - 2, 4, 0);
+	XMVECTOR pos = XMVectorSet(rand()%4-2, rand() % 5 - 2, 6, 0);
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);
 	asterEntity->SetPosition(position);
 }
 
-void Asteroid::Move(int x, int y, int z,float deltaTime)
+void Asteroid::Move(float x, float y, float z,float deltaTime)
 {
 	XMVECTOR moveX = XMVectorZero();
 	XMVECTOR moveY = XMVectorZero();
@@ -60,28 +60,7 @@ void Asteroid::Move(int x, int y, int z,float deltaTime)
 	moveZ = moveZ * moveAmount;
 	
 
-	if (x == 1)
-	{
-		pos += moveX;
-	}
-	else if (x == -1)
-	{
-		pos -= moveX;
-	}
-
-	if (y == 1) {
-		pos += moveY;
-
-	}
-	else if (y == -1) {
-		pos -= moveY;
-	}
-	if (z == 1) {
-		pos += moveZ;
-	}
-	else if (z == -1) {
-		pos -= moveZ;
-	}
+	pos += moveX*x + moveY*y + moveZ*z;
 
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);

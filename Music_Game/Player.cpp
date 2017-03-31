@@ -38,7 +38,7 @@ void Player::Update(float deltaTime)
 	}
 }
 
-void Player::Move(int x, int y, int z, float deltaTime)
+void Player::Move(float x, float y, float z, float deltaTime)
 {
 	XMVECTOR moveX = XMVectorZero();
 	XMVECTOR moveY = XMVectorZero();
@@ -59,28 +59,7 @@ void Player::Move(int x, int y, int z, float deltaTime)
 	moveZ = moveZ*moveAmount;
 
 
-	if (x == 1)
-	{
-		pos += moveX;
-	}
-	else if (x == -1)
-	{
-		pos -= moveX;
-	}
-
-	if (y == 1) {
-		pos += moveY;
-
-	}
-	else if (y == -1) {
-		pos -= moveY;
-	}
-	if (z == 1) {
-		pos += moveZ;
-	}
-	else if (z == -1) {
-		pos -= moveZ;
-	}
+	pos += moveX*x + moveY*y + moveZ*z;
 
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);
