@@ -19,37 +19,69 @@ void Player::Update(float deltaTime)
 {
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
-		Move(1, deltaTime);
+		Move(1,0,0,deltaTime);
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
-		Move(-1, deltaTime);
+		Move(-1,0,0, deltaTime);
+	}
+
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
+		Move(0, 1, 0, deltaTime);
+	}
+
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		Move(0, -1, 0, deltaTime);
 	}
 }
 
-void Player::Move(int direction, float deltaTime)
+void Player::Move(int x, int y, int z, float deltaTime)
 {
-	XMVECTOR moveDir = XMVectorZero();
+	XMVECTOR moveX = XMVectorZero();
+	XMVECTOR moveY = XMVectorZero();
+	XMVECTOR moveZ = XMVectorZero();
 	float moveAmount = 5.0f * deltaTime;
 
 	XMVECTOR fwd = XMVectorSet(0, 0, 1, 0);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
+	XMVECTOR right = XMVectorSet(1, 0, 0, 0);
 
 	XMVECTOR pos = XMLoadFloat3(&(playerEntity->GetPosition()));
 
-	moveDir = XMVector3Cross(fwd, up);
-	moveDir = moveDir * moveAmount;
+	moveX = XMVector3Cross(fwd, up);
+	moveY = XMVector3Cross(fwd, right);
+	moveZ = XMVector3Cross(up, right);
+	moveX = moveX * moveAmount;
+	moveY = moveY* moveAmount;
+	moveZ = moveZ*moveAmount;
 
-	if (direction == 1)
+
+	if (x == 1)
 	{
-		pos += moveDir;
+		pos += moveX;
 	}
-	else if (direction == -1)
+	else if (x == -1)
 	{
-		pos -= moveDir;
+		pos -= moveX;
 	}
-	
+
+	if (y == 1) {
+		pos += moveY;
+
+	}
+	else if (y == -1) {
+		pos -= moveY;
+	}
+	if (z == 1) {
+		pos += moveZ;
+	}
+	else if (z == -1) {
+		pos -= moveZ;
+	}
+
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);
 

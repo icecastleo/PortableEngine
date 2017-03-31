@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Asteroid.h"
 
 class Game 
 	: public DXCore
@@ -54,5 +55,6 @@ private:
 	Renderer Render;
 	Camera Cam;
 	Player player;
+	Asteroid asteroid;
 };
 

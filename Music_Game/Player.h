@@ -14,6 +14,6 @@ public:
 
 private:
 	Entity* playerEntity;
-	void Move(int direction, float deltaTime);
+	void Move(int x, int y, int z, float deltaTime);
 };
 

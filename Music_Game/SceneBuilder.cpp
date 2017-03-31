@@ -72,6 +72,9 @@ void SceneBuilder::BuildMaterials()
 
 	path = L"Assets/textures/player.png";
 	playerMat = new Material(device, context, path);
+
+	path = L"Assets/textures/asteroid.png";
+	asteroidMat = new Material(device, context, path);
 }
 
 //---------------------------------------------------------
@@ -129,6 +132,8 @@ void SceneBuilder::BuildMeshes()
 	quadMesh = new Mesh("quad", device);
 
 	playerMesh = new Mesh("sphere", device);
+
+	asteroidMesh = new Mesh("sphere", device);
 }
 
 //---------------------------------------------------------
@@ -143,6 +148,8 @@ void SceneBuilder::BuildEntities()
 	ent3 = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+
+	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 }
 
 //---------------------------------------------------------
@@ -168,9 +175,10 @@ void SceneBuilder::SetupScenes()
 	scene2->directionalLights.push_back(dirLight2);
 	scene2->pointLights.push_back(pointLight);
 	scene2->spotLights.push_back(spotLight);
-	scene2->entities.push_back(ent1);
-	scene2->entities.push_back(ent2);
+	/*scene2->entities.push_back(ent1);
+	scene2->entities.push_back(ent2);*/
 	scene2->entities.push_back(playerEnt);
+	scene2->entities.push_back(asteroidEnt);
 	
 	//Scene 3
 	//------------------------------------------------------------------
@@ -211,3 +219,9 @@ Entity* SceneBuilder::GetPlayerEntity()
 {
 	return playerEnt;
 }
+
+Entity* SceneBuilder::GetAsteroidEntity()
+{
+	return asteroidEnt;
+}
+

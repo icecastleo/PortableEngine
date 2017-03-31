@@ -84,6 +84,7 @@ void Game::Init()
 
 	player = Player(SceneBuild.GetPlayerEntity());
 
+	asteroid = Asteroid(SceneBuild.GetAsteroidEntity());
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
 	// Essentially: "What kind of shape should the GPU draw with our data?"
@@ -141,7 +142,7 @@ void Game::Update(float deltaTime, float totalTime)
 	Scene *currentScene = SceneManag.GetScene(SceneNumber);
 
 	player.Update(deltaTime);
-
+	asteroid.Update(deltaTime);
 	for each (Entity* ent in currentScene->entities)
 	{
 		ent->Update();
