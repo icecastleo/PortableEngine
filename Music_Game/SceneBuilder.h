@@ -52,10 +52,12 @@ private:
 	Material* menuMat;
 	Material* playerMat;
 	Material* asteroidMat;
+	Material* backgroundMat;
 
 	Entity* ent1;
 	Entity* ent2;
 	Entity* ent3;
+	Entity* backgroundEnt;
 	Entity* playerEnt;
 	Entity* asteroidEnt;
 

@@ -75,6 +75,9 @@ void SceneBuilder::BuildMaterials()
 
 	path = L"Assets/textures/asteroid.png";
 	asteroidMat = new Material(device, context, path);
+
+	path = L"Assets/textures/background.png";
+	backgroundMat = new Material(device, context, path);
 }
 
 //---------------------------------------------------------
@@ -150,6 +153,8 @@ void SceneBuilder::BuildEntities()
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
 	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+
+	backgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 }
 
 //---------------------------------------------------------
@@ -171,12 +176,13 @@ void SceneBuilder::SetupScenes()
 	scene2->name = "MainGame";
 	scene2->entities = std::vector<Entity*>();
 	scene2->globalLights.push_back(ambient);
-	scene2->directionalLights.push_back(dirLight);
-	scene2->directionalLights.push_back(dirLight2);
-	scene2->pointLights.push_back(pointLight);
-	scene2->spotLights.push_back(spotLight);
+	//scene2->directionalLights.push_back(dirLight);
+	//scene2->directionalLights.push_back(dirLight2);
+	//scene2->pointLights.push_back(pointLight);
+	//scene2->spotLights.push_back(spotLight);
 	/*scene2->entities.push_back(ent1);
 	scene2->entities.push_back(ent2);*/
+	scene2->entities.push_back(backgroundEnt);
 	scene2->entities.push_back(playerEnt);
 	scene2->entities.push_back(asteroidEnt);
 	

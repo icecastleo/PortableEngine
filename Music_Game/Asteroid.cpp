@@ -21,6 +21,12 @@ void Asteroid::Update(float deltaTime)
 	Move(0, 0, 2,deltaTime);
 	XMVECTOR pos = XMLoadFloat3(&(asterEntity->GetPosition()));
 	XMFLOAT3 position;
+	XMFLOAT3 rota= asterEntity->GetRotation();
+	rota.y += (rand() % 3)*0.0005f;
+	rota.x += (rand() % 3)*0.0005f;
+	rota.z += (rand() % 3)*0.0005f;
+	asterEntity->SetRotation(rota);
+
 	XMStoreFloat3(&position, pos);
 	if (position.z < -3) {
 		RandomPos();
