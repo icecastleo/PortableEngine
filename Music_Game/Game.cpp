@@ -138,7 +138,14 @@ void Game::Update(float deltaTime, float totalTime)
 
 	Cam.Update(prevMousePos, deltaTime);
 
+	Scene *currentScene = SceneManag.GetScene(SceneNumber);
+
 	player.Update(deltaTime);
+
+	for each (Entity* ent in currentScene->entities)
+	{
+		ent->Update();
+	}
 }
 
 // --------------------------------------------------------

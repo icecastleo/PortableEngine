@@ -128,7 +128,7 @@ void SceneBuilder::BuildMeshes()
 
 	quadMesh = new Mesh("quad", device);
 
-	playerMesh = new Mesh("box", device);
+	playerMesh = new Mesh("sphere", device);
 }
 
 //---------------------------------------------------------
@@ -142,7 +142,7 @@ void SceneBuilder::BuildEntities()
 
 	ent3 = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
-	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -4.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 }
 
 //---------------------------------------------------------
@@ -170,7 +170,7 @@ void SceneBuilder::SetupScenes()
 	scene2->spotLights.push_back(spotLight);
 	scene2->entities.push_back(ent1);
 	scene2->entities.push_back(ent2);
-
+	scene2->entities.push_back(playerEnt);
 	
 	//Scene 3
 	//------------------------------------------------------------------

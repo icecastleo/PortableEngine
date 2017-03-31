@@ -19,21 +19,19 @@ void Player::Update(float deltaTime)
 {
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
-		Move(-1, deltaTime);
-		printf("Left");
+		Move(1, deltaTime);
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
-		Move(1, deltaTime);
-		printf("Right");
+		Move(-1, deltaTime);
 	}
 }
 
 void Player::Move(int direction, float deltaTime)
 {
 	XMVECTOR moveDir = XMVectorZero();
-	float moveAmount = 0.7f * deltaTime;
+	float moveAmount = 5.0f * deltaTime;
 
 	XMVECTOR fwd = XMVectorSet(0, 0, 1, 0);
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
