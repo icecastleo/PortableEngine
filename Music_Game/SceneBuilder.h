@@ -44,13 +44,11 @@ private:
 	ID3D11DeviceContext* context;
 
 	Mesh* cubeMesh;
-	Mesh* boxMesh;
 	Mesh* quadMesh;
 	Mesh* playerMesh;
 	Mesh* asteroidMesh;
 
-	Material* quadMat;
-	Material* creditsMat;
+	//Material* creditsMat;
 	Material* menuMat;
 	Material* playerMat;
 	Material* asteroidMat;

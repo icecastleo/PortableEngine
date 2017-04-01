@@ -27,11 +27,14 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 //---------------------------------------------------------
 Material::~Material() 
 {
-	SRV->Release();
-	skySRV->Release();
+	if (SRV != nullptr) { SRV->Release(); }
 	sampleState->Release();
-	rsSky->Release();
-	dsSky->Release();
+	if (skySRV != nullptr)
+	{
+		skySRV->Release();
+		rsSky->Release();
+		dsSky->Release();
+	}
 	delete sampleDes;
 }
 
@@ -49,6 +52,7 @@ void Material::SetTexture(ID3D11Device* device, ID3D11DeviceContext* context, co
 	sampleDes->MaxLOD = D3D11_FLOAT32_MAX;
 
 	SRV = nullptr;
+	skySRV = nullptr;
 
 	DirectX::CreateWICTextureFromFile(device, context, path, 0, &SRV);
 
@@ -81,9 +85,11 @@ void Material::SetupSkybox(ID3D11Device* device, ID3D11DeviceContext* context, c
 	sampleDes->Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	sampleDes->MaxLOD = D3D11_FLOAT32_MAX;
 
+	SRV = nullptr;
 	skySRV = nullptr;
 
-	DirectX::CreateDDSTextureFromFile(device, path, 0, &skySRV);
+	HRESULT hr;
+	hr = DirectX::CreateDDSTextureFromFile(device, path, 0, &skySRV);
 
 	device->CreateSamplerState(sampleDes, &sampleState);
 }
