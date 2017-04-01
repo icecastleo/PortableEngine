@@ -39,7 +39,7 @@ void Asteroid::Update(float deltaTime)
 }
 
 void Asteroid::RandomPos() {
-	XMVECTOR pos = XMVectorSet(rand()%4-2, rand() % 5 - 2, 6, 0);
+	XMVECTOR pos = XMVectorSet(rand()%4-2, rand() % 5 - 2, 20, 0);
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);
 	asterEntity->SetPosition(position);

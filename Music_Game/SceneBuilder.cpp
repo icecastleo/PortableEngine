@@ -14,8 +14,8 @@ SceneBuilder::SceneBuilder() {}
 SceneBuilder::~SceneBuilder()
 {
 	delete quadMat;
-	delete boxMat;
 	delete menuMat;
+	delete creditsMat;
 	delete playerMat;
 
 	delete cubeMesh;
@@ -23,10 +23,11 @@ SceneBuilder::~SceneBuilder()
 	delete quadMesh;
 	delete playerMesh;
 
-	delete ent1;
-	delete ent2;
-	delete ent3;
+	delete menuEnt;
 	delete playerEnt;
+	delete menuBackgroundEnt;
+	delete gameBackgroundEnt;
+	delete creditsBackgroundEnt;
 
 	delete ambient;
 	delete dirLight;
@@ -61,11 +62,8 @@ void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 //---------------------------------------------------------
 void SceneBuilder::BuildMaterials()
 {
-	const wchar_t* path = L"Assets/textures/quad.png";
-	quadMat = new Material(device, context, path);
-
-	path = L"Assets/textures/box.png";
-	boxMat = new Material(device, context, path);
+	//Texture file path
+	const wchar_t* path;
 
 	path = L"Assets/textures/menu.png";
 	menuMat = new Material(device, context, path);
@@ -76,8 +74,9 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/asteroid.png";
 	asteroidMat = new Material(device, context, path);
 
-	path = L"Assets/textures/background.png";
-	backgroundMat = new Material(device, context, path);
+	//path = L"Assets/textures/background.dds";
+	path = L"Assets/textures/spaceBackground.dds";
+	backgroundMat = new Material(device, context, path, true);
 }
 
 //---------------------------------------------------------
@@ -130,8 +129,6 @@ void SceneBuilder::BuildMeshes()
 {
 	cubeMesh = new Mesh("cube", device);
 
-	boxMesh = new Mesh("box", device);
-
 	quadMesh = new Mesh("quad", device);
 
 	playerMesh = new Mesh("cube", device);
@@ -144,17 +141,16 @@ void SceneBuilder::BuildMeshes()
 //---------------------------------------------------------
 void SceneBuilder::BuildEntities()
 {
-	ent1 = new Entity(cubeMesh, quadMat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
-	ent2 = new Entity(boxMesh, boxMat, XMFLOAT3(+8.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
-
-	ent3 = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	menuEnt = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
-	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, 20.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 
-	backgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 }
 
 //---------------------------------------------------------
@@ -167,7 +163,8 @@ void SceneBuilder::SetupScenes()
 	scene1->name = "Menu";
 	scene1->entities = std::vector<Entity*>();
 	scene1->directionalLights.push_back(dirLight3);
-	scene1->entities.push_back(ent3);
+	scene1->entities.push_back(menuEnt);
+	scene1->background = menuBackgroundEnt;
 	
 
 	//Scene 2
@@ -175,23 +172,18 @@ void SceneBuilder::SetupScenes()
 	scene2 = new Scene();
 	scene2->name = "MainGame";
 	scene2->entities = std::vector<Entity*>();
+	scene2->background = gameBackgroundEnt;
 	scene2->globalLights.push_back(ambient);
-	//scene2->directionalLights.push_back(dirLight);
-	//scene2->directionalLights.push_back(dirLight2);
-	//scene2->pointLights.push_back(pointLight);
-	//scene2->spotLights.push_back(spotLight);
-	/*scene2->entities.push_back(ent1);
-	scene2->entities.push_back(ent2);*/
-	scene2->entities.push_back(backgroundEnt);
 	scene2->entities.push_back(playerEnt);
 	scene2->entities.push_back(asteroidEnt);
 	
 	//Scene 3
 	//------------------------------------------------------------------
 	scene3 = new Scene();
-	scene3->name = "Menu";
+	scene3->name = "Game Over";
 	scene3->entities = std::vector<Entity*>();
 	scene3->directionalLights.push_back(dirLight4);
+	scene3->background = creditsBackgroundEnt;
 }
 
 

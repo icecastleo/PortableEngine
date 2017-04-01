@@ -35,10 +35,12 @@ void Renderer::Init(Camera* _Cam, ID3D11DeviceContext* con, ID3D11RenderTargetVi
 //---------------------------------------------------------
 //Set Shaders
 //---------------------------------------------------------
-void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader)
+void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader, SimpleVertexShader* _skyVs, SimplePixelShader* _skyPs)
 {
 	vertexShader = _vertexShader;
 	pixelShader = _pixelShader;
+	skyVS = _skyVs;
+	skyPS = _skyPs;
 }
 
 //---------------------------------------------------------
@@ -139,6 +141,10 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		
 		pixelShader->SetSamplerState("basicSampler", currentScene->entities.at(i)->GetMat()->GetSampleState());
 		pixelShader->SetShaderResourceView("diffuseTexture", currentScene->entities.at(i)->GetMat()->GetSRV());
+		if (currentScene->background != NULL)
+		{
+			pixelShader->SetShaderResourceView("Sky", currentScene->background->GetMat()->GetSkySRV());
+		}
 
 		pixelShader->CopyAllBufferData();
 
@@ -160,6 +166,25 @@ void Renderer::Draw(float deltaTime, float totalTime)
 			currentScene->entities.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
 			0,     // Offset to the first index we want to use
 			0);    // Offset to add to each index when looking up vertices
+	}
+	if (currentScene->background != NULL)
+	{
+
+		vertexBuffer = currentScene->background->GetMesh()->GetVertexBuffer();
+		indexBuffer = currentScene->background->GetMesh()->GetIndexBuffer();
+
+		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+		currentScene->background->GetMat()->PrepareSkybox(Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), skyVS, skyPS);
+
+		context->RSSetState(currentScene->background->GetMat()->GetRast());
+		context->OMSetDepthStencilState(currentScene->background->GetMat()->GetDepthSD(), 0);
+		context->DrawIndexed(currentScene->background->GetMesh()->GetIndexCount(), 0, 0);
+
+		// Reset the render states we've changed
+		context->RSSetState(0);
+		context->OMSetDepthStencilState(0, 0);
 	}
 
 	// Present the back buffer to the user

@@ -50,16 +50,16 @@ private:
 	Mesh* asteroidMesh;
 
 	Material* quadMat;
-	Material* boxMat;
+	Material* creditsMat;
 	Material* menuMat;
 	Material* playerMat;
 	Material* asteroidMat;
 	Material* backgroundMat;
 
-	Entity* ent1;
-	Entity* ent2;
-	Entity* ent3;
-	Entity* backgroundEnt;
+	Entity* menuEnt;
+	Entity* menuBackgroundEnt;
+	Entity* gameBackgroundEnt;
+	Entity* creditsBackgroundEnt;
 	Entity* playerEnt;
 	Entity* asteroidEnt;
 

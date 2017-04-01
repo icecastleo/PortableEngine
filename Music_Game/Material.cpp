@@ -15,12 +15,23 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 }
 
 //---------------------------------------------------------
+//Constructor override to create a material for a skybox
+//---------------------------------------------------------
+Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, bool isSkybox)
+{
+	SetupSkybox(device, context, path);
+}
+
+//---------------------------------------------------------
 //Default Deconstructor
 //---------------------------------------------------------
 Material::~Material() 
 {
 	SRV->Release();
+	skySRV->Release();
 	sampleState->Release();
+	rsSky->Release();
+	dsSky->Release();
 	delete sampleDes;
 }
 
@@ -40,6 +51,39 @@ void Material::SetTexture(ID3D11Device* device, ID3D11DeviceContext* context, co
 	SRV = nullptr;
 
 	DirectX::CreateWICTextureFromFile(device, context, path, 0, &SRV);
+
+	device->CreateSamplerState(sampleDes, &sampleState);
+}
+
+//---------------------------------------------------------
+//Set the material's texture
+//---------------------------------------------------------
+void Material::SetupSkybox(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path)
+{
+
+	D3D11_RASTERIZER_DESC rsDesc = {};
+	rsDesc.FillMode = D3D11_FILL_SOLID;
+	rsDesc.CullMode = D3D11_CULL_FRONT;
+	rsDesc.DepthClipEnable = true;
+	device->CreateRasterizerState(&rsDesc, &rsSky);
+
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+	dsDesc.DepthEnable = true;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	device->CreateDepthStencilState(&dsDesc, &dsSky);
+
+	sampleState = nullptr;
+	sampleDes = new D3D11_SAMPLER_DESC();
+	sampleDes->AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDes->AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDes->AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDes->Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampleDes->MaxLOD = D3D11_FLOAT32_MAX;
+
+	skySRV = nullptr;
+
+	DirectX::CreateDDSTextureFromFile(device, path, 0, &skySRV);
 
 	device->CreateSamplerState(sampleDes, &sampleState);
 }
@@ -70,6 +114,18 @@ void Material::PrepareMaterial(DirectX::XMFLOAT4X4 world, DirectX::XMFLOAT4X4 vi
 	vertexShader->SetShader();
 }
 
+void Material::PrepareSkybox(DirectX::XMFLOAT4X4 view, DirectX::XMFLOAT4X4 projection, SimpleVertexShader* skyVS, SimplePixelShader* skyPS)
+{
+	skyVS->SetMatrix4x4("view", view);
+	skyVS->SetMatrix4x4("projection", projection);
+	skyVS->CopyAllBufferData();
+	skyVS->SetShader();
+
+	skyPS->SetShaderResourceView("Sky", skySRV);
+	skyPS->CopyAllBufferData();
+	skyPS->SetShader();
+}
+
 //---------------------------------------------------------
 //Return the SRV
 //---------------------------------------------------------
@@ -79,9 +135,33 @@ ID3D11ShaderResourceView* Material::GetSRV()
 }
 
 //---------------------------------------------------------
+//Return the skybox SRV
+//---------------------------------------------------------
+ID3D11ShaderResourceView* Material::GetSkySRV()
+{
+	return skySRV;
+}
+
+//---------------------------------------------------------
 //Return the Sample State
 //---------------------------------------------------------
 ID3D11SamplerState* Material:: GetSampleState()
 {
 	return sampleState;
+}
+
+//---------------------------------------------------------
+//Return the Rasterrizer Desc
+//---------------------------------------------------------
+ID3D11RasterizerState* Material::GetRast()
+{
+	return rsSky;
+}
+
+//---------------------------------------------------------
+//Return the Rasterrizer Desc
+//---------------------------------------------------------
+ID3D11DepthStencilState* Material::GetDepthSD()
+{
+	return dsSky;
 }

@@ -54,6 +54,7 @@ cbuffer lightData : register(b0)
 };
 
 Texture2D diffuseTexture : register(t0);
+TextureCube Sky			: register(t2);
 SamplerState basicSampler : register(s0);
 
 // --------------------------------------------------------
@@ -112,6 +113,12 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float4 SLights = (surfaceColor*SpotNdotL*lightS0.DiffuseColor)*spotAtten;
 
 	//---------------------------------------------------------------------------------------------
+
+
+	float4 skyColor = Sky.Sample(basicSampler, reflect(-dirToPointLight, input.normal));
+	//---------------------------------------------------------------------------------------------
+	
+	//return lerp((global + DirLights + PLights + SLights), skyColor, 0.01f);
 	return global + DirLights + PLights + SLights;
 
 }

@@ -54,6 +54,8 @@ Game::~Game()
 	// will clean up their own internal DirectX stuff
 	delete vertexShader;
 	delete pixelShader;
+	delete skyVS;
+	delete skyPS;
 }
 
 // --------------------------------------------------------
@@ -70,7 +72,7 @@ void Game::Init()
 
 	LoadShaders();
 
-	Render.SetShaders(vertexShader, pixelShader);
+	Render.SetShaders(vertexShader, pixelShader, skyVS, skyPS);
 
 	SceneBuild.Init(device, context);
 	SceneManag.AddScene(SceneBuild.GetScene(1));
@@ -107,6 +109,14 @@ void Game::LoadShaders()
 	pixelShader = new SimplePixelShader(device, context);
 	if(!pixelShader->LoadShaderFile(L"Debug/PixelShader.cso"))	
 		pixelShader->LoadShaderFile(L"PixelShader.cso");
+
+	skyVS = new SimpleVertexShader(device, context);
+	if (!skyVS->LoadShaderFile(L"Debug/SkyVS.cso"))
+		skyVS->LoadShaderFile(L"SkyVS.cso");
+
+	skyPS = new SimplePixelShader(device, context);
+	if (!skyPS->LoadShaderFile(L"Debug/SkyPS.cso"))
+		skyPS->LoadShaderFile(L"SkyPS.cso");
 }
 
 // --------------------------------------------------------
@@ -147,6 +157,17 @@ void Game::Update(float deltaTime, float totalTime)
 	{
 		ent->Update();
 	}
+
+	Entity* playerEnt = SceneBuild.GetPlayerEntity();
+	XMVECTOR playerOffset = XMLoadFloat3(&(playerEnt->GetPosition()));
+	XMMATRIX playerWorld = XMLoadFloat4x4(&(playerEnt->GetWorldMat()));
+
+	Entity* asteroidEnt = SceneBuild.GetAsteroidEntity();
+	XMVECTOR asteroidOffset = XMLoadFloat3(&(asteroidEnt->GetPosition()));
+	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
+
+	//bool collide = collisionDetection.BoundingSphereCollision(2.0, playerOffset, playerWorld, 2.0, asteroidOffset, asteroidWorld);
+	//printf("%d", collide);
 }
 
 // --------------------------------------------------------
