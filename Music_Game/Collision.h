@@ -16,12 +16,5 @@ public:
 		float secondObjBoundingSphere,
 		XMVECTOR secondObjCenterOffset,
 		XMMATRIX& secondObjWorldSpace);
-
-	bool BoundingBoxCollision(XMVECTOR& firstObjBoundingBoxMinVertex,
-		XMVECTOR& firstObjBoundingBoxMaxVertex,
-		XMMATRIX& firstObjWorldSpace,
-		XMVECTOR& secondObjBoundingBoxMinVertex,
-		XMVECTOR& secondObjBoundingBoxMaxVertex,
-		XMMATRIX& secondObjWorldSpace);
 };
 

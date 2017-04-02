@@ -133,9 +133,9 @@ void SceneBuilder::BuildMeshes()
 
 	quadMesh = new Mesh("quad", device);
 
-	playerMesh = new Mesh("cube", device);
+	playerMesh = new Mesh("sphere", device);
 
-	asteroidMesh = new Mesh("sphere", device);
+	asteroidMesh = new Mesh("cube", device);
 }
 
 //---------------------------------------------------------
@@ -148,7 +148,7 @@ void SceneBuilder::BuildEntities()
 
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
-	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, 20.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, 0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 
 	//menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));

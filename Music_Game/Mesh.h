@@ -21,10 +21,16 @@ public:
 	ID3D11Buffer* GetIndexBuffer();
 	unsigned int GetIndexCount();
 
+	std::vector<Vertex> GetVertexCollection();
+	std::vector<UINT> GetIndexCollection();
+
 private:
 	ID3D11Buffer* vertBuffer;
 	ID3D11Buffer* indBuffer;
 	unsigned int indCount;
+
+	std::vector<Vertex> vertexCollection;
+	std::vector<UINT> indexCollection;
 
 	void CreateGeometry(Vertex*, int, UINT*, ID3D11Device*);
 };

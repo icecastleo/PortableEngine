@@ -187,6 +187,8 @@ Mesh::Mesh(char* objFile, ID3D11Device *device)
 	indCount = vertCounter;
 	CreateGeometry(&verts[0], vertCounter, &indices[0], device);
 
+	vertexCollection = verts;
+	indexCollection = indices;
 }
 
 // --------------------------------------------------------
@@ -293,4 +295,14 @@ ID3D11Buffer* Mesh::GetIndexBuffer()
 unsigned int Mesh::GetIndexCount()
 {
 	return indCount;
+}
+
+std::vector<Vertex> Mesh::GetVertexCollection()
+{
+	return vertexCollection;
+}
+
+std::vector<UINT> Mesh::GetIndexCollection()
+{
+	return indexCollection;
 }

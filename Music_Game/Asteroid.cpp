@@ -9,11 +9,14 @@ Asteroid::Asteroid()
 
 Asteroid::~Asteroid()
 {
+	//delete asterCollider;
 }
 
 Asteroid::Asteroid(Entity * asterEntity)
 {
 	this->asterEntity = asterEntity;
+
+	asterCollider = new Collider(asterEntity->GetMesh());
 }
 
 void Asteroid::Update(float deltaTime)
@@ -74,3 +77,7 @@ void Asteroid::Move(float x, float y, float z,float deltaTime)
 	asterEntity->SetPosition(position);
 }
 
+Collider* Asteroid::GetCollider()
+{
+	return asterCollider;
+}

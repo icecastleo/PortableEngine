@@ -2,7 +2,7 @@
 //Modified for use in homework
 
 #include "Game.h"
-
+#include <iostream>
 // For the DirectX Math library
 using namespace DirectX;
 
@@ -15,7 +15,7 @@ using namespace DirectX;
 // hInstance - the application's OS-level handle (unique ID)
 // --------------------------------------------------------
 Game::Game(HINSTANCE hInstance)
-	: DXCore( 
+	: DXCore(
 		hInstance,		   // The application's handle
 		"DirectX Game",	   // Text for the window's title bar
 		1280,			   // Width of the window's client area
@@ -104,10 +104,10 @@ void Game::LoadShaders()
 {
 	vertexShader = new SimpleVertexShader(device, context);
 	if (!vertexShader->LoadShaderFile(L"Debug/VertexShader.cso"))
-		vertexShader->LoadShaderFile(L"VertexShader.cso");		
+		vertexShader->LoadShaderFile(L"VertexShader.cso");
 
 	pixelShader = new SimplePixelShader(device, context);
-	if(!pixelShader->LoadShaderFile(L"Debug/PixelShader.cso"))	
+	if (!pixelShader->LoadShaderFile(L"Debug/PixelShader.cso"))
 		pixelShader->LoadShaderFile(L"PixelShader.cso");
 
 	skyVS = new SimpleVertexShader(device, context);
@@ -159,15 +159,29 @@ void Game::Update(float deltaTime, float totalTime)
 	}
 
 	Entity* playerEnt = SceneBuild.GetPlayerEntity();
+	Mesh* playerMesh = playerEnt->GetMesh();
 	XMVECTOR playerOffset = XMLoadFloat3(&(playerEnt->GetPosition()));
 	XMMATRIX playerWorld = XMLoadFloat4x4(&(playerEnt->GetWorldMat()));
 
 	Entity* asteroidEnt = SceneBuild.GetAsteroidEntity();
+	Mesh* asteroidMesh = asteroidEnt->GetMesh();
 	XMVECTOR asteroidOffset = XMLoadFloat3(&(asteroidEnt->GetPosition()));
 	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
 
-	//bool collide = collisionDetection.BoundingSphereCollision(2.0, playerOffset, playerWorld, 2.0, asteroidOffset, asteroidWorld);
-	//printf("%d", collide);
+	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(playerEnt->GetWorldMat()));
+	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
+
+	XMVECTOR playerCenterOffset = XMLoadFloat3(&(player.GetCollider()->GetObjectCenterOffset()));
+	XMVECTOR asteroidCenterOffset = XMLoadFloat3(&(asteroid.GetCollider()->GetObjectCenterOffset()));
+
+	bool collide = collisionDetection.BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+		playerCenterOffset,
+		playerWorldSpace,
+		player.GetCollider()->GetBoudingSphere(),
+		asteroidCenterOffset,
+		asteroidWorldSpace);
+
+	printf("COLL %d\n", collide);
 }
 
 // --------------------------------------------------------
