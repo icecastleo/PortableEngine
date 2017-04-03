@@ -27,7 +27,7 @@ SceneBuilder::~SceneBuilder()
 	delete menuEnt;
 	delete playerEnt;
 	delete asteroidEnt;
-	//delete menuBackgroundEnt;
+	delete menuBackgroundEnt;
 	delete gameBackgroundEnt;
 	//delete creditsBackgroundEnt;
 
@@ -135,7 +135,7 @@ void SceneBuilder::BuildMeshes()
 
 	playerMesh = new Mesh("sphere", device);
 
-	asteroidMesh = new Mesh("cube", device);
+	asteroidMesh = new Mesh("sphere", device);
 }
 
 //---------------------------------------------------------
@@ -150,7 +150,7 @@ void SceneBuilder::BuildEntities()
 
 	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, 0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 
-	//menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 }
@@ -166,7 +166,7 @@ void SceneBuilder::SetupScenes()
 	scene1->entities = std::vector<Entity*>();
 	scene1->directionalLights.push_back(dirLight3);
 	scene1->entities.push_back(menuEnt);
-	//scene1->background = menuBackgroundEnt;
+	scene1->background = menuBackgroundEnt;
 	
 
 	//Scene 2
@@ -214,6 +214,7 @@ Scene* SceneBuilder::GetScene(int num)
 
 //---------------------------------------------------------
 //Return the player Entity
+//This needs to go, needs to be requested from the scene itself
 //---------------------------------------------------------
 Entity* SceneBuilder::GetPlayerEntity()
 {
