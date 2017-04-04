@@ -168,9 +168,10 @@ void Game::Update(float deltaTime, float totalTime)
 	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
 	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
 
-	bool collide = collisionDetection.BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+
+	bool collide = Collision::Instance()->BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
 		playerWorldSpace,
-		player.GetCollider()->GetBoudingSphere(),
+		asteroid.GetCollider()->GetBoudingSphere(),
 		asteroidWorldSpace);
 
 	printf("COLL %d\n", collide);

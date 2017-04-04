@@ -13,6 +13,7 @@ Player::Player(Entity* playerEnt) : playerEntity(playerEnt)
 
 Player::~Player()
 {
+	//delete playerEntity;
 	//delete playerCollider;
 }
 

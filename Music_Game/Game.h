@@ -59,7 +59,5 @@ private:
 	Camera Cam;
 	Player player;
 	Asteroid asteroid;
-
-	Collision collisionDetection;
 };
 

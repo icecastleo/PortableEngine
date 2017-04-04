@@ -1,5 +1,4 @@
 #pragma once
-
 #include <DirectXMath.h>
 
 using namespace DirectX;
@@ -7,6 +6,8 @@ using namespace DirectX;
 class Collision
 {
 public:
+	static Collision* Instance();
+
 	Collision();
 	~Collision();
 
@@ -14,5 +15,8 @@ public:
 		XMMATRIX& firstObjWorldSpace,
 		float secondObjBoundingSphere,
 		XMMATRIX& secondObjWorldSpace);
+
+private:
+	static Collision* m_Instance;
 };
 
