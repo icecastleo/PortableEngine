@@ -160,25 +160,17 @@ void Game::Update(float deltaTime, float totalTime)
 
 	Entity* playerEnt = SceneBuild.GetPlayerEntity();
 	Mesh* playerMesh = playerEnt->GetMesh();
-	XMVECTOR playerOffset = XMLoadFloat3(&(playerEnt->GetPosition()));
 	XMMATRIX playerWorld = XMLoadFloat4x4(&(playerEnt->GetWorldMat()));
+	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(playerEnt->GetWorldMat()));
 
 	Entity* asteroidEnt = SceneBuild.GetAsteroidEntity();
 	Mesh* asteroidMesh = asteroidEnt->GetMesh();
-	XMVECTOR asteroidOffset = XMLoadFloat3(&(asteroidEnt->GetPosition()));
 	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
-
-	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(playerEnt->GetWorldMat()));
 	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
 
-	XMVECTOR playerCenterOffset = XMLoadFloat3(&(player.GetCollider()->GetObjectCenterOffset()));
-	XMVECTOR asteroidCenterOffset = XMLoadFloat3(&(asteroid.GetCollider()->GetObjectCenterOffset()));
-
 	bool collide = collisionDetection.BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
-		playerCenterOffset,
 		playerWorldSpace,
 		player.GetCollider()->GetBoudingSphere(),
-		asteroidCenterOffset,
 		asteroidWorldSpace);
 
 	printf("COLL %d\n", collide);
