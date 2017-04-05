@@ -158,18 +158,13 @@ void Game::Update(float deltaTime, float totalTime)
 		ent->Update();
 	}
 
-	Entity* playerEnt = SceneBuild.GetPlayerEntity();
-	Mesh* playerMesh = playerEnt->GetMesh();
-	XMMATRIX playerWorld = XMLoadFloat4x4(&(playerEnt->GetWorldMat()));
-	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(playerEnt->GetWorldMat()));
+	XMMATRIX playerWorld = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
+	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
 
-	Entity* asteroidEnt = SceneBuild.GetAsteroidEntity();
-	Mesh* asteroidMesh = asteroidEnt->GetMesh();
-	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
-	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(asteroidEnt->GetWorldMat()));
+	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity()->GetWorldMat()));
+	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity()->GetWorldMat()));
 
-
-	bool collide = Collision::Instance()->BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+	bool collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
 		playerWorldSpace,
 		asteroid.GetCollider()->GetBoudingSphere(),
 		asteroidWorldSpace);

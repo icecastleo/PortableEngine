@@ -6,10 +6,13 @@ using namespace DirectX;
 class Collision
 {
 public:
-	static Collision* Instance();
-
-	Collision();
-	~Collision();
+	static Collision& Instance()
+	{
+		static Collision m_Instance;
+		return m_Instance;
+	}
+	// Singleton destructors
+	Collision(Collision const&) = delete;
 
 	bool BoundingSphereCollision(float firstObjBoundingSphere,
 		XMMATRIX& firstObjWorldSpace,
@@ -17,6 +20,6 @@ public:
 		XMMATRIX& secondObjWorldSpace);
 
 private:
-	static Collision* m_Instance;
+	Collision();
 };
 

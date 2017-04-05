@@ -1,21 +1,7 @@
 #include "Collision.h"
 
-Collision* Collision::m_Instance = NULL;
-
 Collision::Collision()
 {
-}
-
-Collision::~Collision()
-{
-}
-
-Collision* Collision::Instance()
-{
-	if (!m_Instance)
-		m_Instance = new Collision;
-
-	return m_Instance;
 }
 
 bool Collision::BoundingSphereCollision(float firstObjBoundingSphere,
