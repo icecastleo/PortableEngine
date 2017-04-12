@@ -43,6 +43,7 @@ SceneBuilder::~SceneBuilder()
 	delete scene2;
 	delete scene3;
 
+
 }
 
 //---------------------------------------------------------
@@ -76,8 +77,8 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/asteroid.png";
 	asteroidMat = new Material(device, context, path);
 
-	//path = L"Assets/textures/spaceBackground.dds";
-	path = L"Assets/textures/SunnyCubeMap.dds";
+	path = L"Assets/textures/spaceBackground.dds";
+	//path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
 }
 
