@@ -167,6 +167,7 @@ void SceneBuilder::SetupScenes()
 	scene1->directionalLights.push_back(dirLight3);
 	scene1->entities.push_back(menuEnt);
 	scene1->background = menuBackgroundEnt;
+	//scene1->musicFileName = "04_-_Bloody_Revenge.mp3";
 	
 
 	//Scene 2
@@ -178,6 +179,7 @@ void SceneBuilder::SetupScenes()
 	scene2->globalLights.push_back(ambient);
 	scene2->entities.push_back(playerEnt);
 	scene2->entities.push_back(asteroidEnt);
+	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
 	
 	//Scene 3
 	//------------------------------------------------------------------
@@ -186,6 +188,7 @@ void SceneBuilder::SetupScenes()
 	scene3->entities = std::vector<Entity*>();
 	scene3->directionalLights.push_back(dirLight4);
 	//scene3->background = creditsBackgroundEnt;
+	scene3->musicFileName = "04_-_Bloody_Revenge.mp3";
 }
 
 

@@ -26,6 +26,8 @@ Game::Game(HINSTANCE hInstance)
 	vertexShader = 0;
 	pixelShader = 0;
 
+	MusicPlayer musicPlayer();
+
 	SceneBuilder SceneBuild();
 
 	SceneManager SceneManag();
@@ -64,9 +66,6 @@ Game::~Game()
 // --------------------------------------------------------
 void Game::Init()
 {
-	//Start with scene 1
-	SceneNumber = 1;
-
 	Cam.SetWidthHeight(width, height);
 	Cam.Init();
 
@@ -79,10 +78,16 @@ void Game::Init()
 	SceneManag.AddScene(SceneBuild.GetScene(2));
 	SceneManag.AddScene(SceneBuild.GetScene(3));
 
-	//Tell the game which scene it should be rendering, uses 1 based indexing
-	Render.SetScene(SceneManag.GetScene(SceneNumber));
+	//Start with scene 1
+	SceneNumber = 1;
+	setScene();
 
 	Render.Init(&Cam, context, backBufferRTV, swapChain, depthStencilView);
+
+	if (SceneManag.GetScene(SceneNumber)->musicFileName) {
+		musicPlayer.setSound(SceneManag.GetScene(SceneNumber)->musicFileName);
+		musicPlayer.play();
+	}
 
 	player = Player(SceneBuild.GetPlayerEntity());
 
@@ -119,6 +124,17 @@ void Game::LoadShaders()
 		skyPS->LoadShaderFile(L"SkyPS.cso");
 }
 
+void Game::setScene()
+{
+	//Tell the game which scene it should be rendering, uses 1 based indexing
+	Render.SetScene(SceneManag.GetScene(SceneNumber));
+
+	if (SceneManag.GetScene(SceneNumber)->musicFileName) {
+		musicPlayer.setSound(SceneManag.GetScene(SceneNumber)->musicFileName);
+		musicPlayer.play();
+	}
+}
+
 // --------------------------------------------------------
 // Handle resizing DirectX "stuff" to match the new window size.
 // For instance, updating our projection matrix's aspect ratio.
@@ -144,8 +160,10 @@ void Game::Update(float deltaTime, float totalTime)
 	if (GetAsyncKeyState(VK_RETURN) && SceneNumber == 1)
 	{
 		SceneNumber = 2;
-		Render.SetScene(SceneManag.GetScene(SceneNumber));
+		setScene();
 	}
+
+	musicPlayer.update();
 
 	Cam.Update(prevMousePos, deltaTime);
 

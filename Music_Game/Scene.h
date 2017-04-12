@@ -11,4 +11,6 @@ struct Scene
 	std::vector<PointLight*> pointLights;
 	std::vector<SpotLight*> spotLights;
 	std::vector<GlobalLight*> globalLights;
+
+	char *musicFileName = 0;
 };

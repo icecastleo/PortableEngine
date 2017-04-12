@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Asteroid.h"
 #include "Collision.h"
+#include "MusicPlayer.h"
 
 class Game 
 	: public DXCore
@@ -38,6 +39,7 @@ private:
 
 	// Initialization helper methods - feel free to customize, combine, etc.
 	void LoadShaders(); 
+	void setScene();
 
 	// Wrappers for DirectX shaders to provide simplified functionality
 	SimpleVertexShader* vertexShader;
@@ -48,6 +50,8 @@ private:
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
+
+	MusicPlayer musicPlayer;
 
 	Scene* menueScene;
 	Scene* gameScene;
