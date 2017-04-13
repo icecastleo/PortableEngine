@@ -45,10 +45,6 @@ private:
 	IDXGISwapChain* swapChain;
 	ID3D11DepthStencilView* depthStencilView;
 
-	// Particle Resources
-	ID3D11DepthStencilState* particleDepthState;
-	ID3D11BlendState* particleBlendState;
-
 	Scene* currentScene;
 
 	Camera* Cam;

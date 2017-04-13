@@ -23,6 +23,15 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 }
 
 //---------------------------------------------------------
+//Constructor override to create a material for particle emitter
+//---------------------------------------------------------
+Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, SimpleVertexShader* particleVS, SimplePixelShader* particlePS)
+{
+	SetupParticle(device, context, path, particleVS, particlePS);
+}
+
+
+//---------------------------------------------------------
 //Default Deconstructor
 //---------------------------------------------------------
 Material::~Material() 
@@ -36,6 +45,13 @@ Material::~Material()
 		dsSky->Release();
 	}
 	delete sampleDes;
+	
+	if(particleTexture!= nullptr)
+		particleTexture->Release();
+	
+	particleBlendState->Release();
+	particleDepthState->Release();
+
 }
 
 //---------------------------------------------------------
@@ -92,6 +108,31 @@ void Material::SetupSkybox(ID3D11Device* device, ID3D11DeviceContext* context, c
 	hr = DirectX::CreateDDSTextureFromFile(device, path, 0, &skySRV);
 
 	device->CreateSamplerState(sampleDes, &sampleState);
+}
+
+void Material::SetupParticle(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, SimpleVertexShader* particleVS, SimplePixelShader* particlePS)
+{
+	DirectX::CreateWICTextureFromFile(device, context, path, 0, &particleTexture);
+
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+	dsDesc.DepthEnable = true;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO; // Turns off depth writing
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	device->CreateDepthStencilState(&dsDesc, &particleDepthState);
+
+	// Blend for particles (additive)
+	D3D11_BLEND_DESC blend = {};
+	blend.AlphaToCoverageEnable = false;
+	blend.IndependentBlendEnable = false;
+	blend.RenderTarget[0].BlendEnable = true;
+	blend.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blend.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blend.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	blend.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blend.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blend.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	blend.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	device->CreateBlendState(&blend, &particleBlendState);
 }
 
 //---------------------------------------------------------

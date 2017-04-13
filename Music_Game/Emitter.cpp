@@ -105,7 +105,7 @@ Emitter::~Emitter()
 void Emitter::Update(float dt)
 {
 	// Update all particles - Check cyclic buffer first
-	if (firstAliveIndex < firstDeadIndex)
+ 	if (firstAliveIndex < firstDeadIndex)
 	{
 		// First alive is BEFORE first dead, so the "living" particles are contiguous
 		// 
@@ -271,8 +271,8 @@ void Emitter::Draw(ID3D11DeviceContext* context, Camera* camera)
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	vs->SetMatrix4x4("view", camera->GetView());
-	vs->SetMatrix4x4("projection", camera->GetProjection());
+	vs->SetMatrix4x4("view", camera->GetViewMatrix());
+	vs->SetMatrix4x4("projection", camera->GetProjectionMatrix());
 	vs->SetShader();
 	vs->CopyAllBufferData();
 

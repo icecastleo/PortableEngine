@@ -43,27 +43,21 @@ SceneBuilder::~SceneBuilder()
 	delete scene2;
 	delete scene3;
 
+	delete emitter;
 }
 
 //---------------------------------------------------------
 //Set up a scene
 //---------------------------------------------------------
-void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context, SimpleVertexShader* _particleVs, SimplePixelShader* _particlePs)
+void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 {
 	device = _device;
 	context = _context;
-	BuildTextures();
 	BuildMaterials();
 	BuildLights();
 	BuildMeshes();
 	BuildEntities();
-	BuildParticles(_particleVs, _particlePs);
 	SetupScenes();
-}
-
-void SceneBuilder::BuildTextures()
-{
-	DirectX::CreateWICTextureFromFile(device, context, L"Debug/Textures/particle.jpg", 0, &particleTexture); //Add particle.jpg to project and alter file path
 }
 
 //---------------------------------------------------------
@@ -86,6 +80,9 @@ void SceneBuilder::BuildMaterials()
 	//path = L"Assets/textures/spaceBackground.dds";
 	path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
+
+	path = L"Debug/Textures/circleParticle.jpg"; 
+	DirectX::CreateWICTextureFromFile(device, context, path, 0, &particleTexture); 
 }
 
 //---------------------------------------------------------
@@ -162,26 +159,6 @@ void SceneBuilder::BuildEntities()
 	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 }
 
-void SceneBuilder::BuildParticles(SimpleVertexShader* particleVS, SimplePixelShader* particlePS)
-{
-	emitter = new Emitter(
-		1000,							// Max particles
-		100,							// Particles per second
-		5,								// Particle lifetime
-		0.1f,							// Start size
-		5.0f,							// End size
-		XMFLOAT4(1, 0.1f, 0.1f, 0.2f),	// Start color
-		XMFLOAT4(1, 0.6f, 0.1f, 0),		// End color
-		XMFLOAT3(-2, 2, 0),				// Start velocity
-		XMFLOAT3(2, 0, 0),				// Start position
-		XMFLOAT3(0, -1, 0),				// Start acceleration
-		device,
-		particleVS,
-		particlePS,
-		particleTexture);
-
-}
-
 //---------------------------------------------------------
 //Setup the 3 built in scenes here
 //---------------------------------------------------------
@@ -205,7 +182,8 @@ void SceneBuilder::SetupScenes()
 	scene2->globalLights.push_back(ambient);
 	scene2->entities.push_back(playerEnt);
 	scene2->entities.push_back(asteroidEnt);
-	
+	scene2->Particles = emitter;
+
 	//Scene 3
 	//------------------------------------------------------------------
 	scene3 = new Scene();

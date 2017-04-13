@@ -20,21 +20,16 @@ public:
 	SceneBuilder();
 	~SceneBuilder();
 
-	void Init(ID3D11Device*, ID3D11DeviceContext*, SimpleVertexShader*, SimplePixelShader*);
-	void BuildTextures();
+	void Init(ID3D11Device*, ID3D11DeviceContext*);
 	void BuildMaterials();
 	void BuildLights();
 	void BuildMeshes();
 	void BuildEntities();
-	void BuildParticles(SimpleVertexShader* particleVS, SimplePixelShader* particlePS);
 
 	Entity* CreateEntity(Mesh*, Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
 	Entity* GetPlayerEntity();
 	Entity* GetAsteroidEntity();
-
-	
-
 
 private:
 	void SetupScenes();
@@ -76,9 +71,6 @@ private:
 
 	SpotLight* spotLight;
 
-	// Particle Texture
-	ID3D11ShaderResourceView* particleTexture;
-	
-	//Particles= Emitter
+	//Particles Emitter
 	Emitter *emitter;
 };

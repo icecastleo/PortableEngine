@@ -76,7 +76,7 @@ void Game::Init()
 
 	Render.SetShaders(vertexShader, pixelShader, skyVS, skyPS, particleVS, particlePS);
 
-	SceneBuild.Init(device, context, particleVS, particlePS);
+	SceneBuild.Init(device, context);
 	SceneManag.AddScene(SceneBuild.GetScene(1));
 	SceneManag.AddScene(SceneBuild.GetScene(2));
 	SceneManag.AddScene(SceneBuild.GetScene(3));
@@ -167,6 +167,9 @@ void Game::Update(float deltaTime, float totalTime)
 	{
 		ent->Update();
 	}
+
+	if(currentScene->Particles != NULL)
+		currentScene->Particles->Update(deltaTime);
 
 	XMMATRIX playerWorld = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
 	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));

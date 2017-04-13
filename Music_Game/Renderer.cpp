@@ -183,12 +183,27 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		context->RSSetState(currentScene->background->GetMat()->GetRast());
 		context->OMSetDepthStencilState(currentScene->background->GetMat()->GetDepthSD(), 0);
 		context->DrawIndexed(currentScene->background->GetMesh()->GetIndexCount(), 0, 0);
+	}
+
+	if (currentScene->Particles != NULL)
+	{
+		// Particle states
+		float blend[4] = { 1,1,1,1 };
+		context->OMSetBlendState(particleBlendState, blend, 0xffffffff);  // Additive blending
+		context->OMSetDepthStencilState(particleDepthState, 0);			// No depth WRITING
+
+																		// Draw the emitter
+		currentScene->Particles->Draw(context, Cam);
+
+		// Reset to default states for next frame
+		context->OMSetBlendState(0, blend, 0xffffffff);
+		context->OMSetDepthStencilState(0, 0);
 
 		// Reset the render states we've changed
 		context->RSSetState(0);
 		context->OMSetDepthStencilState(0, 0);
 	}
-
+	
 	// Present the back buffer to the user
 	//  - Puts the final frame we're drawing into the window so the user can see it
 	//  - Do this exactly ONCE PER FRAME (always at the very end of the frame)
