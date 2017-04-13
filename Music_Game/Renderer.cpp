@@ -189,8 +189,8 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	{
 		// Particle states
 		float blend[4] = { 1,1,1,1 };
-		context->OMSetBlendState(particleBlendState, blend, 0xffffffff);  // Additive blending
-		context->OMSetDepthStencilState(particleDepthState, 0);			// No depth WRITING
+		context->OMSetBlendState(currentScene->Particles->GetMaterial()->GetParticleBlendState(), blend, 0xffffffff);  // Additive blending
+		context->OMSetDepthStencilState(currentScene->Particles->GetMaterial()->GetParticleDepthState(), 0);			// No depth WRITING
 
 																		// Draw the emitter
 		currentScene->Particles->Draw(context, Cam);

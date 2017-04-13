@@ -4,6 +4,7 @@
 
 #include "Camera.h"
 #include "SimpleShader.h"
+#include "Material.h"
 
 struct Particle
 {
@@ -37,9 +38,7 @@ public:
 		DirectX::XMFLOAT3 emitterPosition,
 		DirectX::XMFLOAT3 emitterAcceleration,
 		ID3D11Device* device,
-		SimpleVertexShader* vs,
-		SimplePixelShader* ps,
-		ID3D11ShaderResourceView* texture
+		Material* material
 	);
 	~Emitter();
 
@@ -51,6 +50,8 @@ public:
 	void CopyParticlesToGPU(ID3D11DeviceContext* context);
 	void CopyOneParticle(int index);
 	void Draw(ID3D11DeviceContext* context, Camera* camera);
+
+	Material* GetMaterial();
 
 private:
 	// Emission properties
@@ -83,4 +84,6 @@ private:
 	ID3D11ShaderResourceView* texture;
 	SimpleVertexShader* vs;
 	SimplePixelShader* ps;
+
+	Material* material;
 };

@@ -13,7 +13,6 @@ public:
 	Material();
 	Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
 	Material::Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*, bool);
-	Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, SimpleVertexShader* particleVS, SimplePixelShader* particlePS);
 	~Material();
 
 	void PrepareMaterial(DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, SimpleVertexShader*);
@@ -21,13 +20,17 @@ public:
 
 	void SetTexture(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
 	void SetupSkybox(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
-	void SetupParticle(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*, SimpleVertexShader*, SimplePixelShader*);
+	void SetupParticle(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
 	ID3D11RasterizerState* GetRast();
 	ID3D11DepthStencilState* GetDepthSD();
 
 	ID3D11ShaderResourceView* GetSRV();
 	ID3D11ShaderResourceView* GetSkySRV();
 	ID3D11SamplerState* GetSampleState();
+
+	ID3D11DepthStencilState* GetParticleDepthState();
+	ID3D11BlendState* GetParticleBlendState();
+	ID3D11ShaderResourceView* GetParticleTexture();
 
 private:
 	

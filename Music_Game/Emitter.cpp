@@ -14,15 +14,14 @@ Emitter::Emitter(
 	DirectX::XMFLOAT3 emitterPosition,
 	DirectX::XMFLOAT3 emitterAcceleration,
 	ID3D11Device* device,
-	SimpleVertexShader* vs,
-	SimplePixelShader* ps,
-	ID3D11ShaderResourceView* texture
+	Material* material
 )
 {
 	// Save params
-	this->vs = vs;
-	this->ps = ps;
-	this->texture = texture;
+	//this->vs = vs;
+	//this->ps = ps;
+	//this->texture = texture;
+	this->material = material;
 
 	this->maxParticles = maxParticles;
 	this->lifetime = lifetime;
@@ -294,4 +293,9 @@ void Emitter::Draw(ID3D11DeviceContext* context, Camera* camera)
 		context->DrawIndexed((maxParticles - firstAliveIndex) * 6, firstAliveIndex * 6, 0);
 	}
 
+}
+
+Material* Emitter::GetMaterial()
+{
+	return material;
 }

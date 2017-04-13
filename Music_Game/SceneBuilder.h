@@ -25,6 +25,7 @@ public:
 	void BuildLights();
 	void BuildMeshes();
 	void BuildEntities();
+	void BuildParticles();
 
 	Entity* CreateEntity(Mesh*, Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
@@ -51,6 +52,7 @@ private:
 	Material* playerMat;
 	Material* asteroidMat;
 	Material* backgroundMat;
+	Material* particelMat;
 
 	Entity* menuEnt;
 	Entity* menuBackgroundEnt;

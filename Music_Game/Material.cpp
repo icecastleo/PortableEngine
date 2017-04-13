@@ -19,17 +19,11 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 //---------------------------------------------------------
 Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, bool isSkybox)
 {
-	SetupSkybox(device, context, path);
+	if(isSkybox)
+		SetupSkybox(device, context, path);
+	else
+		SetupParticle(device, context, path);
 }
-
-//---------------------------------------------------------
-//Constructor override to create a material for particle emitter
-//---------------------------------------------------------
-Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, SimpleVertexShader* particleVS, SimplePixelShader* particlePS)
-{
-	SetupParticle(device, context, path, particleVS, particlePS);
-}
-
 
 //---------------------------------------------------------
 //Default Deconstructor
@@ -110,7 +104,7 @@ void Material::SetupSkybox(ID3D11Device* device, ID3D11DeviceContext* context, c
 	device->CreateSamplerState(sampleDes, &sampleState);
 }
 
-void Material::SetupParticle(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, SimpleVertexShader* particleVS, SimplePixelShader* particlePS)
+void Material::SetupParticle(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path)
 {
 	DirectX::CreateWICTextureFromFile(device, context, path, 0, &particleTexture);
 
@@ -211,4 +205,19 @@ ID3D11RasterizerState* Material::GetRast()
 ID3D11DepthStencilState* Material::GetDepthSD()
 {
 	return dsSky;
+}
+
+ID3D11DepthStencilState* Material::GetParticleDepthState()
+{
+	return particleDepthState;
+}
+
+ID3D11BlendState* Material::GetParticleBlendState()
+{
+	return particleBlendState;
+}
+
+ID3D11ShaderResourceView* Material::GetParticleTexture()
+{
+	return particleTexture;
 }
