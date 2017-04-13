@@ -19,7 +19,7 @@ public:
 	void Init(Camera*, ID3D11DeviceContext*, ID3D11RenderTargetView*, IDXGISwapChain*, ID3D11DepthStencilView*);
 	void Resized(ID3D11DepthStencilView*, ID3D11RenderTargetView*);
 	void Draw(float, float);
-	void SetShaders(SimpleVertexShader*, SimplePixelShader*, SimpleVertexShader*, SimplePixelShader*);
+	void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader, SimpleVertexShader* _skyVs, SimplePixelShader* _skyPs, SimpleVertexShader* _particleVs, SimplePixelShader* _particlePs);
 	void SetScene(Scene*);
 
 private:
@@ -28,6 +28,9 @@ private:
 	SimplePixelShader* pixelShader;
 	SimpleVertexShader* skyVS;
 	SimplePixelShader* skyPS;
+	// Particle Shaders
+	SimpleVertexShader* particleVS;
+	SimplePixelShader* particlePS;
 
 	// Buffers to hold actual geometry data
 	ID3D11Buffer* vertexBuffer;
@@ -41,6 +44,10 @@ private:
 	ID3D11RenderTargetView* backBufferRTV;
 	IDXGISwapChain* swapChain;
 	ID3D11DepthStencilView* depthStencilView;
+
+	// Particle Resources
+	ID3D11DepthStencilState* particleDepthState;
+	ID3D11BlendState* particleBlendState;
 
 	Scene* currentScene;
 

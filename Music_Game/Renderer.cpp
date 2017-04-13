@@ -35,12 +35,14 @@ void Renderer::Init(Camera* _Cam, ID3D11DeviceContext* con, ID3D11RenderTargetVi
 //---------------------------------------------------------
 //Set Shaders
 //---------------------------------------------------------
-void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader, SimpleVertexShader* _skyVs, SimplePixelShader* _skyPs)
+void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader, SimpleVertexShader* _skyVs, SimplePixelShader* _skyPs, SimpleVertexShader* _particleVs, SimplePixelShader* _particlePs)
 {
 	vertexShader = _vertexShader;
 	pixelShader = _pixelShader;
 	skyVS = _skyVs;
 	skyPS = _skyPs;
+	particleVS = _particleVs;
+	particlePS = _particlePs;
 }
 
 //---------------------------------------------------------

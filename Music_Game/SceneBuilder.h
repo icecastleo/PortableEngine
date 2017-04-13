@@ -1,5 +1,6 @@
 //Darren Farr
 #pragma once
+#include "SimpleShader.h"
 #include "Entity.h"
 #include <DirectXMath.h>
 #include "Mesh.h"
@@ -7,6 +8,7 @@
 #include <vector>
 #include "Lights.h"
 #include "Scene.h"
+#include "Emitter.h"
 
 //---------------------------------------------------------
 //Scene Manager class
@@ -18,12 +20,13 @@ public:
 	SceneBuilder();
 	~SceneBuilder();
 
-	void Init(ID3D11Device*, ID3D11DeviceContext*);
+	void Init(ID3D11Device*, ID3D11DeviceContext*, SimpleVertexShader*, SimplePixelShader*);
+	void BuildTextures();
 	void BuildMaterials();
 	void BuildLights();
 	void BuildMeshes();
 	void BuildEntities();
-
+	void BuildParticles(SimpleVertexShader* particleVS, SimplePixelShader* particlePS);
 
 	Entity* CreateEntity(Mesh*, Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
@@ -72,4 +75,10 @@ private:
 	PointLight* pointLight;
 
 	SpotLight* spotLight;
+
+	// Particle Texture
+	ID3D11ShaderResourceView* particleTexture;
+	
+	//Particles= Emitter
+	Emitter *emitter;
 };

@@ -44,6 +44,9 @@ private:
 	SimplePixelShader* pixelShader;
 	SimpleVertexShader* skyVS;
 	SimplePixelShader* skyPS;
+	// Particle Shaders
+	SimpleVertexShader* particleVS;
+	SimplePixelShader* particlePS;
 
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.

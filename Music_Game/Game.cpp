@@ -1,4 +1,4 @@
-//Original code - Chris Cascioli
+ //Original code - Chris Cascioli
 //Modified for use in homework
 
 #include "Game.h"
@@ -56,6 +56,8 @@ Game::~Game()
 	delete pixelShader;
 	delete skyVS;
 	delete skyPS;
+	delete particleVS;
+	delete particleVS;
 }
 
 // --------------------------------------------------------
@@ -72,9 +74,9 @@ void Game::Init()
 
 	LoadShaders();
 
-	Render.SetShaders(vertexShader, pixelShader, skyVS, skyPS);
+	Render.SetShaders(vertexShader, pixelShader, skyVS, skyPS, particleVS, particlePS);
 
-	SceneBuild.Init(device, context);
+	SceneBuild.Init(device, context, particleVS, particlePS);
 	SceneManag.AddScene(SceneBuild.GetScene(1));
 	SceneManag.AddScene(SceneBuild.GetScene(2));
 	SceneManag.AddScene(SceneBuild.GetScene(3));
@@ -117,6 +119,14 @@ void Game::LoadShaders()
 	skyPS = new SimplePixelShader(device, context);
 	if (!skyPS->LoadShaderFile(L"Debug/SkyPS.cso"))
 		skyPS->LoadShaderFile(L"SkyPS.cso");
+
+	particleVS = new SimpleVertexShader(device, context);
+	if (!particleVS->LoadShaderFile(L"Debug/ParticleVS.cso"))
+		particleVS->LoadShaderFile(L"ParticleVS.cso");
+
+	particlePS = new SimplePixelShader(device, context);
+	if (!particlePS->LoadShaderFile(L"Debug/ParticlePS.cso"))
+		particlePS->LoadShaderFile(L"ParticlePS.cso");
 }
 
 // --------------------------------------------------------
