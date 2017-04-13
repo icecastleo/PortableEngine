@@ -28,6 +28,7 @@ void Player::Update(float deltaTime)
 		Move(-1,0,0, deltaTime);
 	}
 
+	/* Up/Down movement not needed.
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
 		Move(0, 1, 0, deltaTime);
@@ -37,6 +38,7 @@ void Player::Update(float deltaTime)
 	{
 		Move(0, -1, 0, deltaTime);
 	}
+	*/
 }
 
 void Player::Move(float x, float y, float z, float deltaTime)

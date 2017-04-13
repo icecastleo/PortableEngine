@@ -57,7 +57,7 @@ private:
 	Entity* menuEnt;
 	Entity* menuBackgroundEnt;
 	Entity* gameBackgroundEnt;
-	Entity* creditsBackgroundEnt;
+	//Entity* creditsBackgroundEnt;
 	Entity* playerEnt;
 	Entity* asteroidEnt;
 
