@@ -43,15 +43,17 @@ private:
 
 	Mesh* cubeMesh;
 	Mesh* quadMesh;
+	Mesh* sphereMesh;
 	Mesh* playerMesh;
 	Mesh* asteroidMesh;
-
+	
 	//Material* creditsMat;
 	Material* menuMat;
 	Material* playerMat;
 	Material* asteroidMat;
 	Material* backgroundMat;
 	Material* laneMat;
+	Material* plutoMat;
 
 	Entity* menuEnt;
 	Entity* menuBackgroundEnt;
@@ -64,6 +66,7 @@ private:
 	Entity* asteroidEnt4;
 	Entity* asteroidEnt5;
 	Entity* laneEnt;
+	Entity* plutoEnt;
 
 
 	GlobalLight* ambient;
