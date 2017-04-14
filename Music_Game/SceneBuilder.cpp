@@ -85,6 +85,9 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/rockNormals.jpg";
 	asteroidMat->SetNormalMap(device, context, path);
 
+	path = L"Assets/textures/pluto.jpg";
+	plutoMat = new Material(device, context, path);
+
 	path = L"Assets/textures/spaceBackground.dds";
 	//path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
@@ -142,6 +145,8 @@ void SceneBuilder::BuildMeshes()
 
 	quadMesh = new Mesh("quad", device);
 
+	sphereMesh = new Mesh("sphere", device);
+
 	playerMesh = new Mesh("sphere", device);
 
 	asteroidMesh = new Mesh("sphere", device);
@@ -167,6 +172,8 @@ void SceneBuilder::BuildEntities()
 	asteroidList[3] = asteroidEnt4;
 	asteroidEnt5 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 	asteroidList[4] = asteroidEnt5;
+
+	plutoEnt = new Entity(sphereMesh, plutoMat, XMFLOAT3(+8.0f, +7.0f, 10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+3.0f, +3.0f, +3.0f));
 
 	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
@@ -202,6 +209,7 @@ void SceneBuilder::SetupScenes()
 	scene2->entities.push_back(asteroidEnt3);
 	scene2->entities.push_back(asteroidEnt4);
 	scene2->entities.push_back(asteroidEnt5);
+	scene2->entities.push_back(plutoEnt);
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
 	
 	//Scene 3
