@@ -12,6 +12,7 @@ Material::Material() {}
 Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path)
 {
 	SetTexture(device, context, path);
+	hasNormal = false;
 }
 
 //---------------------------------------------------------
@@ -20,6 +21,7 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, bool isSkybox)
 {
 	SetupSkybox(device, context, path);
+	hasNormal = false;
 }
 
 //---------------------------------------------------------
@@ -28,13 +30,16 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 Material::~Material() 
 {
 	if (SRV != nullptr) { SRV->Release(); }
-	sampleState->Release();
+	
 	if (skySRV != nullptr)
 	{
 		skySRV->Release();
 		rsSky->Release();
 		dsSky->Release();
 	}
+	if (normalSRV != nullptr) { normalSRV->Release(); }
+
+	sampleState->Release();
 	delete sampleDes;
 }
 
@@ -53,6 +58,7 @@ void Material::SetTexture(ID3D11Device* device, ID3D11DeviceContext* context, co
 
 	SRV = nullptr;
 	skySRV = nullptr;
+	normalSRV = nullptr;
 
 	DirectX::CreateWICTextureFromFile(device, context, path, 0, &SRV);
 
@@ -87,11 +93,22 @@ void Material::SetupSkybox(ID3D11Device* device, ID3D11DeviceContext* context, c
 
 	SRV = nullptr;
 	skySRV = nullptr;
+	normalSRV = nullptr;
 
 	HRESULT hr;
 	hr = DirectX::CreateDDSTextureFromFile(device, path, 0, &skySRV);
 
 	device->CreateSamplerState(sampleDes, &sampleState);
+}
+
+//---------------------------------------------------------
+//Set a normal map
+//---------------------------------------------------------
+void Material::SetNormalMap(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path)
+{
+	hasNormal = true;
+
+	DirectX::CreateWICTextureFromFile(device, context, path, 0, &normalSRV);
 }
 
 //---------------------------------------------------------
@@ -141,6 +158,14 @@ ID3D11ShaderResourceView* Material::GetSRV()
 }
 
 //---------------------------------------------------------
+//Return the SRV
+//---------------------------------------------------------
+ID3D11ShaderResourceView* Material::GetNormalSRV()
+{
+	return normalSRV;
+}
+
+//---------------------------------------------------------
 //Return the skybox SRV
 //---------------------------------------------------------
 ID3D11ShaderResourceView* Material::GetSkySRV()
@@ -170,4 +195,12 @@ ID3D11RasterizerState* Material::GetRast()
 ID3D11DepthStencilState* Material::GetDepthSD()
 {
 	return dsSky;
+}
+
+//---------------------------------------------------------
+//Return if the material has a normal map or not
+//---------------------------------------------------------
+bool Material::HasNormalMap()
+{
+	return hasNormal;
 }

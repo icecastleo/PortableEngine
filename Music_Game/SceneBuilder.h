@@ -28,10 +28,8 @@ public:
 	Entity* CreateEntity(Mesh*, Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
 	Entity* GetPlayerEntity();
-	Entity* GetAsteroidEntity();
-
+	Entity* GetAsteroidEntity(int);
 	
-
 
 private:
 	void SetupScenes();
@@ -60,6 +58,10 @@ private:
 	//Entity* creditsBackgroundEnt;
 	Entity* playerEnt;
 	Entity* asteroidEnt;
+	Entity* asteroidEnt2;
+	Entity* asteroidEnt3;
+	Entity* asteroidEnt4;
+	Entity* asteroidEnt5;
 
 
 	GlobalLight* ambient;
@@ -72,4 +74,6 @@ private:
 	PointLight* pointLight;
 
 	SpotLight* spotLight;
+
+	Entity* asteroidList[5];
 };

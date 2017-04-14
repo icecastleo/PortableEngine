@@ -19,6 +19,7 @@ public:
 	void PrepareSkybox(DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, SimpleVertexShader*, SimplePixelShader*);
 
 	void SetTexture(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
+	void SetNormalMap(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
 	void SetupSkybox(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
 
 	ID3D11RasterizerState* GetRast();
@@ -26,7 +27,10 @@ public:
 
 	ID3D11ShaderResourceView* GetSRV();
 	ID3D11ShaderResourceView* GetSkySRV();
+	ID3D11ShaderResourceView* GetNormalSRV();
 	ID3D11SamplerState* GetSampleState();
+
+	bool HasNormalMap();
 
 private:
 	
@@ -37,4 +41,8 @@ private:
 	ID3D11ShaderResourceView* skySRV;
 	ID3D11RasterizerState* rsSky;
 	ID3D11DepthStencilState* dsSky;
+
+	ID3D11ShaderResourceView* normalSRV;
+
+	bool hasNormal;
 };

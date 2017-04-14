@@ -13,12 +13,18 @@ Renderer::Renderer()
 	indexBuffer = 0;
 	vertexShader = 0;
 	pixelShader = 0;
+	currentPixelShader = 0;
+
 }
 
 //---------------------------------------------------------
 //Default Deconstructor
 //---------------------------------------------------------
-Renderer::~Renderer() {}
+Renderer::~Renderer() 
+{
+	//Need to figure out how to delete this without crashing.
+	//delete currentPixelShader;
+}
 
 //---------------------------------------------------------
 //Inititialize one time members
@@ -35,10 +41,13 @@ void Renderer::Init(Camera* _Cam, ID3D11DeviceContext* con, ID3D11RenderTargetVi
 //---------------------------------------------------------
 //Set Shaders
 //---------------------------------------------------------
-void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader, SimpleVertexShader* _skyVs, SimplePixelShader* _skyPs)
+void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader, 
+	SimpleVertexShader* _vertShaderNorm, SimplePixelShader* _pixShaderNorm, SimpleVertexShader* _skyVs, SimplePixelShader* _skyPs)
 {
 	vertexShader = _vertexShader;
 	pixelShader = _pixelShader;
+	vertexShaderNormalMap = _vertShaderNorm;
+	pixelShaderNormalMap = _pixShaderNorm;
 	skyVS = _skyVs;
 	skyPS = _skyPs;
 }
@@ -81,9 +90,18 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	for (unsigned i = 0; i < currentScene->entities.size(); i++)
 	{
 		//call to set shaders goes here
-		currentScene->entities.at(i)->GetMat()->PrepareMaterial(currentScene->entities.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
+		if (currentScene->entities.at(i)->GetMat()->HasNormalMap())
+		{
+			currentScene->entities.at(i)->GetMat()->PrepareMaterial(currentScene->entities.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
+			currentPixelShader = pixelShaderNormalMap;
+		}
+		else
+		{
+			currentScene->entities.at(i)->GetMat()->PrepareMaterial(currentScene->entities.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
+			currentPixelShader = pixelShader;
+		}
 
-		pixelShader->SetFloat4("camPos", Cam->GetPositon());
+		currentPixelShader->SetFloat4("camPos", Cam->GetPositon());
 
 		if (currentScene->spotLights.size() > 0) {
 			currentScene->spotLights.at(0)->Direction.x = Cam->GetDirection().x;
@@ -99,7 +117,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		{
 			std::string name = "ambient" + std::to_string(g);
 			//setup lights
-			pixelShader->SetData(
+			currentPixelShader->SetData(
 				name,
 				currentScene->globalLights.at(g),
 				sizeof(GlobalLight)
@@ -110,7 +128,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		{
 			std::string name = "light" + std::to_string(l);
 			//setup lights
-			pixelShader->SetData(
+			currentPixelShader->SetData(
 				name,
 				currentScene->directionalLights.at(l),
 				sizeof(DirectionalLight)
@@ -121,7 +139,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		{
 			std::string name = "lightP" + std::to_string(p);
 			//setup lights
-			pixelShader->SetData(
+			currentPixelShader->SetData(
 				name,
 				currentScene->pointLights.at(p),
 				sizeof(PointLight)
@@ -132,23 +150,30 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		{
 			std::string name = "lightS" + std::to_string(s);
 			//setup lights
-			pixelShader->SetData(
+			currentPixelShader->SetData(
 				name,
 				currentScene->spotLights.at(s),
 				sizeof(SpotLight)
 			);
 		}
 		
-		pixelShader->SetSamplerState("basicSampler", currentScene->entities.at(i)->GetMat()->GetSampleState());
-		pixelShader->SetShaderResourceView("diffuseTexture", currentScene->entities.at(i)->GetMat()->GetSRV());
-		if (currentScene->background != NULL)
+		currentPixelShader->SetSamplerState("basicSampler", currentScene->entities.at(i)->GetMat()->GetSampleState());
+		currentPixelShader->SetShaderResourceView("diffuseTexture", currentScene->entities.at(i)->GetMat()->GetSRV());
+		
+		//check for a normal map
+		if (currentScene->entities.at(i)->GetMat()->HasNormalMap())
 		{
-			pixelShader->SetShaderResourceView("Sky", currentScene->background->GetMat()->GetSkySRV());
+			currentPixelShader->SetShaderResourceView("NormalMap", currentScene->entities.at(i)->GetMat()->GetNormalSRV());
 		}
 
-		pixelShader->CopyAllBufferData();
+		if (currentScene->background != NULL)
+		{
+			currentPixelShader->SetShaderResourceView("Sky", currentScene->background->GetMat()->GetSkySRV());
+		}
 
-		pixelShader->SetShader();
+		currentPixelShader->CopyAllBufferData();
+
+		currentPixelShader->SetShader();
 
 		stride = sizeof(Vertex);
 		offset = 0;
@@ -166,6 +191,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 			currentScene->entities.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
 			0,     // Offset to the first index we want to use
 			0);    // Offset to add to each index when looking up vertices
+
 	}
 	if (currentScene->background != NULL)
 	{

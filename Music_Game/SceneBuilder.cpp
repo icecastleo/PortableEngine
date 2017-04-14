@@ -27,6 +27,10 @@ SceneBuilder::~SceneBuilder()
 	delete menuEnt;
 	delete playerEnt;
 	delete asteroidEnt;
+	delete asteroidEnt2;
+	delete asteroidEnt3;
+	delete asteroidEnt4;
+	delete asteroidEnt5;
 	delete menuBackgroundEnt;
 	delete gameBackgroundEnt;
 	//delete creditsBackgroundEnt;
@@ -51,6 +55,7 @@ SceneBuilder::~SceneBuilder()
 //---------------------------------------------------------
 void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 {
+	asteroidList[5];
 	device = _device;
 	context = _context;
 	BuildMaterials();
@@ -74,8 +79,11 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/player.png";
 	playerMat = new Material(device, context, path);
 
-	path = L"Assets/textures/asteroid.png";
+	//path = L"Assets/textures/asteroid.png";
+	path = L"Assets/textures/rock.jpg";
 	asteroidMat = new Material(device, context, path);
+	path = L"Assets/textures/rockNormals.jpg";
+	asteroidMat->SetNormalMap(device, context, path);
 
 	path = L"Assets/textures/spaceBackground.dds";
 	//path = L"Assets/textures/SunnyCubeMap.dds";
@@ -145,11 +153,20 @@ void SceneBuilder::BuildMeshes()
 void SceneBuilder::BuildEntities()
 {
 
-	menuEnt = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	menuEnt = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +3.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
-	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, 0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	asteroidList[0] = asteroidEnt;
+	asteroidEnt2 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	asteroidList[1] = asteroidEnt2;
+	asteroidEnt3 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(-2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	asteroidList[2] = asteroidEnt3;
+	asteroidEnt4 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	asteroidList[3] = asteroidEnt4;
+	asteroidEnt5 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	asteroidList[4] = asteroidEnt5;
 
 	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
@@ -165,7 +182,8 @@ void SceneBuilder::SetupScenes()
 	scene1 = new Scene();
 	scene1->name = "Menu";
 	scene1->entities = std::vector<Entity*>();
-	scene1->directionalLights.push_back(dirLight3);
+	scene1->globalLights.push_back(ambient);
+	scene1->directionalLights.push_back(dirLight4);
 	scene1->entities.push_back(menuEnt);
 	scene1->background = menuBackgroundEnt;
 	//scene1->musicFileName = "04_-_Bloody_Revenge.mp3";
@@ -180,6 +198,10 @@ void SceneBuilder::SetupScenes()
 	scene2->globalLights.push_back(ambient);
 	scene2->entities.push_back(playerEnt);
 	scene2->entities.push_back(asteroidEnt);
+	scene2->entities.push_back(asteroidEnt2);
+	scene2->entities.push_back(asteroidEnt3);
+	scene2->entities.push_back(asteroidEnt4);
+	scene2->entities.push_back(asteroidEnt5);
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
 	
 	//Scene 3
@@ -225,8 +247,8 @@ Entity* SceneBuilder::GetPlayerEntity()
 	return playerEnt;
 }
 
-Entity* SceneBuilder::GetAsteroidEntity()
+Entity* SceneBuilder::GetAsteroidEntity(int num)
 {
-	return asteroidEnt;
+	return asteroidList[num];
 }
 

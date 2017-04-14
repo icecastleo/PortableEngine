@@ -2,6 +2,7 @@
 //Modified for use in homework
 
 #include "Game.h"
+#include <time.h> 
 #include <iostream>
 // For the DirectX Math library
 using namespace DirectX;
@@ -25,6 +26,8 @@ Game::Game(HINSTANCE hInstance)
 	// Initialize fields
 	vertexShader = 0;
 	pixelShader = 0;
+	vertexShaderNormalMap = 0;
+	pixelShaderNormalMap = 0;
 
 	MusicPlayer musicPlayer();
 
@@ -56,6 +59,8 @@ Game::~Game()
 	// will clean up their own internal DirectX stuff
 	delete vertexShader;
 	delete pixelShader;
+	delete vertexShaderNormalMap;
+	delete pixelShaderNormalMap;
 	delete skyVS;
 	delete skyPS;
 }
@@ -71,7 +76,7 @@ void Game::Init()
 
 	LoadShaders();
 
-	Render.SetShaders(vertexShader, pixelShader, skyVS, skyPS);
+	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS);
 
 	SceneBuild.Init(device, context);
 	SceneManag.AddScene(SceneBuild.GetScene(1));
@@ -91,7 +96,15 @@ void Game::Init()
 
 	player = Player(SceneBuild.GetPlayerEntity());
 
-	asteroid = Asteroid(SceneBuild.GetAsteroidEntity());
+	//Make 5 Asteroids for the game
+	asteroid = Asteroid(SceneBuild.GetAsteroidEntity(0));
+	asteroid2 = Asteroid(SceneBuild.GetAsteroidEntity(1));
+	asteroid3 = Asteroid(SceneBuild.GetAsteroidEntity(2));
+	asteroid4 = Asteroid(SceneBuild.GetAsteroidEntity(3));
+	asteroid5 = Asteroid(SceneBuild.GetAsteroidEntity(4));
+
+
+
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
 	// Essentially: "What kind of shape should the GPU draw with our data?"
@@ -114,6 +127,14 @@ void Game::LoadShaders()
 	pixelShader = new SimplePixelShader(device, context);
 	if (!pixelShader->LoadShaderFile(L"Debug/PixelShader.cso"))
 		pixelShader->LoadShaderFile(L"PixelShader.cso");
+
+	vertexShaderNormalMap = new SimpleVertexShader(device, context);
+	if (!vertexShaderNormalMap->LoadShaderFile(L"Debug/VertexShaderNormalMap.cso"))
+		vertexShaderNormalMap->LoadShaderFile(L"VertexShaderNormalMap.cso");
+
+	pixelShaderNormalMap = new SimplePixelShader(device, context);
+	if (!pixelShaderNormalMap->LoadShaderFile(L"Debug/PixelShaderNormalMap.cso"))
+		pixelShaderNormalMap->LoadShaderFile(L"PixelShaderNormalMap.cso");
 
 	skyVS = new SimpleVertexShader(device, context);
 	if (!skyVS->LoadShaderFile(L"Debug/SkyVS.cso"))
@@ -169,8 +190,24 @@ void Game::Update(float deltaTime, float totalTime)
 
 	Scene *currentScene = SceneManag.GetScene(SceneNumber);
 
+	//Temp code
+	//----------------------------------------------------------------------------------------
+	
+	//Spawn an inactive asteroid in a random lane.
+	srand(time(NULL));
+	if (!asteroid.IsActive()) { asteroid.SetActive(rand() % 3 + 1); }
+	else if (!asteroid2.IsActive()) { asteroid2.SetActive(rand() % 2 + 1); }
+	else if (!asteroid3.IsActive()) { asteroid3.SetActive(rand() % 3 + 1); }
+	else if (!asteroid4.IsActive()) { asteroid4.SetActive(rand() % 2 + 1); }
+	else if (!asteroid5.IsActive()) { asteroid5.SetActive(rand() % 3 + 1); }
+
+
 	player.Update(deltaTime);
 	asteroid.Update(deltaTime);
+	asteroid2.Update(deltaTime);
+	asteroid3.Update(deltaTime);
+	asteroid4.Update(deltaTime);
+	asteroid5.Update(deltaTime);
 	for each (Entity* ent in currentScene->entities)
 	{
 		ent->Update();
@@ -179,15 +216,51 @@ void Game::Update(float deltaTime, float totalTime)
 	XMMATRIX playerWorld = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
 	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
 
-	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity()->GetWorldMat()));
-	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity()->GetWorldMat()));
+	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(0)->GetWorldMat()));
+	XMMATRIX asteroidWorld2 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(1)->GetWorldMat()));
+	XMMATRIX asteroidWorld3 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(2)->GetWorldMat()));
+	XMMATRIX asteroidWorld4 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(3)->GetWorldMat()));
+	XMMATRIX asteroidWorld5 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(4)->GetWorldMat()));
+	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(0)->GetWorldMat()));
+	XMMATRIX asteroidWorldSpace2 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(1)->GetWorldMat()));
+	XMMATRIX asteroidWorldSpace3 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(2)->GetWorldMat()));
+	XMMATRIX asteroidWorldSpace4 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(3)->GetWorldMat()));
+	XMMATRIX asteroidWorldSpace5 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(4)->GetWorldMat()));
 
 	bool collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
 		playerWorldSpace,
 		asteroid.GetCollider()->GetBoudingSphere(),
 		asteroidWorldSpace);
+	if (collide) { printf("Asteroid 1 collided with player\n"); }
+	collide = false;
 
-	printf("COLL %d\n", collide);
+	collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+		playerWorldSpace,
+		asteroid2.GetCollider()->GetBoudingSphere(),
+		asteroidWorldSpace2);
+	if (collide) { printf("Asteroid 2 collided with player\n"); }
+	collide = false;
+
+	collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+		playerWorldSpace,
+		asteroid3.GetCollider()->GetBoudingSphere(),
+		asteroidWorldSpace3);
+	if (collide) { printf("Asteroid 3 collided with player\n"); }
+	collide = false;
+
+	collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+		playerWorldSpace,
+		asteroid4.GetCollider()->GetBoudingSphere(),
+		asteroidWorldSpace4);
+	if (collide) { printf("Asteroid 4 collided with player\n"); }
+	collide = false;
+
+	collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+		playerWorldSpace,
+		asteroid5.GetCollider()->GetBoudingSphere(),
+		asteroidWorldSpace5);
+	if (collide) { printf("Asteroid 5 collided with player\n"); }
+
 }
 
 // --------------------------------------------------------

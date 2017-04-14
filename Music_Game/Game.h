@@ -44,6 +44,8 @@ private:
 	// Wrappers for DirectX shaders to provide simplified functionality
 	SimpleVertexShader* vertexShader;
 	SimplePixelShader* pixelShader;
+	SimpleVertexShader* vertexShaderNormalMap;
+	SimplePixelShader* pixelShaderNormalMap;
 	SimpleVertexShader* skyVS;
 	SimplePixelShader* skyPS;
 
@@ -63,5 +65,9 @@ private:
 	Camera Cam;
 	Player player;
 	Asteroid asteroid;
+	Asteroid asteroid2;
+	Asteroid asteroid3;
+	Asteroid asteroid4;
+	Asteroid asteroid5;
 };
 
