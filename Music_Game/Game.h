@@ -60,7 +60,7 @@ private:
 	SceneManager SceneManag;
 	Renderer Render;
 	Camera Cam;
-	Player player;
-	Asteroid asteroid;
+	Player* player;
+	Asteroid* asteroid;
 };
 

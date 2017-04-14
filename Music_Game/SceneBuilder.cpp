@@ -18,7 +18,7 @@ SceneBuilder::~SceneBuilder()
 	//delete creditsMat;
 	delete playerMat;
 	delete backgroundMat;
-	//delete particelMat;
+	delete particelMat;
 
 	delete cubeMesh;
 	delete asteroidMesh;
@@ -83,7 +83,7 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
 
-	path = L"Assets/Textures/circleParticle.jpg"; 
+	path = L"Assets/Textures/fireParticle.jpg"; 
 	particelMat = new Material(device, context, path, false);
 }
 

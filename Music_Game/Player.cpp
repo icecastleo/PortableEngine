@@ -13,7 +13,8 @@ Player::Player(Entity* playerEnt) : playerEntity(playerEnt)
 
 Player::~Player()
 {
-	//delete playerCollider;
+	if(playerCollider != NULL)
+		delete playerCollider;
 }
 
 void Player::Update(float deltaTime)

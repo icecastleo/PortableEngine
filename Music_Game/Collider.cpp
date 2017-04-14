@@ -17,7 +17,7 @@ Collider::Collider(Mesh* _mesh) : mesh(_mesh)
 
 Collider::~Collider()
 {
-	//delete mesh;
+	
 }
 
 void Collider::CreateBoundingVolumes(std::vector<Vertex> &vertPosArray,	float &boundingSphere)

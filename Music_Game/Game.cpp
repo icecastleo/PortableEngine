@@ -58,6 +58,9 @@ Game::~Game()
 	delete skyPS;
 	delete particleVS;
 	delete particlePS;
+
+	delete player;
+	delete asteroid;
 }
 
 // --------------------------------------------------------
@@ -86,9 +89,9 @@ void Game::Init()
 
 	Render.Init(&Cam, context, backBufferRTV, swapChain, depthStencilView);
 
-	player = Player(SceneBuild.GetPlayerEntity());
+	player = new Player(SceneBuild.GetPlayerEntity());
 
-	asteroid = Asteroid(SceneBuild.GetAsteroidEntity());
+	asteroid = new Asteroid(SceneBuild.GetAsteroidEntity());
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
 	// Essentially: "What kind of shape should the GPU draw with our data?"
@@ -161,8 +164,8 @@ void Game::Update(float deltaTime, float totalTime)
 
 	Scene *currentScene = SceneManag.GetScene(SceneNumber);
 
-	player.Update(deltaTime);
-	asteroid.Update(deltaTime);
+	player->Update(deltaTime);
+	asteroid->Update(deltaTime);
 	for each (Entity* ent in currentScene->entities)
 	{
 		ent->Update();
@@ -177,9 +180,9 @@ void Game::Update(float deltaTime, float totalTime)
 	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity()->GetWorldMat()));
 	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity()->GetWorldMat()));
 
-	bool collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+	bool collide = Collision::Instance().BoundingSphereCollision(player->GetCollider()->GetBoudingSphere(),
 		playerWorldSpace,
-		asteroid.GetCollider()->GetBoudingSphere(),
+		asteroid->GetCollider()->GetBoudingSphere(),
 		asteroidWorldSpace);
 
 	printf("COLL %d\n", collide);
