@@ -24,6 +24,7 @@ public:
 	void SetScene(Scene*);
 
 private:
+	void SetPixelShaderUp(SimplePixelShader*, int);
 
 	SimpleVertexShader* vertexShader;
 	SimplePixelShader* pixelShader;
@@ -31,8 +32,6 @@ private:
 	SimplePixelShader* pixelShaderNormalMap;
 	SimpleVertexShader* skyVS;
 	SimplePixelShader* skyPS;
-
-	SimplePixelShader* currentPixelShader;
 
 	// Buffers to hold actual geometry data
 	ID3D11Buffer* vertexBuffer;

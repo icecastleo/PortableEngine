@@ -13,18 +13,13 @@ Renderer::Renderer()
 	indexBuffer = 0;
 	vertexShader = 0;
 	pixelShader = 0;
-	currentPixelShader = 0;
 
 }
 
 //---------------------------------------------------------
 //Default Deconstructor
 //---------------------------------------------------------
-Renderer::~Renderer() 
-{
-	//Need to figure out how to delete this without crashing.
-	//delete currentPixelShader;
-}
+Renderer::~Renderer() {}
 
 //---------------------------------------------------------
 //Inititialize one time members
@@ -93,87 +88,15 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		if (currentScene->entities.at(i)->GetMat()->HasNormalMap())
 		{
 			currentScene->entities.at(i)->GetMat()->PrepareMaterial(currentScene->entities.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
-			currentPixelShader = pixelShaderNormalMap;
+			SetPixelShaderUp(pixelShaderNormalMap, i);
 		}
 		else
 		{
 			currentScene->entities.at(i)->GetMat()->PrepareMaterial(currentScene->entities.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
-			currentPixelShader = pixelShader;
+			SetPixelShaderUp(pixelShader, i);
 		}
 
-		currentPixelShader->SetFloat4("camPos", Cam->GetPositon());
-
-		if (currentScene->spotLights.size() > 0) {
-			currentScene->spotLights.at(0)->Direction.x = Cam->GetDirection().x;
-			currentScene->spotLights.at(0)->Direction.y = Cam->GetDirection().y;
-			currentScene->spotLights.at(0)->Direction.z = Cam->GetDirection().z;
-			currentScene->spotLights.at(0)->Position.x = Cam->GetPositon().x;
-			currentScene->spotLights.at(0)->Position.y = Cam->GetPositon().y;
-			currentScene->spotLights.at(0)->Position.z = Cam->GetPositon().z;
-		}
-
-		//loop through lights
-		for (int g = 0; g < currentScene->globalLights.size(); g++)
-		{
-			std::string name = "ambient" + std::to_string(g);
-			//setup lights
-			currentPixelShader->SetData(
-				name,
-				currentScene->globalLights.at(g),
-				sizeof(GlobalLight)
-			);
-		}
-
-		for (int l = 0; l < currentScene->directionalLights.size(); l++)
-		{
-			std::string name = "light" + std::to_string(l);
-			//setup lights
-			currentPixelShader->SetData(
-				name,
-				currentScene->directionalLights.at(l),
-				sizeof(DirectionalLight)
-			);
-		}
-
-		for (int p = 0; p < currentScene->pointLights.size(); p++)
-		{
-			std::string name = "lightP" + std::to_string(p);
-			//setup lights
-			currentPixelShader->SetData(
-				name,
-				currentScene->pointLights.at(p),
-				sizeof(PointLight)
-			);
-		}
-
-		for (int s = 0; s < currentScene->spotLights.size(); s++)
-		{
-			std::string name = "lightS" + std::to_string(s);
-			//setup lights
-			currentPixelShader->SetData(
-				name,
-				currentScene->spotLights.at(s),
-				sizeof(SpotLight)
-			);
-		}
 		
-		currentPixelShader->SetSamplerState("basicSampler", currentScene->entities.at(i)->GetMat()->GetSampleState());
-		currentPixelShader->SetShaderResourceView("diffuseTexture", currentScene->entities.at(i)->GetMat()->GetSRV());
-		
-		//check for a normal map
-		if (currentScene->entities.at(i)->GetMat()->HasNormalMap())
-		{
-			currentPixelShader->SetShaderResourceView("NormalMap", currentScene->entities.at(i)->GetMat()->GetNormalSRV());
-		}
-
-		if (currentScene->background != NULL)
-		{
-			currentPixelShader->SetShaderResourceView("Sky", currentScene->background->GetMat()->GetSkySRV());
-		}
-
-		currentPixelShader->CopyAllBufferData();
-
-		currentPixelShader->SetShader();
 
 		stride = sizeof(Vertex);
 		offset = 0;
@@ -218,6 +141,93 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	//  - Do this exactly ONCE PER FRAME (always at the very end of the frame)
 	swapChain->Present(0, 0);
 }
+
+//---------------------------------------------------------
+//Set the pixel shader up
+//---------------------------------------------------------
+void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, int i)
+{
+	pShader->SetFloat4("camPos", Cam->GetPositon());
+
+	if (currentScene->spotLights.size() > 0) {
+		currentScene->spotLights.at(0)->Direction.x = Cam->GetDirection().x;
+		currentScene->spotLights.at(0)->Direction.y = Cam->GetDirection().y;
+		currentScene->spotLights.at(0)->Direction.z = Cam->GetDirection().z;
+		currentScene->spotLights.at(0)->Position.x = Cam->GetPositon().x;
+		currentScene->spotLights.at(0)->Position.y = Cam->GetPositon().y;
+		currentScene->spotLights.at(0)->Position.z = Cam->GetPositon().z;
+	}
+
+	//loop through lights
+	//global lights
+	for (int g = 0; g < currentScene->globalLights.size(); g++)
+	{
+		std::string name = "ambient" + std::to_string(g);
+		//setup lights
+		pShader->SetData(
+			name,
+			currentScene->globalLights.at(g),
+			sizeof(GlobalLight)
+		);
+	}
+
+	//directional lights
+	for (int d = 0; d < currentScene->directionalLights.size(); d++)
+	{
+		std::string name = "light" + std::to_string(d);
+		//setup lights
+		pShader->SetData(
+			name,
+			currentScene->directionalLights.at(d),
+			sizeof(DirectionalLight)
+		);
+	}
+
+	//point lights
+	for (int p = 0; p < currentScene->pointLights.size(); p++)
+	{
+		std::string name = "lightP" + std::to_string(p);
+		//setup lights
+		pShader->SetData(
+			name,
+			currentScene->pointLights.at(p),
+			sizeof(PointLight)
+		);
+	}
+
+	//spot lights
+	for (int s = 0; s < currentScene->spotLights.size(); s++)
+	{
+		std::string name = "lightS" + std::to_string(s);
+		//setup lights
+		pShader->SetData(
+			name,
+			currentScene->spotLights.at(s),
+			sizeof(SpotLight)
+		);
+	}
+
+	pShader->SetSamplerState("basicSampler", currentScene->entities.at(i)->GetMat()->GetSampleState());
+	pShader->SetShaderResourceView("diffuseTexture", currentScene->entities.at(i)->GetMat()->GetSRV());
+
+	//check for a normal map
+	if (currentScene->entities.at(i)->GetMat()->HasNormalMap())
+	{
+		pShader->SetShaderResourceView("NormalMap", currentScene->entities.at(i)->GetMat()->GetNormalSRV());
+	}
+
+	if (currentScene->background != NULL)
+	{
+		pShader->SetShaderResourceView("Sky", currentScene->background->GetMat()->GetSkySRV());
+	}
+
+	pShader->CopyAllBufferData();
+
+	pShader->SetShader();
+}
+
+
+
 
 
 //---------------------------------------------------------
