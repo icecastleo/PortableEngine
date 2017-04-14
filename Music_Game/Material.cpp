@@ -48,9 +48,9 @@ Material::~Material()
 		particleBlendState->Release();
 		particleDepthState->Release();
 	}
-
 	delete sampleDes;
 	sampleState->Release();
+
 }
 
 //---------------------------------------------------------

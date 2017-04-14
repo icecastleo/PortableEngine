@@ -169,9 +169,9 @@ void Renderer::Draw(float deltaTime, float totalTime)
 			0,     // Offset to the first index we want to use
 			0);    // Offset to add to each index when looking up vertices
 	}
+
 	if (currentScene->background != NULL)
 	{
-
 		vertexBuffer = currentScene->background->GetMesh()->GetVertexBuffer();
 		indexBuffer = currentScene->background->GetMesh()->GetIndexBuffer();
 
@@ -183,6 +183,10 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		context->RSSetState(currentScene->background->GetMat()->GetRast());
 		context->OMSetDepthStencilState(currentScene->background->GetMat()->GetDepthSD(), 0);
 		context->DrawIndexed(currentScene->background->GetMesh()->GetIndexCount(), 0, 0);
+	
+		// Reset the render states we've changed
+		context->RSSetState(0);
+		context->OMSetDepthStencilState(0, 0);
 	}
 
 	if (currentScene->Particles != nullptr)
@@ -197,10 +201,6 @@ void Renderer::Draw(float deltaTime, float totalTime)
 
 		// Reset to default states for next frame
 		context->OMSetBlendState(0, blend, 0xffffffff);
-		context->OMSetDepthStencilState(0, 0);
-
-		// Reset the render states we've changed
-		context->RSSetState(0);
 		context->OMSetDepthStencilState(0, 0);
 	}
 	

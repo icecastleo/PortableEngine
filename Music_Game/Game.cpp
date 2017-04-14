@@ -160,19 +160,20 @@ void Game::Update(float deltaTime, float totalTime)
 		Render.SetScene(SceneManag.GetScene(SceneNumber));
 	}
 
-	Cam.Update(prevMousePos, deltaTime);
-
 	Scene *currentScene = SceneManag.GetScene(SceneNumber);
 
-	player->Update(deltaTime);
-	asteroid->Update(deltaTime);
+	if (currentScene->Particles != NULL)
+		currentScene->Particles->Update(deltaTime);
+
+	Cam.Update(prevMousePos, deltaTime);
+
 	for each (Entity* ent in currentScene->entities)
 	{
 		ent->Update();
 	}
-
-	if(currentScene->Particles != NULL)
-		currentScene->Particles->Update(deltaTime);
+	
+	player->Update(deltaTime);
+	asteroid->Update(deltaTime);
 
 	XMMATRIX playerWorld = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
 	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
