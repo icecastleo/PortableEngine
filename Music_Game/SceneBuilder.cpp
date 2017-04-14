@@ -18,6 +18,7 @@ SceneBuilder::~SceneBuilder()
 	//delete creditsMat;
 	delete playerMat;
 	delete backgroundMat;
+	//delete particelMat;
 
 	delete cubeMesh;
 	delete asteroidMesh;
@@ -57,6 +58,7 @@ void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 	BuildLights();
 	BuildMeshes();
 	BuildEntities();
+	BuildParticles();
 	SetupScenes();
 }
 
@@ -81,9 +83,8 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
 
-	path = L"Debug/Textures/circleParticle.jpg"; 
+	path = L"Assets/Textures/circleParticle.jpg"; 
 	particelMat = new Material(device, context, path, false);
-	//DirectX::CreateWICTextureFromFile(device, context, path, 0, &particleTexture); 
 }
 
 //---------------------------------------------------------

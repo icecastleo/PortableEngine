@@ -18,10 +18,8 @@ Emitter::Emitter(
 )
 {
 	// Save params
-	//this->vs = vs;
-	//this->ps = ps;
-	//this->texture = texture;
 	this->material = material;
+	this->texture = material->GetParticleTexture();
 
 	this->maxParticles = maxParticles;
 	this->lifetime = lifetime;
@@ -99,6 +97,12 @@ Emitter::~Emitter()
 	delete[] localParticleVertices;
 	vertexBuffer->Release();
 	indexBuffer->Release();
+}
+
+void Emitter::SetShaders(SimpleVertexShader* particleVS, SimplePixelShader* particlePS)
+{
+	this->vs = particleVS;
+	this->ps = particlePS;
 }
 
 void Emitter::Update(float dt)

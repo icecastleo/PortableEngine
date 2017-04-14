@@ -30,22 +30,28 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 //---------------------------------------------------------
 Material::~Material() 
 {
-	if (SRV != nullptr) { SRV->Release(); }
-	sampleState->Release();
+	if (SRV != nullptr) 
+	{
+		SRV->Release(); 
+	}
+	
 	if (skySRV != nullptr)
 	{
 		skySRV->Release();
 		rsSky->Release();
 		dsSky->Release();
 	}
-	delete sampleDes;
 	
-	if(particleTexture!= nullptr)
+	if (particleTexture != nullptr)
+	{
 		particleTexture->Release();
-	
-	particleBlendState->Release();
-	particleDepthState->Release();
 
+		particleBlendState->Release();
+		particleDepthState->Release();
+	}
+
+	sampleState->Release();
+	delete sampleDes;
 }
 
 //---------------------------------------------------------
@@ -108,6 +114,19 @@ void Material::SetupParticle(ID3D11Device* device, ID3D11DeviceContext* context,
 {
 	DirectX::CreateWICTextureFromFile(device, context, path, 0, &particleTexture);
 
+	// Create a sampler state for texture sampling
+	D3D11_SAMPLER_DESC samplerDesc = {};
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	samplerDesc.MaxAnisotropy = 16;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	// Ask the device to create a state
+	device->CreateSamplerState(&samplerDesc, &sampleState);
+
+
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
 	dsDesc.DepthEnable = true;
 	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO; // Turns off depth writing
@@ -127,6 +146,8 @@ void Material::SetupParticle(ID3D11Device* device, ID3D11DeviceContext* context,
 	blend.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
 	blend.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 	device->CreateBlendState(&blend, &particleBlendState);
+
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 //---------------------------------------------------------

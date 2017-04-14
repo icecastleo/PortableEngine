@@ -185,14 +185,14 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		context->DrawIndexed(currentScene->background->GetMesh()->GetIndexCount(), 0, 0);
 	}
 
-	if (currentScene->Particles != NULL)
+	if (currentScene->Particles != nullptr)
 	{
 		// Particle states
 		float blend[4] = { 1,1,1,1 };
 		context->OMSetBlendState(currentScene->Particles->GetMaterial()->GetParticleBlendState(), blend, 0xffffffff);  // Additive blending
 		context->OMSetDepthStencilState(currentScene->Particles->GetMaterial()->GetParticleDepthState(), 0);			// No depth WRITING
 
-																		// Draw the emitter
+		currentScene->Particles->SetShaders(particleVS, particlePS);															// Draw the emitter
 		currentScene->Particles->Draw(context, Cam);
 
 		// Reset to default states for next frame

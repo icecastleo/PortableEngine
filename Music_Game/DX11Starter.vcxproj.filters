@@ -142,10 +142,10 @@
     <FxCompile Include="SkyVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Graphics Programming\CPU Particle Demo\CPU Particle Demo\ParticlePS.hlsl">
+    <FxCompile Include="ParticleVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Graphics Programming\CPU Particle Demo\CPU Particle Demo\ParticleVS.hlsl">
+    <FxCompile Include="ParticlePS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

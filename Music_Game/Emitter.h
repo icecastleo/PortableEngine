@@ -42,6 +42,8 @@ public:
 	);
 	~Emitter();
 
+	void SetShaders(SimpleVertexShader* particleVS, SimplePixelShader* particlePS);
+
 	void Update(float dt);
 
 	void UpdateSingleParticle(float dt, int index);

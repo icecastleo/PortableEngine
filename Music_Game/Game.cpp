@@ -57,7 +57,7 @@ Game::~Game()
 	delete skyVS;
 	delete skyPS;
 	delete particleVS;
-	delete particleVS;
+	delete particlePS;
 }
 
 // --------------------------------------------------------
