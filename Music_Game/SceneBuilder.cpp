@@ -18,6 +18,8 @@ SceneBuilder::~SceneBuilder()
 	//delete creditsMat;
 	delete playerMat;
 	delete backgroundMat;
+	delete laneMat;
+	delete plutoMat;
 
 	delete cubeMesh;
 	delete asteroidMesh;
@@ -34,6 +36,8 @@ SceneBuilder::~SceneBuilder()
 	delete menuBackgroundEnt;
 	delete gameBackgroundEnt;
 	//delete creditsBackgroundEnt;
+	delete laneEnt;
+	delete plutoEnt;
 
 	delete ambient;
 	delete dirLight;
@@ -91,6 +95,9 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/spaceBackground.dds";
 	//path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
+
+	path = L"Assets/textures/rainbow.jpg";
+	laneMat = new Material(device, context, path);
 }
 
 //---------------------------------------------------------
@@ -149,7 +156,7 @@ void SceneBuilder::BuildMeshes()
 
 	playerMesh = new Mesh("sphere", device);
 
-	asteroidMesh = new Mesh("sphere", device);
+	asteroidMesh = new Mesh("sphereTest", device);
 }
 
 //---------------------------------------------------------
@@ -157,6 +164,7 @@ void SceneBuilder::BuildMeshes()
 //---------------------------------------------------------
 void SceneBuilder::BuildEntities()
 {
+	//Entity template (mesh name, material name, position, rotation, scale)
 
 	menuEnt = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +3.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
@@ -178,6 +186,8 @@ void SceneBuilder::BuildEntities()
 	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+
+	laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));
 }
 
 //---------------------------------------------------------
@@ -190,7 +200,7 @@ void SceneBuilder::SetupScenes()
 	scene1->name = "Menu";
 	scene1->entities = std::vector<Entity*>();
 	scene1->globalLights.push_back(ambient);
-	scene1->directionalLights.push_back(dirLight4);
+	scene1->directionalLights.push_back(dirLight3);
 	scene1->entities.push_back(menuEnt);
 	scene1->background = menuBackgroundEnt;
 	//scene1->musicFileName = "04_-_Bloody_Revenge.mp3";
@@ -204,6 +214,7 @@ void SceneBuilder::SetupScenes()
 	scene2->background = gameBackgroundEnt;
 	scene2->globalLights.push_back(ambient);
 	scene2->entities.push_back(playerEnt);
+	scene2->entities.push_back(laneEnt);
 	scene2->entities.push_back(asteroidEnt);
 	scene2->entities.push_back(asteroidEnt2);
 	scene2->entities.push_back(asteroidEnt3);

@@ -52,6 +52,7 @@ private:
 	Material* playerMat;
 	Material* asteroidMat;
 	Material* backgroundMat;
+	Material* laneMat;
 	Material* plutoMat;
 
 	Entity* menuEnt;
@@ -64,7 +65,7 @@ private:
 	Entity* asteroidEnt3;
 	Entity* asteroidEnt4;
 	Entity* asteroidEnt5;
-
+	Entity* laneEnt;
 	Entity* plutoEnt;
 
 
