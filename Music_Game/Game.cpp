@@ -162,9 +162,6 @@ void Game::Update(float deltaTime, float totalTime)
 
 	Scene *currentScene = SceneManag.GetScene(SceneNumber);
 
-	if (currentScene->Particles != NULL)
-		currentScene->Particles->Update(deltaTime);
-
 	Cam.Update(prevMousePos, deltaTime);
 
 	for each (Entity* ent in currentScene->entities)
@@ -186,7 +183,11 @@ void Game::Update(float deltaTime, float totalTime)
 		asteroid->GetCollider()->GetBoudingSphere(),
 		asteroidWorldSpace);
 
-	printf("COLL %d\n", collide);
+	if (currentScene->Particles != nullptr)
+	{
+		currentScene->Particles->Update(deltaTime);
+		currentScene->Particles->SetDraw(collide);
+	}
 }
 
 // --------------------------------------------------------

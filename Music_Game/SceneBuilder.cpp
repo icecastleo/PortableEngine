@@ -83,7 +83,7 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
 
-	path = L"Assets/Textures/fireParticle.jpg"; 
+	path = L"Assets/Textures/circleParticle.jpg"; 
 	particelMat = new Material(device, context, path, false);
 }
 
@@ -164,16 +164,16 @@ void SceneBuilder::BuildEntities()
 void SceneBuilder::BuildParticles()
 {
 	emitter = new Emitter(
-		1000,							// Max particles
-		100,							// Particles per second
-		5,								// Particle lifetime
-		0.1f,							// Start size
+		50,							// Max particles
+		25,							// Particles per second
+		2,								// Particle lifetime
+		1.0f,							// Start size
 		5.0f,							// End size
 		XMFLOAT4(1, 0.1f, 0.1f, 0.2f),	// Start color
 		XMFLOAT4(1, 0.6f, 0.1f, 0),		// End color
-		XMFLOAT3(-2, 2, 0),				// Start velocity
-		XMFLOAT3(2, 0, 0),				// Start position
-		XMFLOAT3(0, -1, 0),				// Start acceleration
+		XMFLOAT3(0, 0.5f, 0),				// Start velocity
+		XMFLOAT3(0, 0, 0),				// Start position
+		XMFLOAT3(0, 0, 5),				// Start acceleration
 		device,
 		particelMat);
 }

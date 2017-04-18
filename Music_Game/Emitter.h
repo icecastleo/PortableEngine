@@ -55,6 +55,9 @@ public:
 
 	Material* GetMaterial();
 
+	bool GetDraw();
+	void SetDraw(bool);
+		
 private:
 	// Emission properties
 	int particlesPerSecond;
@@ -63,6 +66,7 @@ private:
 
 	int livingParticleCount;
 	float lifetime;
+	bool draw;
 
 	DirectX::XMFLOAT3 emitterAcceleration;
 	DirectX::XMFLOAT3 emitterPosition;

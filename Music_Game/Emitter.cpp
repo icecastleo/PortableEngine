@@ -39,6 +39,8 @@ Emitter::Emitter(
 	firstAliveIndex = 0;
 	firstDeadIndex = 0;
 
+	SetDraw(false);
+
 	// Make the particle array
 	particles = new Particle[maxParticles];
 
@@ -47,10 +49,10 @@ Emitter::Emitter(
 	localParticleVertices = new ParticleVertex[4 * maxParticles];
 	for (int i = 0; i < maxParticles * 4; i += 4)
 	{
-		localParticleVertices[i + 0].UV = XMFLOAT2(0, 0);
-		localParticleVertices[i + 1].UV = XMFLOAT2(1, 0);
-		localParticleVertices[i + 2].UV = XMFLOAT2(1, 1);
-		localParticleVertices[i + 3].UV = XMFLOAT2(0, 1);
+		localParticleVertices[i + 0].UV = XMFLOAT2(3, 0);
+		localParticleVertices[i + 1].UV = XMFLOAT2(0, 3);
+		localParticleVertices[i + 2].UV = XMFLOAT2(-3, 0);
+		localParticleVertices[i + 3].UV = XMFLOAT2(0, -3);
 	}
 
 
@@ -265,41 +267,53 @@ void Emitter::CopyOneParticle(int index)
 
 void Emitter::Draw(ID3D11DeviceContext* context, Camera* camera)
 {
-	// Copy to dynamic buffer
-	CopyParticlesToGPU(context);
-
-	// Set up buffers
-	UINT stride = sizeof(ParticleVertex);
-	UINT offset = 0;
-	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-	vs->SetMatrix4x4("view", camera->GetViewMatrix());
-	vs->SetMatrix4x4("projection", camera->GetProjectionMatrix());
-	vs->SetShader();
-	vs->CopyAllBufferData();
-
-	ps->SetShaderResourceView("particle", texture);
-	ps->SetShader();
-	ps->CopyAllBufferData();
-
-	// Draw the correct parts of the buffer
-	if (firstAliveIndex < firstDeadIndex)
+	if (draw)
 	{
-		context->DrawIndexed(livingParticleCount * 6, firstAliveIndex * 6, 0);
-	}
-	else
-	{
-		// Draw first half (0 -> dead)
-		context->DrawIndexed(firstDeadIndex * 6, 0, 0);
+		// Copy to dynamic buffer
+		CopyParticlesToGPU(context);
 
-		// Draw second half (alive -> max)
-		context->DrawIndexed((maxParticles - firstAliveIndex) * 6, firstAliveIndex * 6, 0);
-	}
+		// Set up buffers
+		UINT stride = sizeof(ParticleVertex);
+		UINT offset = 0;
+		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
+		vs->SetMatrix4x4("view", camera->GetViewMatrix());
+		vs->SetMatrix4x4("projection", camera->GetProjectionMatrix());
+		vs->SetShader();
+		vs->CopyAllBufferData();
+
+		ps->SetShaderResourceView("particle", texture);
+		ps->SetShader();
+		ps->CopyAllBufferData();
+
+		// Draw the correct parts of the buffer
+		if (firstAliveIndex < firstDeadIndex)
+		{
+			context->DrawIndexed(livingParticleCount * 6, firstAliveIndex * 6, 0);
+		}
+		else
+		{
+			// Draw first half (0 -> dead)
+			context->DrawIndexed(firstDeadIndex * 6, 0, 0);
+
+			// Draw second half (alive -> max)
+			context->DrawIndexed((maxParticles - firstAliveIndex) * 6, firstAliveIndex * 6, 0);
+		}
+	}
 }
 
 Material* Emitter::GetMaterial()
 {
 	return material;
+}
+
+bool Emitter::GetDraw()
+{
+	return draw;
+}
+
+void Emitter::SetDraw(bool _draw)
+{
+	draw = _draw;
 }
