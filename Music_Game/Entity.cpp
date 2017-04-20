@@ -41,6 +41,9 @@ Entity::Entity(Mesh* _mesh, Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _rot, XMFLOA
 // --------------------------------------------------------
 void Entity::Update()
 {
+	XMFLOAT3 temp = transform.rotation;
+	temp.y += 0.0005f;
+	transform.rotation = temp;
 	SetWorldMat();
 }
 

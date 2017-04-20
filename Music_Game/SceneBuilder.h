@@ -67,6 +67,7 @@ private:
 	Entity* asteroidEnt5;
 	Entity* laneEnt;
 	Entity* plutoEnt;
+	Entity* testNormals;
 
 
 	GlobalLight* ambient;

@@ -38,6 +38,7 @@ SceneBuilder::~SceneBuilder()
 	//delete creditsBackgroundEnt;
 	delete laneEnt;
 	delete plutoEnt;
+	delete testNormals;
 
 	delete ambient;
 	delete dirLight;
@@ -188,6 +189,8 @@ void SceneBuilder::BuildEntities()
 	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 
 	laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));
+
+	testNormals = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0, 6, -8), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+3.0f, +3.0f, +3.0f));
 }
 
 //---------------------------------------------------------
@@ -221,7 +224,14 @@ void SceneBuilder::SetupScenes()
 	scene2->entities.push_back(asteroidEnt4);
 	scene2->entities.push_back(asteroidEnt5);
 	scene2->entities.push_back(plutoEnt);
+	scene2->entities.push_back(testNormals);
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
+
+
+	scene2->directionalLights.push_back(dirLight);
+	scene2->directionalLights.push_back(dirLight2);
+	scene2->directionalLights.push_back(dirLight4);
+
 	
 	//Scene 3
 	//------------------------------------------------------------------
