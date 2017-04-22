@@ -39,8 +39,6 @@ Emitter::Emitter(
 	firstAliveIndex = 0;
 	firstDeadIndex = 0;
 
-	SetDraw(false);
-
 	// Make the particle array
 	particles = new Particle[maxParticles];
 
@@ -49,10 +47,10 @@ Emitter::Emitter(
 	localParticleVertices = new ParticleVertex[4 * maxParticles];
 	for (int i = 0; i < maxParticles * 4; i += 4)
 	{
-		localParticleVertices[i + 0].UV = XMFLOAT2(3, 0);
-		localParticleVertices[i + 1].UV = XMFLOAT2(0, 3);
-		localParticleVertices[i + 2].UV = XMFLOAT2(-3, 0);
-		localParticleVertices[i + 3].UV = XMFLOAT2(0, -3);
+		localParticleVertices[i + 0].UV = XMFLOAT2(0, 0);
+		localParticleVertices[i + 1].UV = XMFLOAT2(1, 0);
+		localParticleVertices[i + 2].UV = XMFLOAT2(1, 1);
+		localParticleVertices[i + 3].UV = XMFLOAT2(0, 1);
 	}
 
 
@@ -110,7 +108,7 @@ void Emitter::SetShaders(SimpleVertexShader* particleVS, SimplePixelShader* part
 void Emitter::Update(float dt)
 {
 	// Update all particles - Check cyclic buffer first
- 	if (firstAliveIndex < firstDeadIndex)
+	if (firstAliveIndex < firstDeadIndex)
 	{
 		// First alive is BEFORE first dead, so the "living" particles are contiguous
 		// 
@@ -137,15 +135,15 @@ void Emitter::Update(float dt)
 			UpdateSingleParticle(dt, i);
 	}
 
-	// Add to the time
-	timeSinceEmit += dt;
+	//// Add to the time
+	//timeSinceEmit += dt;
 
-	// Enough time to emit?
-	while (timeSinceEmit > secondsPerParticle)
-	{
-		SpawnParticle();
-		timeSinceEmit -= secondsPerParticle;
-	}
+	//// Enough time to emit?
+	//while (timeSinceEmit > secondsPerParticle)
+	//{
+	//	SpawnParticle();
+	//	timeSinceEmit -= secondsPerParticle;
+	//}
 }
 
 void Emitter::UpdateSingleParticle(float dt, int index)
@@ -204,9 +202,9 @@ void Emitter::SpawnParticle()
 	particles[firstDeadIndex].Color = startColor;
 	particles[firstDeadIndex].Position = emitterPosition;
 	particles[firstDeadIndex].StartVelocity = startVelocity;
-	particles[firstDeadIndex].StartVelocity.x += ((float)rand() / RAND_MAX) * 0.4f - 0.2f;
-	particles[firstDeadIndex].StartVelocity.y += ((float)rand() / RAND_MAX) * 0.4f - 0.2f;
-	particles[firstDeadIndex].StartVelocity.z += ((float)rand() / RAND_MAX) * 0.4f - 0.2f;
+	particles[firstDeadIndex].StartVelocity.x = cos(firstDeadIndex) * startVelocity.x;
+	particles[firstDeadIndex].StartVelocity.y = sin(firstDeadIndex) * startVelocity.y;
+	particles[firstDeadIndex].StartVelocity.z = 0;
 
 	// Increment and wrap
 	firstDeadIndex++;
@@ -267,53 +265,45 @@ void Emitter::CopyOneParticle(int index)
 
 void Emitter::Draw(ID3D11DeviceContext* context, Camera* camera)
 {
-	if (draw)
+	// Copy to dynamic buffer
+	CopyParticlesToGPU(context);
+
+	// Set up buffers
+	UINT stride = sizeof(ParticleVertex);
+	UINT offset = 0;
+	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	vs->SetMatrix4x4("view", camera->GetViewMatrix());
+	vs->SetMatrix4x4("projection", camera->GetProjectionMatrix());
+	vs->SetShader();
+	vs->CopyAllBufferData();
+
+	ps->SetShaderResourceView("particle", texture);
+	ps->SetShader();
+	ps->CopyAllBufferData();
+
+	// Draw the correct parts of the buffer
+	if (firstAliveIndex < firstDeadIndex)
 	{
-		// Copy to dynamic buffer
-		CopyParticlesToGPU(context);
-
-		// Set up buffers
-		UINT stride = sizeof(ParticleVertex);
-		UINT offset = 0;
-		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-		vs->SetMatrix4x4("view", camera->GetViewMatrix());
-		vs->SetMatrix4x4("projection", camera->GetProjectionMatrix());
-		vs->SetShader();
-		vs->CopyAllBufferData();
-
-		ps->SetShaderResourceView("particle", texture);
-		ps->SetShader();
-		ps->CopyAllBufferData();
-
-		// Draw the correct parts of the buffer
-		if (firstAliveIndex < firstDeadIndex)
-		{
-			context->DrawIndexed(livingParticleCount * 6, firstAliveIndex * 6, 0);
-		}
-		else
-		{
-			// Draw first half (0 -> dead)
-			context->DrawIndexed(firstDeadIndex * 6, 0, 0);
-
-			// Draw second half (alive -> max)
-			context->DrawIndexed((maxParticles - firstAliveIndex) * 6, firstAliveIndex * 6, 0);
-		}
+		context->DrawIndexed(livingParticleCount * 6, firstAliveIndex * 6, 0);
 	}
+	else
+	{
+		// Draw first half (0 -> dead)
+		context->DrawIndexed(firstDeadIndex * 6, 0, 0);
+
+		// Draw second half (alive -> max)
+		context->DrawIndexed((maxParticles - firstAliveIndex) * 6, firstAliveIndex * 6, 0);
+	}
+}
+
+void Emitter::SetEmitterPosition(float x, float y, float z)
+{
+	emitterPosition = XMFLOAT3(x, y, z);
 }
 
 Material* Emitter::GetMaterial()
 {
 	return material;
-}
-
-bool Emitter::GetDraw()
-{
-	return draw;
-}
-
-void Emitter::SetDraw(bool _draw)
-{
-	draw = _draw;
 }

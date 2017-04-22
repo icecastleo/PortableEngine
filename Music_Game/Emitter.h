@@ -53,10 +53,9 @@ public:
 	void CopyOneParticle(int index);
 	void Draw(ID3D11DeviceContext* context, Camera* camera);
 
-	Material* GetMaterial();
+	void SetEmitterPosition(float x, float y, float z);
 
-	bool GetDraw();
-	void SetDraw(bool);
+	Material* GetMaterial();
 		
 private:
 	// Emission properties
@@ -66,7 +65,6 @@ private:
 
 	int livingParticleCount;
 	float lifetime;
-	bool draw;
 
 	DirectX::XMFLOAT3 emitterAcceleration;
 	DirectX::XMFLOAT3 emitterPosition;
