@@ -78,11 +78,11 @@ void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con
 	// We don't need the texture reference itself no mo'
 	ppTexture->Release();
 
-	blur = new GaussianBlur(mDevice, context, depthStencilView);
-	blur->Init(mWidth, mHeight);
+	blur = new GaussianBlur(mDevice, context);
+	blur->Init(mWidth, mHeight, depthStencilView);
 
-	bloom = new Bloom(mDevice, context, depthStencilView);
-	bloom->Init(mWidth, mHeight);
+	bloom = new Bloom(mDevice, context);
+	bloom->Init(mWidth, mHeight, depthStencilView);
 }
 
 //---------------------------------------------------------
@@ -294,6 +294,6 @@ void Renderer::Resized(ID3D11DepthStencilView* depth, ID3D11RenderTargetView* bB
 	mWidth = width;
 	mHeight = height;
 
-	blur->SetWidthHeight(width, height);
-	bloom->SetWidthHeight(width, height);
+	blur->Resize(width, height, depthStencilView);
+	bloom->Resize(width, height, depthStencilView);
 }

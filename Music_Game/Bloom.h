@@ -19,11 +19,11 @@ typedef struct _BloomSettings
 class Bloom
 {
 public:
-	Bloom(ID3D11Device* device, ID3D11DeviceContext* context, ID3D11DepthStencilView* depthStencilView, _BloomSettings bloomSettings = DefaultBloomSettings);
+	Bloom(ID3D11Device* device, ID3D11DeviceContext* context, _BloomSettings bloomSettings = DefaultBloomSettings);
 	~Bloom();
 
-	void Init(unsigned int width, unsigned int height);
-	void SetWidthHeight(unsigned int width, unsigned int height);
+	void Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
+	void Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
 
 	//const BloomSettings& GetBloomSettings() const;
 	//void SetBloomSettings(const BloomSettings& bloomSettings);

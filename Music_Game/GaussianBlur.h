@@ -8,11 +8,11 @@
 class GaussianBlur
 {
 public:
-	GaussianBlur(ID3D11Device* device, ID3D11DeviceContext* context, ID3D11DepthStencilView* depthStencilView, float blurAmount = DefaultBlurAmount);
+	GaussianBlur(ID3D11Device* device, ID3D11DeviceContext* context, float blurAmount = DefaultBlurAmount);
 	~GaussianBlur();
 
-	void Init(unsigned int width, unsigned int height);
-	void SetWidthHeight(unsigned int width, unsigned int height);
+	void Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
+	void Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
 
 	float BlurAmount() const;
 	void SetBlurAmount(float blurAmount);
