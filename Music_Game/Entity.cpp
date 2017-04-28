@@ -22,15 +22,15 @@ Entity::~Entity()
 // --------------------------------------------------------
 Entity::Entity(Mesh* _mesh, Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _rot, XMFLOAT3 _scale)
 {
-	XMStoreFloat4x4(&worldMat, XMMatrixIdentity());
+	XMStoreFloat4x4(&worldMat, DirectX::XMMatrixIdentity());
 	mesh = _mesh;
 	mat = _mat;
 	transform.position = _pos;
 	transform.rotation = _rot;
 	transform.scale = _scale;
-
+	parent = nullptr;
+	child = nullptr;
 	SetWorldMat();
-
 	posOrig = transform.position;
 	rotOrig = transform.rotation;
 	scaleOrig = transform.scale;
@@ -41,26 +41,64 @@ Entity::Entity(Mesh* _mesh, Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _rot, XMFLOA
 // --------------------------------------------------------
 void Entity::Update()
 {
-	XMFLOAT3 temp = transform.rotation;
-	temp.y += 0.0005f;
-	transform.rotation = temp;
 	SetWorldMat();
 }
 
+
+void Entity::SetParent(Entity * e)
+{
+	if (e != nullptr) {
+		e->child = nullptr;
+		parent = e;
+	}
+	else {
+		parent = nullptr;
+	}
+	
+}
 
 // --------------------------------------------------------
 //Set the world matrix for the entity based on its 
 //translation(position), rotation, and/or scale
 // --------------------------------------------------------
 void Entity::SetWorldMat()
-{
-	XMMATRIX _scale = XMMatrixScaling(transform.scale.x, transform.scale.y, transform.scale.z);
-	XMVECTOR _rotT = XMLoadFloat3(&(transform.rotation));
-	XMMATRIX _rot = XMMatrixRotationRollPitchYawFromVector(_rotT);
-	XMMATRIX _trans = XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z);
+{		
+	//
+	//
 
-	XMMATRIX world = _scale * _rot * _trans;
-	XMStoreFloat4x4(&worldMat, XMMatrixTranspose(world));
+	//
+	//
+	XMMATRIX m = DirectX::XMMatrixMultiply(
+		DirectX::XMMatrixMultiply(
+			DirectX::XMMatrixScaling(transform.scale.x, transform.scale.y, transform.scale.z),
+			DirectX::XMMatrixRotationRollPitchYaw(transform.rotation.x, transform.rotation.y, transform.rotation.z)
+		),
+		DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z)
+	);
+
+	XMStoreFloat4x4(
+		&localMat,
+		DirectX::XMMatrixTranspose(m)
+	);
+	if (parent != nullptr) {
+		XMMATRIX w = DirectX::XMMatrixMultiply(
+			m,
+			DirectX::XMMatrixTranspose(
+				XMLoadFloat4x4(&parent->GetWorldMat())
+			)
+		);
+		XMStoreFloat4x4(
+			&worldMat,
+			DirectX::XMMatrixTranspose(w)
+		);
+	}
+	else
+	{
+		worldMat=localMat;
+	}
+	if (child != nullptr) {
+		child->SetWorldMat();
+	}
 }
 
 // --------------------------------------------------------

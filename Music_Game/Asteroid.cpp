@@ -33,11 +33,15 @@ void Asteroid::Update(float deltaTime)
 		rota.z += (rand() % 3)*0.0005f;
 		asterEntity->SetRotation(rota);
 
+
 		XMStoreFloat3(&position, pos);
-		if (position.z < -3) {
+		if (position.z < -10) {
 			active = false;
 		}
 
+		if (position.z < -1.0f) {
+			collided = true;
+		}
 
 	}
 }
@@ -88,6 +92,7 @@ Collider* Asteroid::GetCollider()
 // --------------------------------------------------------
 void Asteroid::SetActive(int laneNumber)
 {
+	collided = false;
 	XMFLOAT3 position;
 	active = true;
 
@@ -100,12 +105,6 @@ void Asteroid::SetActive(int laneNumber)
 		break;
 	}
 	case 2:
-	{
-		position = XMFLOAT3(0.0f, 0.0f, 20.0f);
-		asterEntity->SetPosition(position);
-		break;
-	}
-	case 3:
 	{
 		position = XMFLOAT3(2.0f, 0.0f, 20.0f);
 		asterEntity->SetPosition(position);

@@ -13,8 +13,9 @@
 #include "Asteroid.h"
 #include "Collision.h"
 #include "MusicPlayer.h"
+#include<vector>
 
-class Game 
+class Game
 	: public DXCore
 {
 
@@ -30,15 +31,15 @@ public:
 	void Draw(float deltaTime, float totalTime);
 
 	// Overridden mouse input helper methods
-	void OnMouseDown (WPARAM buttonState, int x, int y);
-	void OnMouseUp	 (WPARAM buttonState, int x, int y);
-	void OnMouseMove (WPARAM buttonState, int x, int y);
-	void OnMouseWheel(float wheelDelta,   int x, int y);
+	void OnMouseDown(WPARAM buttonState, int x, int y);
+	void OnMouseUp(WPARAM buttonState, int x, int y);
+	void OnMouseMove(WPARAM buttonState, int x, int y);
+	void OnMouseWheel(float wheelDelta, int x, int y);
 private:
 	int SceneNumber;
 
 	// Initialization helper methods - feel free to customize, combine, etc.
-	void LoadShaders(); 
+	void LoadShaders();
 	void setScene();
 
 	// Wrappers for DirectX shaders to provide simplified functionality
@@ -64,10 +65,12 @@ private:
 	Renderer Render;
 	Camera Cam;
 	Player player;
-	Asteroid asteroid;
-	Asteroid asteroid2;
-	Asteroid asteroid3;
-	Asteroid asteroid4;
-	Asteroid asteroid5;
+	void SetNextAsteroid();
+	std::vector<Asteroid*> asteroids;
+	Asteroid* curAsteroid;
+	int curIndex = 0;
+	float timer = 0.2f;
+	int asteroidIndex = 0;
+	float stayTime = 0;
 };
 

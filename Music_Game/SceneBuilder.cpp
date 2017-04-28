@@ -18,8 +18,10 @@ SceneBuilder::~SceneBuilder()
 	//delete creditsMat;
 	delete playerMat;
 	delete backgroundMat;
-	delete laneMat;
-	delete plutoMat;
+	delete sunMat;
+	delete earthMat;
+	delete moonMat;
+	delete venusMat;
 
 	delete cubeMesh;
 	delete asteroidMesh;
@@ -28,17 +30,15 @@ SceneBuilder::~SceneBuilder()
 
 	delete menuEnt;
 	delete playerEnt;
-	delete asteroidEnt;
-	delete asteroidEnt2;
-	delete asteroidEnt3;
-	delete asteroidEnt4;
-	delete asteroidEnt5;
+
 	delete menuBackgroundEnt;
 	delete gameBackgroundEnt;
 	//delete creditsBackgroundEnt;
-	delete laneEnt;
-	delete plutoEnt;
 	delete testNormals;
+	delete sunEnt;
+	delete earthEnt;
+	delete venusEnt;
+	delete moonEnt;
 
 	delete ambient;
 	delete dirLight;
@@ -60,7 +60,7 @@ SceneBuilder::~SceneBuilder()
 //---------------------------------------------------------
 void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 {
-	asteroidList[5];
+	asteroidList[12];
 	device = _device;
 	context = _context;
 	BuildMaterials();
@@ -91,14 +91,26 @@ void SceneBuilder::BuildMaterials()
 	asteroidMat->SetNormalMap(device, context, path);
 
 	path = L"Assets/textures/pluto.jpg";
-	plutoMat = new Material(device, context, path);
+	//plutoMat = new Material(device, context, path);
 
 	path = L"Assets/textures/spaceBackground.dds";
 	//path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
 
 	path = L"Assets/textures/rainbow.jpg";
-	laneMat = new Material(device, context, path);
+	//laneMat = new Material(device, context, path);
+
+	path = L"Assets/textures/venus.jpg";
+	venusMat = new Material(device, context, path);
+
+	path = L"Assets/textures/sun.jpg";
+	sunMat = new Material(device, context, path);
+
+	path = L"Assets/textures/earth.png";
+	earthMat = new Material(device, context, path);
+
+	path = L"Assets/textures/moon.jpg";
+	moonMat = new Material(device, context, path);
 }
 
 //---------------------------------------------------------
@@ -169,28 +181,28 @@ void SceneBuilder::BuildEntities()
 
 	menuEnt = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +3.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
-	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 
-	asteroidEnt = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
-	asteroidList[0] = asteroidEnt;
-	asteroidEnt2 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
-	asteroidList[1] = asteroidEnt2;
-	asteroidEnt3 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(-2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
-	asteroidList[2] = asteroidEnt3;
-	asteroidEnt4 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
-	asteroidList[3] = asteroidEnt4;
-	asteroidEnt5 = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
-	asteroidList[4] = asteroidEnt5;
+	for (int i = 0; i < 12; i++) {
+		asteroidList[i]= new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	}
 
-	plutoEnt = new Entity(sphereMesh, plutoMat, XMFLOAT3(+8.0f, +7.0f, 10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+3.0f, +3.0f, +3.0f));
 
 	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 
-	laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));
+	//laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));
 
 	testNormals = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0, 6, -8), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+3.0f, +3.0f, +3.0f));
+
+	venusEnt = new Entity(sphereMesh, venusMat, XMFLOAT3(1, 0, 1), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
+	sunEnt = new Entity(sphereMesh, sunMat, XMFLOAT3(15, -5, 15), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+8.0f, +8.0f, +8.0f));
+	earthEnt = new Entity(sphereMesh, earthMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.5f, +0.5f, +0.5f));
+	moonEnt = new Entity(sphereMesh, moonMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
+
+	earthEnt->SetParent(sunEnt);
+	moonEnt->SetParent(earthEnt);
 }
 
 //---------------------------------------------------------
@@ -217,20 +229,28 @@ void SceneBuilder::SetupScenes()
 	scene2->background = gameBackgroundEnt;
 	scene2->globalLights.push_back(ambient);
 	scene2->entities.push_back(playerEnt);
-	scene2->entities.push_back(laneEnt);
-	scene2->entities.push_back(asteroidEnt);
-	scene2->entities.push_back(asteroidEnt2);
-	scene2->entities.push_back(asteroidEnt3);
-	scene2->entities.push_back(asteroidEnt4);
-	scene2->entities.push_back(asteroidEnt5);
-	scene2->entities.push_back(plutoEnt);
-	scene2->entities.push_back(testNormals);
+	for (Entity* e : asteroidList) {
+		scene2->entities.push_back(e);
+	}
+	//scene2->entities.push_back(asteroidEnt5);
+	//scene2->entities.push_back(plutoEnt);
+	//scene2->entities.push_back(testNormals);
+	//
+	//scene2->entities.push_back(venusEnt);
+	scene2->entities.push_back(sunEnt);
+	scene2->entities.push_back(earthEnt);
+	scene2->entities.push_back(moonEnt);
+	scene2->sun = sunEnt;
+	scene2->moon = moonEnt;
+	scene2->earth = earthEnt;
+	//scene2->venus = venusEnt;
+	//
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
 
 
-	scene2->directionalLights.push_back(dirLight);
-	scene2->directionalLights.push_back(dirLight2);
-	scene2->directionalLights.push_back(dirLight4);
+	//scene2->directionalLights.push_back(dirLight);
+	//scene2->directionalLights.push_back(dirLight2);
+	//scene2->directionalLights.push_back(dirLight4);
 
 	
 	//Scene 3
