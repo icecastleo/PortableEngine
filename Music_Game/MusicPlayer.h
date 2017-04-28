@@ -25,8 +25,15 @@ private:
 
 	unsigned int len = 1024;
 
+	bool beamMark=false;
+	float largestFreq=0;
+	float lastFreq = 0;
+	bool detected=false;
+
 	void ERRCHECK_fn(FMOD_RESULT result, const char *file, int line);
 	#define ERRCHECK(_result) ERRCHECK_fn(_result, __FILE__, __LINE__)
+public:
+	bool IsDetected();
 };
 
 

@@ -2,8 +2,9 @@
 #include "fmod_errors.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 #include <cstring>
-
+using namespace std;
 MusicPlayer::MusicPlayer()
 {
 	result = FMOD::System_Create(&system);
@@ -46,7 +47,7 @@ void MusicPlayer::setSound(char *fileName)
 	ERRCHECK(result);
 
 	result = sound->setMode(FMOD_LOOP_OFF);    /* prevent embedded loop points which automatically makes looping turn on, */
-	ERRCHECK(result);      
+	ERRCHECK(result);
 
 	result = system->createDSPByType(FMOD_DSP_TYPE_FFT, &spectrumDSP);
 	ERRCHECK(result);
@@ -67,8 +68,8 @@ void MusicPlayer::play() {
 	result = channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, spectrumDSP);
 	ERRCHECK(result);
 
-	result = channel->setVolume(0.1);
-	ERRCHECK(result);
+	//result = channel->setVolume(0.1);
+	//ERRCHECK(result);
 }
 
 void MusicPlayer::update() {
@@ -80,6 +81,24 @@ void MusicPlayer::update() {
 
 	result = spectrumDSP->getParameterData(FMOD_DSP_FFT_SPECTRUMDATA, (void **)&fftparameter, &len, 0, 0);
 	ERRCHECK(result);
+
+	//for (int channel = 0; channel < (fftparameter->numchannels == 0 ? 0 : 1); channel++) {
+	//	int bin = 2;
+	//	float freqVal = fftparameter->spectrum[channel][bin];
+	//	if (freqVal > largestFreq) {
+	//		largestFreq = freqVal;
+	//		std::cout << largestFreq << std::endl;
+	//	}
+	//	if (freqVal > largestFreq*0.85&&!beamMark) {
+	//		cout << freqVal << endl;
+	//		beamMark = true;
+	//	}
+	//	else if(freqVal<largestFreq*0.2f&&beamMark){
+	//		beamMark = false;
+	//	}
+	//	lastFreq = freqVal;
+
+	//}
 }
 
 void MusicPlayer::ERRCHECK_fn(FMOD_RESULT result, const char *file, int line)
@@ -90,10 +109,21 @@ void MusicPlayer::ERRCHECK_fn(FMOD_RESULT result, const char *file, int line)
 	}
 }
 
+bool MusicPlayer::IsDetected()
+{
+	if (detected) {
+		detected = false;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 
 // TODO:: get frequency
 
-////for (int channel = 0; channel < fftparameter->numchannels; channel++) {
+//for (int channel = 0; channel < fftparameter->numchannels; channel++) {
 //for (int channel = 0; channel < (fftparameter->numchannels == 0 ? 0 : 1); channel++) {
 //	for (int bin = 1; bin < 10; ++bin) {
 //		float freqVal = fftparameter->spectrum[channel][bin];

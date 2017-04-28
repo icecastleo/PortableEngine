@@ -54,20 +54,25 @@ private:
 	Material* backgroundMat;
 	Material* laneMat;
 	Material* plutoMat;
+	Material* venusMat;
+	Material* sunMat;
+	Material* earthMat;
+	Material* moonMat;
 
 	Entity* menuEnt;
 	Entity* menuBackgroundEnt;
 	Entity* gameBackgroundEnt;
 	//Entity* creditsBackgroundEnt;
 	Entity* playerEnt;
-	Entity* asteroidEnt;
-	Entity* asteroidEnt2;
-	Entity* asteroidEnt3;
-	Entity* asteroidEnt4;
-	Entity* asteroidEnt5;
+
+
 	Entity* laneEnt;
 	Entity* plutoEnt;
 	Entity* testNormals;
+	Entity* venusEnt;
+	Entity* sunEnt;
+	Entity* moonEnt;
+	Entity* earthEnt;
 
 
 	GlobalLight* ambient;
@@ -81,5 +86,5 @@ private:
 
 	SpotLight* spotLight;
 
-	Entity* asteroidList[5];
+	Entity* asteroidList[12];
 };

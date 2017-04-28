@@ -95,11 +95,9 @@ void Game::Init()
 	player = Player(SceneBuild.GetPlayerEntity());
 
 	//Make 5 Asteroids for the game
-	asteroid = Asteroid(SceneBuild.GetAsteroidEntity(0));
-	asteroid2 = Asteroid(SceneBuild.GetAsteroidEntity(1));
-	asteroid3 = Asteroid(SceneBuild.GetAsteroidEntity(2));
-	asteroid4 = Asteroid(SceneBuild.GetAsteroidEntity(3));
-	asteroid5 = Asteroid(SceneBuild.GetAsteroidEntity(4));
+	for (int i = 0; i < 12; i++) {
+		asteroids.push_back(new Asteroid(SceneBuild.GetAsteroidEntity(i)));
+	}
 
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
@@ -152,6 +150,13 @@ void Game::setScene()
 	}
 }
 
+void Game::SetNextAsteroid()
+{
+	curAsteroid->collided = true;
+	curIndex++;
+	curAsteroid = asteroids[curIndex % 12];
+}
+
 // --------------------------------------------------------
 // Handle resizing DirectX "stuff" to match the new window size.
 // For instance, updating our projection matrix's aspect ratio.
@@ -179,6 +184,7 @@ void Game::Update(float deltaTime, float totalTime)
 		SceneNumber = 2;
 		setScene();
 	}
+	
 
 	musicPlayer.update();
 
@@ -186,76 +192,59 @@ void Game::Update(float deltaTime, float totalTime)
 
 	Scene *currentScene = SceneManag.GetScene(SceneNumber);
 
+	if (SceneNumber == 2) {
+		timer += deltaTime;
+		Entity* sun = currentScene->sun;
+		Entity* earth = currentScene->earth;
+		Entity* moon = currentScene->moon;
+		Entity* venus = currentScene->venus;
+		sun->SetRotation(DirectX::XMFLOAT3(sun->GetRotation().x, sun->GetRotation().y + 0.002f, sun->GetRotation().z));
+		earth->SetRotation(DirectX::XMFLOAT3(earth->GetRotation().x, earth->GetRotation().y + 0.004f, earth->GetRotation().z));
+		moon->SetRotation(DirectX::XMFLOAT3(moon->GetRotation().x, moon->GetRotation().y + 0.006f, moon->GetRotation().z));
+
+		
+	}
+
 	//Temp code
 	//----------------------------------------------------------------------------------------
 	
 	//Spawn an inactive asteroid in a random lane.
 	srand(time(NULL));
-	if (!asteroid.IsActive()) { asteroid.SetActive(rand() % 3 + 1); }
-	else if (!asteroid2.IsActive()) { asteroid2.SetActive(rand() % 2 + 1); }
-	else if (!asteroid3.IsActive()) { asteroid3.SetActive(rand() % 3 + 1); }
-	else if (!asteroid4.IsActive()) { asteroid4.SetActive(rand() % 2 + 1); }
-	else if (!asteroid5.IsActive()) { asteroid5.SetActive(rand() % 3 + 1); }
+	if (timer > 0.5f) {
+		timer = 0;
+		asteroids[asteroidIndex%12]->SetActive(rand() % 2 + 1);
+		asteroidIndex++;
+	}
 
 
 	player.Update(deltaTime);
-	asteroid.Update(deltaTime);
-	asteroid2.Update(deltaTime);
-	asteroid3.Update(deltaTime);
-	asteroid4.Update(deltaTime);
-	asteroid5.Update(deltaTime);
+	for (Asteroid* a : asteroids) {
+		a->Update(deltaTime);
+	}
+
 	for each (Entity* ent in currentScene->entities)
 	{
 		ent->Update();
 	}
 
+
+
 	XMMATRIX playerWorld = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
 	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
-
-	XMMATRIX asteroidWorld = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(0)->GetWorldMat()));
-	XMMATRIX asteroidWorld2 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(1)->GetWorldMat()));
-	XMMATRIX asteroidWorld3 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(2)->GetWorldMat()));
-	XMMATRIX asteroidWorld4 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(3)->GetWorldMat()));
-	XMMATRIX asteroidWorld5 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(4)->GetWorldMat()));
-	XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(0)->GetWorldMat()));
-	XMMATRIX asteroidWorldSpace2 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(1)->GetWorldMat()));
-	XMMATRIX asteroidWorldSpace3 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(2)->GetWorldMat()));
-	XMMATRIX asteroidWorldSpace4 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(3)->GetWorldMat()));
-	XMMATRIX asteroidWorldSpace5 = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(4)->GetWorldMat()));
-
-	bool collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
-		playerWorldSpace,
-		asteroid.GetCollider()->GetBoudingSphere(),
-		asteroidWorldSpace);
-	if (collide) { printf("Asteroid 1 collided with player\n"); }
-	collide = false;
-
-	collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
-		playerWorldSpace,
-		asteroid2.GetCollider()->GetBoudingSphere(),
-		asteroidWorldSpace2);
-	if (collide) { printf("Asteroid 2 collided with player\n"); }
-	collide = false;
-
-	collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
-		playerWorldSpace,
-		asteroid3.GetCollider()->GetBoudingSphere(),
-		asteroidWorldSpace3);
-	if (collide) { printf("Asteroid 3 collided with player\n"); }
-	collide = false;
-
-	collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
-		playerWorldSpace,
-		asteroid4.GetCollider()->GetBoudingSphere(),
-		asteroidWorldSpace4);
-	if (collide) { printf("Asteroid 4 collided with player\n"); }
-	collide = false;
-
-	collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
-		playerWorldSpace,
-		asteroid5.GetCollider()->GetBoudingSphere(),
-		asteroidWorldSpace5);
-	if (collide) { printf("Asteroid 5 collided with player\n"); }
+	for (unsigned i = 0; i < asteroids.size(); i++) {
+		if (!asteroids[i]->collided) {
+			XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(i)->GetWorldMat()));
+			bool collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+				playerWorldSpace,
+				asteroids[i]->GetCollider()->GetBoudingSphere(),
+				asteroidWorldSpace);
+			if (collide) {
+				//
+				asteroids[i]->collided = true;
+				printf("collided\n");
+			}
+		}
+	}
 
 }
 

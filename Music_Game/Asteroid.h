@@ -18,6 +18,8 @@ public:
 	Collider* GetCollider();
 
 	bool IsActive();
+	bool active;
+	bool collided = false;
 
 private:
 	Entity* asterEntity;
@@ -26,6 +28,6 @@ private:
 	void Move(float x, float y, float z, float deltaTime);
 	void RandomPos();
 
-	bool active;
+	
 };
 

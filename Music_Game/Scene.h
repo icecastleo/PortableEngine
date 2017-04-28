@@ -12,5 +12,10 @@ struct Scene
 	std::vector<SpotLight*> spotLights;
 	std::vector<GlobalLight*> globalLights;
 
+	Entity* sun;
+	Entity* moon;
+	Entity* earth;
+	Entity* venus;
+
 	char *musicFileName = 0;
 };

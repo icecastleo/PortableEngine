@@ -30,6 +30,11 @@ public:
 	Mesh* GetMesh();
 	Material* GetMat();
 
+	Entity* parent;
+	Entity* child;
+
+	void SetParent(Entity* e);
+
 private:
 
 	void SetWorldMat();
@@ -37,7 +42,10 @@ private:
 	Mesh* mesh;
 	Material* mat;
 
+
+
 	DirectX::XMFLOAT4X4 worldMat;
+	DirectX::XMFLOAT4X4 localMat;
 	Transform transform;
 	/*DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT3 rot;
