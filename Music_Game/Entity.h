@@ -4,7 +4,9 @@
 #include <DirectXMath.h>
 #include "Mesh.h"
 #include "Material.h"
+#include <vector>
 #include "Transform.h"
+
 
 //Entity Class
 //An object to hold mesh(s) and local properties
@@ -31,7 +33,7 @@ public:
 	Material* GetMat();
 
 	Entity* parent;
-	Entity* child;
+	std::vector<Entity*> children;
 
 	void SetParent(Entity* e);
 

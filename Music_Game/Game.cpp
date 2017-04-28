@@ -198,10 +198,17 @@ void Game::Update(float deltaTime, float totalTime)
 		Entity* earth = currentScene->earth;
 		Entity* moon = currentScene->moon;
 		Entity* venus = currentScene->venus;
+		Entity* planet1 = currentScene->planet1;
+		Entity* planet2 = currentScene->planet2;
+		Entity* planet3 = currentScene->planet3;
+
 		sun->SetRotation(DirectX::XMFLOAT3(sun->GetRotation().x, sun->GetRotation().y + 0.002f, sun->GetRotation().z));
 		earth->SetRotation(DirectX::XMFLOAT3(earth->GetRotation().x, earth->GetRotation().y + 0.004f, earth->GetRotation().z));
 		moon->SetRotation(DirectX::XMFLOAT3(moon->GetRotation().x, moon->GetRotation().y + 0.006f, moon->GetRotation().z));
-
+		venus->SetRotation(DirectX::XMFLOAT3(venus->GetRotation().x , venus->GetRotation().y + 0.0001f, venus->GetRotation().z ));
+		planet1->SetRotation(DirectX::XMFLOAT3(planet1->GetRotation().x, planet1->GetRotation().y + 0.01f, planet1->GetRotation().z));
+		planet2->SetRotation(DirectX::XMFLOAT3(planet2->GetRotation().x, planet2->GetRotation().y - 0.008f, planet2->GetRotation().z));
+		planet3->SetRotation(DirectX::XMFLOAT3(planet3->GetRotation().x, planet3->GetRotation().y + 0.003f, planet3->GetRotation().z));
 		
 	}
 

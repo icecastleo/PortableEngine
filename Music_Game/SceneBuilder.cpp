@@ -87,30 +87,41 @@ void SceneBuilder::BuildMaterials()
 	//path = L"Assets/textures/asteroid.png";
 	path = L"Assets/textures/rock.jpg";
 	asteroidMat = new Material(device, context, path);
+
 	path = L"Assets/textures/rockNormals.jpg";
 	asteroidMat->SetNormalMap(device, context, path);
 
 	path = L"Assets/textures/pluto.jpg";
 	//plutoMat = new Material(device, context, path);
 
-	path = L"Assets/textures/spaceBackground.dds";
+	path = L"Assets/textures/space.jpg";
 	//path = L"Assets/textures/SunnyCubeMap.dds";
 	backgroundMat = new Material(device, context, path, true);
 
 	path = L"Assets/textures/rainbow.jpg";
 	//laneMat = new Material(device, context, path);
 
-	path = L"Assets/textures/venus.jpg";
+	path = L"Assets/textures/venus.png";
 	venusMat = new Material(device, context, path);
 
 	path = L"Assets/textures/sun.jpg";
 	sunMat = new Material(device, context, path);
 
-	path = L"Assets/textures/earth.png";
+	path = L"Assets/textures/earth.jpg";
 	earthMat = new Material(device, context, path);
 
 	path = L"Assets/textures/moon.jpg";
 	moonMat = new Material(device, context, path);
+
+	path = L"Assets/textures/planet1.jpg";
+	p1Mat = new Material(device, context, path);
+
+	path = L"Assets/textures/planet2.png";
+	p2Mat = new Material(device, context, path);
+
+	path = L"Assets/textures/planet3.png";
+	p3Mat = new Material(device, context, path);
+
 }
 
 //---------------------------------------------------------
@@ -125,8 +136,8 @@ void SceneBuilder::BuildLights()
 	//Directional Lights
 	//-----------------------------------------------------------
 	dirLight = new DirectionalLight();
-	dirLight->DiffuseColor = XMFLOAT4(0, 0, 1, 1);
-	dirLight->Direction = XMFLOAT3(1, -1, 0);
+	dirLight->DiffuseColor = XMFLOAT4(0, 0, 0, 1);
+	dirLight->Direction = XMFLOAT3(-1, -1, -1);
 
 	dirLight2 = new DirectionalLight();
 	dirLight2->DiffuseColor = XMFLOAT4(1, 0, 0, 1);
@@ -149,10 +160,10 @@ void SceneBuilder::BuildLights()
 	//Spot Lights
 	//-----------------------------------------------------------
 	spotLight = new SpotLight();
-	spotLight->DiffuseColor = XMFLOAT4(0.85f, 0.85f, 0.85f, 1);
+	spotLight->DiffuseColor = XMFLOAT4(0.8f, 0.3f, 0.0f, 1);
 	spotLight->Direction = XMFLOAT3(0, 0, 1);
 	spotLight->phi = 0.0f;
-	spotLight->Position = XMFLOAT3(0, 0, 0);
+	spotLight->Position = XMFLOAT3(0, 15, 0);
 	spotLight->theta = 90.0f;
 }
 
@@ -188,19 +199,27 @@ void SceneBuilder::BuildEntities()
 	}
 
 
-	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
-	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
+	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
 	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 
 	//laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));
 
 	testNormals = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0, 6, -8), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+3.0f, +3.0f, +3.0f));
 
-	venusEnt = new Entity(sphereMesh, venusMat, XMFLOAT3(1, 0, 1), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
-	sunEnt = new Entity(sphereMesh, sunMat, XMFLOAT3(15, -5, 15), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+8.0f, +8.0f, +8.0f));
+	venusEnt = new Entity(sphereMesh, venusMat, XMFLOAT3(-60, -10, 30), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
+	sunEnt = new Entity(sphereMesh, sunMat, XMFLOAT3(30, -10, 40), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	//sunEnt = new Entity(sphereMesh, sunMat, XMFLOAT3(060, 20, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.20f, +0.20f, +0.20f));
 	earthEnt = new Entity(sphereMesh, earthMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.5f, +0.5f, +0.5f));
 	moonEnt = new Entity(sphereMesh, moonMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
+	p1= new Entity(sphereMesh, p1Mat, XMFLOAT3(0, 0, 1.5f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.7f, +0.7f, +0.7f));
+	p2 = new Entity(sphereMesh, p2Mat, XMFLOAT3(-1.5f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
+	p3 = new Entity(sphereMesh, p3Mat, XMFLOAT3(-1.5f, 0, -1), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.6f, +0.6f, +0.6f));
 
+	//sunEnt->SetParent(venusEnt);
+	p1->SetParent(sunEnt);
+	p2->SetParent(sunEnt);
+	p3->SetParent(sunEnt);
 	earthEnt->SetParent(sunEnt);
 	moonEnt->SetParent(earthEnt);
 }
@@ -236,18 +255,25 @@ void SceneBuilder::SetupScenes()
 	//scene2->entities.push_back(plutoEnt);
 	//scene2->entities.push_back(testNormals);
 	//
-	//scene2->entities.push_back(venusEnt);
+	scene2->entities.push_back(venusEnt);
 	scene2->entities.push_back(sunEnt);
 	scene2->entities.push_back(earthEnt);
 	scene2->entities.push_back(moonEnt);
+	scene2->entities.push_back(p1);
+	scene2->entities.push_back(p2);
+	scene2->entities.push_back(p3);
 	scene2->sun = sunEnt;
 	scene2->moon = moonEnt;
 	scene2->earth = earthEnt;
-	//scene2->venus = venusEnt;
+	scene2->venus = venusEnt;
+
+	scene2->planet1 = p1;
+	scene2->planet2 = p2;
+	scene2->planet3 = p3;
 	//
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
 
-
+	//scene2->spotLights.push_back(spotLight);
 	//scene2->directionalLights.push_back(dirLight);
 	//scene2->directionalLights.push_back(dirLight2);
 	//scene2->directionalLights.push_back(dirLight4);

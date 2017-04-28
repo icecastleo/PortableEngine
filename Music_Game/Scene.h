@@ -16,6 +16,9 @@ struct Scene
 	Entity* moon;
 	Entity* earth;
 	Entity* venus;
+	Entity* planet1;
+	Entity* planet2;
+	Entity* planet3;
 
 	char *musicFileName = 0;
 };

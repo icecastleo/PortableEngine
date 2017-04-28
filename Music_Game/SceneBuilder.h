@@ -58,6 +58,9 @@ private:
 	Material* sunMat;
 	Material* earthMat;
 	Material* moonMat;
+	Material* p1Mat;
+	Material* p2Mat;
+	Material* p3Mat;
 
 	Entity* menuEnt;
 	Entity* menuBackgroundEnt;
@@ -73,7 +76,9 @@ private:
 	Entity* sunEnt;
 	Entity* moonEnt;
 	Entity* earthEnt;
-
+	Entity* p1;
+	Entity* p2;
+	Entity* p3;
 
 	GlobalLight* ambient;
 

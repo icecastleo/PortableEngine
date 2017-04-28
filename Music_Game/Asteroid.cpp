@@ -24,13 +24,13 @@ void Asteroid::Update(float deltaTime)
 {
 	if (active)
 	{
-		Move(0, 0, 2, deltaTime);
+		Move(-0.2f, 0, 2, deltaTime);
 		XMVECTOR pos = XMLoadFloat3(&(asterEntity->GetPosition()));
 		XMFLOAT3 position;
 		XMFLOAT3 rota = asterEntity->GetRotation();
-		rota.y += (rand() % 3)*0.0005f;
-		rota.x += (rand() % 3)*0.0005f;
-		rota.z += (rand() % 3)*0.0005f;
+		rota.y += (rand() % 3)*0.005f;
+		rota.x += (rand() % 3)*0.005f;
+		rota.z += (rand() % 3)*0.005f;
 		asterEntity->SetRotation(rota);
 
 
@@ -100,13 +100,13 @@ void Asteroid::SetActive(int laneNumber)
 	{
 	case 1:
 	{
-		position = XMFLOAT3(-2.0f, 0.0f, 20.0f);
+		position = XMFLOAT3(-4.0f, 0.0f, 20.0f);
 		asterEntity->SetPosition(position);
 		break;
 	}
 	case 2:
 	{
-		position = XMFLOAT3(2.0f, 0.0f, 20.0f);
+		position = XMFLOAT3(-0.0f, 0.0f, 20.0f);
 		asterEntity->SetPosition(position);
 		break;
 	}

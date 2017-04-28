@@ -29,7 +29,6 @@ Entity::Entity(Mesh* _mesh, Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _rot, XMFLOA
 	transform.rotation = _rot;
 	transform.scale = _scale;
 	parent = nullptr;
-	child = nullptr;
 	SetWorldMat();
 	posOrig = transform.position;
 	rotOrig = transform.rotation;
@@ -47,15 +46,22 @@ void Entity::Update()
 
 void Entity::SetParent(Entity * e)
 {
-	if (e != nullptr) {
-		e->child = nullptr;
+	if (parent != nullptr) {
+		for (unsigned i = 0; i < parent->children.size();i++) {
+			if (parent->children[i] == this) {
+				parent->children.erase(parent->children.begin() + i);
+				break;
+			}
+		}
 		parent = e;
+		e->children.push_back(this);
 	}
 	else {
-		parent = nullptr;
-	}
-	
+		parent = e;
+		e->children.push_back(this);
+	}	
 }
+
 
 // --------------------------------------------------------
 //Set the world matrix for the entity based on its 
@@ -96,8 +102,10 @@ void Entity::SetWorldMat()
 	{
 		worldMat=localMat;
 	}
-	if (child != nullptr) {
-		child->SetWorldMat();
+	if (children.size()>0) {
+		for (Entity* e : children) {
+			e->SetWorldMat();
+		}
 	}
 }
 

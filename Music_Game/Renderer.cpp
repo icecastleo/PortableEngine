@@ -210,9 +210,9 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, int i)
 		currentScene->spotLights.at(0)->Direction.x = Cam->GetDirection().x;
 		currentScene->spotLights.at(0)->Direction.y = Cam->GetDirection().y;
 		currentScene->spotLights.at(0)->Direction.z = Cam->GetDirection().z;
-		currentScene->spotLights.at(0)->Position.x = Cam->GetPositon().x;
+		/*currentScene->spotLights.at(0)->Position.x = Cam->GetPositon().x;
 		currentScene->spotLights.at(0)->Position.y = Cam->GetPositon().y;
-		currentScene->spotLights.at(0)->Position.z = Cam->GetPositon().z;
+		currentScene->spotLights.at(0)->Position.z = Cam->GetPositon().z;*/
 	}
 
 	//loop through lights
