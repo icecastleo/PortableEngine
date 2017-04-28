@@ -146,7 +146,7 @@ void SceneBuilder::BuildLights()
 {
 	//global ambient light
 	ambient = new GlobalLight();
-	ambient->AmbientColor = XMFLOAT4(0.2f, 0.2f, 0.2f, 1);
+	ambient->AmbientColor = XMFLOAT4(0.4f, 0.4f, 0.4f, 1);
 
 	//Directional Lights
 	//-----------------------------------------------------------
@@ -170,7 +170,7 @@ void SceneBuilder::BuildLights()
 	//-----------------------------------------------------------
 	pointLight = new PointLight();
 	pointLight->DiffuseColor = XMFLOAT4(1, 1, 0, 1);
-	pointLight->Position = XMFLOAT3(2, 2, -6);
+	pointLight->Position = XMFLOAT3(30, -10, 40);
 
 	//Spot Lights
 	//-----------------------------------------------------------
@@ -265,6 +265,7 @@ void SceneBuilder::SetupScenes()
 	scene2->transparentNorm = std::vector<Entity*>();
 	scene2->background = gameBackgroundEnt;
 	scene2->globalLights.push_back(ambient);
+	//scene2->pointLights.push_back(pointLight);
 	scene2->entities.push_back(playerEnt);
 	for (Entity* e : asteroidList) {
 		scene2->entities.push_back(e);
@@ -294,7 +295,7 @@ void SceneBuilder::SetupScenes()
 
 	//scene2->directionalLights.push_back(dirLight);
 	//scene2->directionalLights.push_back(dirLight2);
-	scene2->directionalLights.push_back(dirLight3);
+	//scene2->directionalLights.push_back(dirLight3);
 	//scene2->directionalLights.push_back(dirLight4);
 
 	
