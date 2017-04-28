@@ -6,8 +6,8 @@ using namespace DirectX;
 const float GaussianBlur::DefaultBlurAmount = 1.0f;
 const unsigned int sampleCount = 9;
 
-GaussianBlur::GaussianBlur(ID3D11Device* device, ID3D11DeviceContext * context, ID3D11DepthStencilView * depthStencilView, float blurAmount)
-	: mDevice(device), mContext(context), mDepthStencilView(depthStencilView), mBlurAmount(blurAmount)
+GaussianBlur::GaussianBlur(ID3D11Device* device, ID3D11DeviceContext * context, float blurAmount)
+	: mDevice(device), mContext(context), mBlurAmount(blurAmount)
 {
 
 }
@@ -31,10 +31,11 @@ void GaussianBlur::SetBlurAmount(float blurAmount)
 	mBlurAmount = blurAmount;
 }
 
-void GaussianBlur::Init(unsigned int width, unsigned int height)
+void GaussianBlur::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
 {
 	mWidth = width;
 	mHeight = height;
+	mDepthStencilView = depthStencilView;
 
 	mPostProcessVS = new SimpleVertexShader(mDevice, mContext);
 	if (!mPostProcessVS->LoadShaderFile(L"Debug/PostProcessVS.cso"))
@@ -90,10 +91,11 @@ void GaussianBlur::Init(unsigned int width, unsigned int height)
 	//mVerticalBlurTexture->Release();
 }
 
-void GaussianBlur::SetWidthHeight(unsigned int width, unsigned int height)
+void GaussianBlur::Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
 {
 	mWidth = width;
 	mHeight = height;
+	mDepthStencilView = depthStencilView;
 }
 
 void GaussianBlur::InitializeSampleOffsets()

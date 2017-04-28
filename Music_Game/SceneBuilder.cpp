@@ -25,6 +25,7 @@ SceneBuilder::~SceneBuilder()
 
 	delete cubeMesh;
 	delete asteroidMesh;
+	delete sphereMesh;
 	delete quadMesh;
 	delete playerMesh;
 
@@ -52,7 +53,9 @@ SceneBuilder::~SceneBuilder()
 	delete scene2;
 	delete scene3;
 
-
+	for (Entity *e : asteroidList) {
+		delete e;
+	}
 }
 
 //---------------------------------------------------------
@@ -173,13 +176,9 @@ void SceneBuilder::BuildLights()
 void SceneBuilder::BuildMeshes()
 {
 	cubeMesh = new Mesh("cube", device);
-
 	quadMesh = new Mesh("quad", device);
-
 	sphereMesh = new Mesh("sphere", device);
-
 	playerMesh = new Mesh("sphere", device);
-
 	asteroidMesh = new Mesh("sphereTest", device);
 }
 
@@ -199,8 +198,9 @@ void SceneBuilder::BuildEntities()
 	}
 
 
-	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
-	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
+	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+
 	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 
 	//laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));

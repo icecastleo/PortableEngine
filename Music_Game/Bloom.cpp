@@ -4,9 +4,9 @@ using namespace DirectX;
 
 const BloomSettings Bloom::DefaultBloomSettings = { 0.45f, 1.25f, 1.0f, 1.0f, 1.0f, 1.0f };
 
-Bloom::Bloom(ID3D11Device * device, ID3D11DeviceContext * context, ID3D11DepthStencilView * depthStencilView, _BloomSettings bloomSettings)
-	: mDevice(device), mContext(context), mDepthStencilView(depthStencilView), mBloomSettings(bloomSettings), 
-	blur(new GaussianBlur(device, context, depthStencilView, bloomSettings.BlurAmount))
+Bloom::Bloom(ID3D11Device * device, ID3D11DeviceContext * context, _BloomSettings bloomSettings)
+	: mDevice(device), mContext(context), mBloomSettings(bloomSettings), 
+	blur(new GaussianBlur(device, context, bloomSettings.BlurAmount))
 {
 }
 
@@ -22,9 +22,13 @@ Bloom::~Bloom()
 	mExtractSRV->Release();
 }
 
-void Bloom::Init(unsigned int width, unsigned int height)
+void Bloom::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
 {
-	blur->Init(width, height);
+	blur->Init(width, height, depthStencilView);
+
+	mWidth = width;
+	mHeight = height;
+	mDepthStencilView = depthStencilView;
 
 	mPostProcessVS = new SimpleVertexShader(mDevice, mContext);
 	if (!mPostProcessVS->LoadShaderFile(L"Debug/PostProcessVS.cso"))
@@ -77,10 +81,13 @@ void Bloom::Init(unsigned int width, unsigned int height)
 	mExtractTexture->Release();
 }
 
-void Bloom::SetWidthHeight(unsigned int width, unsigned int height)
+void Bloom::Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
 {
 	mWidth = width;
 	mHeight = height;
+	mDepthStencilView = depthStencilView;
+
+	blur->Resize(width, height, depthStencilView);
 }
 
 void Bloom::Draw(const float & gameTime, ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetView * outputRTV)
