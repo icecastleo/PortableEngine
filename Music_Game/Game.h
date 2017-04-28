@@ -64,7 +64,7 @@ private:
 	SceneManager SceneManag;
 	Renderer Render;
 	Camera Cam;
-	Player player;
+	Player *player;
 	void SetNextAsteroid();
 	std::vector<Asteroid*> asteroids;
 	Asteroid* curAsteroid;

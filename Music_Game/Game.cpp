@@ -61,6 +61,12 @@ Game::~Game()
 	delete pixelShaderNormalMap;
 	delete skyVS;
 	delete skyPS;
+
+	for (Asteroid *a : asteroids) {
+		delete a;
+	}
+
+	delete player;
 }
 
 // --------------------------------------------------------
@@ -92,7 +98,7 @@ void Game::Init()
 		musicPlayer.play();
 	}
 
-	player = Player(SceneBuild.GetPlayerEntity());
+	player = new Player(SceneBuild.GetPlayerEntity());
 
 	//Make 5 Asteroids for the game
 	for (int i = 0; i < 12; i++) {
@@ -217,7 +223,7 @@ void Game::Update(float deltaTime, float totalTime)
 	}
 
 
-	player.Update(deltaTime);
+	player->Update(deltaTime);
 	for (Asteroid* a : asteroids) {
 		a->Update(deltaTime);
 	}
@@ -234,7 +240,7 @@ void Game::Update(float deltaTime, float totalTime)
 	for (unsigned i = 0; i < asteroids.size(); i++) {
 		if (!asteroids[i]->collided) {
 			XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(i)->GetWorldMat()));
-			bool collide = Collision::Instance().BoundingSphereCollision(player.GetCollider()->GetBoudingSphere(),
+			bool collide = Collision::Instance().BoundingSphereCollision(player->GetCollider()->GetBoudingSphere(),
 				playerWorldSpace,
 				asteroids[i]->GetCollider()->GetBoudingSphere(),
 				asteroidWorldSpace);

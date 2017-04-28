@@ -24,6 +24,7 @@ Renderer::~Renderer()
 	ppRTV->Release();
 
 	delete blur;
+	delete bloom;
 }
 
 //---------------------------------------------------------
