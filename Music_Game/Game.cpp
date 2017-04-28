@@ -28,6 +28,8 @@ Game::Game(HINSTANCE hInstance)
 	pixelShader = 0;
 	vertexShaderNormalMap = 0;
 	pixelShaderNormalMap = 0;
+	pixelShaderBlend = 0;
+	pixelShaderNormalMapBlend = 0;
 
 	//SceneBuilder SceneBuild();
 
@@ -61,6 +63,8 @@ Game::~Game()
 	delete pixelShaderNormalMap;
 	delete skyVS;
 	delete skyPS;
+	delete pixelShaderBlend;
+	delete pixelShaderNormalMapBlend;
 
 	for (Asteroid *a : asteroids) {
 		delete a;
@@ -80,7 +84,7 @@ void Game::Init()
 
 	LoadShaders();
 
-	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS);
+	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS, pixelShaderBlend, pixelShaderNormalMapBlend);
 
 	SceneBuild.Init(device, context);
 	SceneManag.AddScene(SceneBuild.GetScene(1));
@@ -88,7 +92,7 @@ void Game::Init()
 	SceneManag.AddScene(SceneBuild.GetScene(3));
 
 	//Start with scene 1
-	SceneNumber = 1;
+	SceneNumber = 2;
 	setScene();
 
 	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, width, height);
@@ -143,6 +147,14 @@ void Game::LoadShaders()
 	skyPS = new SimplePixelShader(device, context);
 	if (!skyPS->LoadShaderFile(L"Debug/SkyPS.cso"))
 		skyPS->LoadShaderFile(L"SkyPS.cso");
+
+	pixelShaderBlend = new SimplePixelShader(device, context);
+	if (!pixelShaderBlend->LoadShaderFile(L"Debug/BlendPixelShader.cso"))
+		pixelShaderBlend->LoadShaderFile(L"BlendPixelShader.cso");
+
+	pixelShaderNormalMapBlend = new SimplePixelShader(device, context);
+	if (!pixelShaderNormalMapBlend->LoadShaderFile(L"Debug/PixelShaderNormalMapBlend.cso"))
+		pixelShaderNormalMapBlend->LoadShaderFile(L"PixelShaderNormalMapBlend.cso");
 }
 
 void Game::setScene()

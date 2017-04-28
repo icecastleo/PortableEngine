@@ -33,6 +33,7 @@ public:
 
 private:
 	void SetupScenes();
+	void SortEntityList(Scene*);
 
 	Scene* scene1;
 	Scene* scene2;
@@ -50,9 +51,9 @@ private:
 	//Material* creditsMat;
 	Material* menuMat;
 	Material* playerMat;
+	Material* laneMat;
 	Material* asteroidMat;
 	Material* backgroundMat;
-	Material* laneMat;
 	Material* plutoMat;
 	Material* venusMat;
 	Material* sunMat;
@@ -71,7 +72,6 @@ private:
 
 	Entity* laneEnt;
 	Entity* plutoEnt;
-	Entity* testNormals;
 	Entity* venusEnt;
 	Entity* sunEnt;
 	Entity* moonEnt;

@@ -20,11 +20,16 @@ Renderer::Renderer()
 //---------------------------------------------------------
 Renderer::~Renderer() 
 {
+	//May be moved later
+	//-----------------------------
 	ppSRV->Release();
 	ppRTV->Release();
+	bsAlphaBlend->Release();
+	rsNoCull->Release();
 
 	delete blur;
 	delete bloom;
+	//-----------------------------
 }
 
 //---------------------------------------------------------
@@ -38,10 +43,14 @@ void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con
 	backBufferRTV = tView;
 	swapChain = chain;
 	depthStencilView = depth;
+	context->RSGetState(&defaultState);
+	
 
 	mWidth = width;
 	mHeight = height;
 
+	//May be moved
+	//-----------------------------------------------------------------------------------------------
 	// Create post process resources -----------------------------------------
 	D3D11_TEXTURE2D_DESC textureDesc = {};
 	textureDesc.Width = mWidth;
@@ -84,13 +93,17 @@ void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con
 
 	bloom = new Bloom(mDevice, context);
 	bloom->Init(mWidth, mHeight, depthStencilView);
+	//-----------------------------------------------------------------------------------------------
+
+	CreateAdditionalRSStates();
 }
 
 //---------------------------------------------------------
 //Set Shaders
 //---------------------------------------------------------
-void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader, 
-	SimpleVertexShader* _vertShaderNorm, SimplePixelShader* _pixShaderNorm, SimpleVertexShader* _skyVs, SimplePixelShader* _skyPs)
+void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader,
+	SimpleVertexShader* _vertShaderNorm, SimplePixelShader* _pixShaderNorm, SimpleVertexShader* _skyVs,
+	SimplePixelShader* _skyPs, SimplePixelShader* _pixelShaderB, SimplePixelShader* _pixShaderNormB)
 {
 	vertexShader = _vertexShader;
 	pixelShader = _pixelShader;
@@ -98,6 +111,8 @@ void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* 
 	pixelShaderNormalMap = _pixShaderNorm;
 	skyVS = _skyVs;
 	skyPS = _skyPs;
+	pixelShaderBlend = _pixelShaderB;
+	pixelShaderNormalMapBlend = _pixShaderNormB;
 }
 
 //---------------------------------------------------------
@@ -128,6 +143,13 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		1.0f,
 		0);
 
+	//Change render state back to defualt
+	context->RSSetState(defaultState);
+
+	// Turn off our custom blend state
+	context->OMSetBlendState(nullptr, 0, 0xFFFFFFFF);
+
+
 	// Post process initial setup =================
 	// Start rendering somewhere else!
 	context->ClearRenderTargetView(ppRTV, color);
@@ -139,41 +161,65 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	currentScene->name = "d";
+	
 	//Loop through the list of Entities and draw each one
-	for (unsigned i = 0; i < currentScene->entities.size(); i++)
+	//Draw opaque entities first then opaque with normals then transparent with normals and finally transparent objects
+	if (currentScene->opaque.size() > 0)
 	{
-		//call to set shaders goes here
-		if (currentScene->entities.at(i)->GetMat()->HasNormalMap())
+		for (unsigned i = 0; i < currentScene->opaque.size(); i++)
 		{
-			currentScene->entities.at(i)->GetMat()->PrepareMaterial(currentScene->entities.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
-			SetPixelShaderUp(pixelShaderNormalMap, i);
+
+			currentScene->opaque.at(i)->GetMat()->PrepareMaterial(currentScene->opaque.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
+			SetPixelShaderUp(pixelShader, currentScene->opaque, i);
+
+
+			stride = sizeof(Vertex);
+			offset = 0;
+
+			vertexBuffer = currentScene->opaque.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
+			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+			context->IASetIndexBuffer(currentScene->opaque.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+
+			// Finally do the actual drawing
+			//  - Do this ONCE PER OBJECT you intend to draw
+			//  - This will use all of the currently set DirectX "stuff" (shaders, buffers, etc)
+			//  - DrawIndexed() uses the currently set INDEX BUFFER to look up corresponding
+			//     vertices in the currently set VERTEX BUFFER
+			context->DrawIndexed(
+				currentScene->opaque.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
+				0,     // Offset to the first index we want to use
+				0);    // Offset to add to each index when looking up vertices
 		}
-		else
+	}//end of opaque draw calls
+
+	if (currentScene->opaqueNorm.size() > 0)
+	{
+		for (unsigned i = 0; i < currentScene->opaqueNorm.size(); i++)
 		{
-			currentScene->entities.at(i)->GetMat()->PrepareMaterial(currentScene->entities.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
-			SetPixelShaderUp(pixelShader, i);
+
+			currentScene->opaqueNorm.at(i)->GetMat()->PrepareMaterial(currentScene->opaqueNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
+			SetPixelShaderUp(pixelShaderNormalMap, currentScene->opaqueNorm, i);
+
+
+			stride = sizeof(Vertex);
+			offset = 0;
+
+			vertexBuffer = currentScene->opaqueNorm.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
+			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+			context->IASetIndexBuffer(currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+
+			context->DrawIndexed(
+				currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
+				0,     // Offset to the first index we want to use
+				0);    // Offset to add to each index when looking up vertices
 		}
+	}//end of opaque with normal maps draw calls
 
-		stride = sizeof(Vertex);
-		offset = 0;
-
-		vertexBuffer = currentScene->entities.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
-		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-		context->IASetIndexBuffer(currentScene->entities.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
-
-		// Finally do the actual drawing
-		//  - Do this ONCE PER OBJECT you intend to draw
-		//  - This will use all of the currently set DirectX "stuff" (shaders, buffers, etc)
-		//  - DrawIndexed() uses the currently set INDEX BUFFER to look up corresponding
-		//     vertices in the currently set VERTEX BUFFER
-		context->DrawIndexed(
-			currentScene->entities.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
-			0,     // Offset to the first index we want to use
-			0);    // Offset to add to each index when looking up vertices
-	}
-
+	 //------------------------------------------------------------------------------------------------------------------------------------------------
+	 //Draw the skybox if one is loaded
 	if (currentScene->background != NULL)
 	{
+
 		vertexBuffer = currentScene->background->GetMesh()->GetVertexBuffer();
 		indexBuffer = currentScene->background->GetMesh()->GetIndexBuffer();
 
@@ -191,6 +237,66 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		context->OMSetDepthStencilState(0, 0);
 	}
 
+
+	//------------------------------------------------------------------------------------------------------------------------------------------------
+	//Change render states based on blending/transperancy
+	//Turn off back face culling
+	context->RSSetState(rsNoCull);
+
+	// Turn on our custom blend state to enable alpha blending
+	context->OMSetBlendState(
+		bsAlphaBlend,
+		0, // Not using per-channel blend factors
+		0xFFFFFFFF); // Sample mask - Need all bits set (0xFFFFFFFF)
+
+	if (currentScene->transparentNorm.size() > 0)
+	{
+		for (unsigned i = 0; i < currentScene->transparentNorm.size(); i++)
+		{
+
+			currentScene->transparentNorm.at(i)->GetMat()->PrepareMaterial(currentScene->transparentNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
+			SetPixelShaderUp(pixelShaderNormalMapBlend, currentScene->transparentNorm, i);
+
+
+			stride = sizeof(Vertex);
+			offset = 0;
+
+			vertexBuffer = currentScene->transparentNorm.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
+			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+			context->IASetIndexBuffer(currentScene->transparentNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+
+			context->DrawIndexed(
+				currentScene->transparentNorm.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
+				0,     // Offset to the first index we want to use
+				0);    // Offset to add to each index when looking up vertices
+		}
+	}//end of transparent with normal maps draw calls
+
+	if (currentScene->transparent.size() > 0)
+	{
+		
+		for (unsigned i = 0; i < currentScene->transparent.size(); i++)
+		{
+
+			currentScene->transparent.at(i)->GetMat()->PrepareMaterial(currentScene->transparent.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
+			SetPixelShaderUp(pixelShaderBlend, currentScene->transparent, i);
+
+
+			stride = sizeof(Vertex);
+			offset = 0;
+
+			vertexBuffer = currentScene->transparent.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
+			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+			context->IASetIndexBuffer(currentScene->transparent.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+
+			context->DrawIndexed(
+				currentScene->transparent.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
+				0,     // Offset to the first index we want to use
+				0);    // Offset to add to each index when looking up vertices
+		}
+		
+	}//end of transparent with normal maps draw calls
+
 	//blur->Draw(deltaTime, ppSRV, backBufferRTV);
 	bloom->Draw(deltaTime, ppSRV, backBufferRTV);
 
@@ -203,7 +309,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 //---------------------------------------------------------
 //Set the pixel shader up
 //---------------------------------------------------------
-void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, int i)
+void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*> list, int i)
 {
 	pShader->SetFloat4("camPos", Cam->GetPositon());
 
@@ -211,9 +317,9 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, int i)
 		currentScene->spotLights.at(0)->Direction.x = Cam->GetDirection().x;
 		currentScene->spotLights.at(0)->Direction.y = Cam->GetDirection().y;
 		currentScene->spotLights.at(0)->Direction.z = Cam->GetDirection().z;
-		/*currentScene->spotLights.at(0)->Position.x = Cam->GetPositon().x;
+		currentScene->spotLights.at(0)->Position.x = Cam->GetPositon().x;
 		currentScene->spotLights.at(0)->Position.y = Cam->GetPositon().y;
-		currentScene->spotLights.at(0)->Position.z = Cam->GetPositon().z;*/
+		currentScene->spotLights.at(0)->Position.z = Cam->GetPositon().z;
 	}
 
 	//loop through lights
@@ -265,13 +371,13 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, int i)
 		);
 	}
 
-	pShader->SetSamplerState("basicSampler", currentScene->entities.at(i)->GetMat()->GetSampleState());
-	pShader->SetShaderResourceView("diffuseTexture", currentScene->entities.at(i)->GetMat()->GetSRV());
+	pShader->SetSamplerState("basicSampler", list.at(i)->GetMat()->GetSampleState());
+	pShader->SetShaderResourceView("diffuseTexture", list.at(i)->GetMat()->GetSRV());
 
 	//check for a normal map
-	if (currentScene->entities.at(i)->GetMat()->HasNormalMap())
+	if (list.at(i)->GetMat()->HasNormalMap())
 	{
-		pShader->SetShaderResourceView("NormalMap", currentScene->entities.at(i)->GetMat()->GetNormalSRV());
+		pShader->SetShaderResourceView("NormalMap", list.at(i)->GetMat()->GetNormalSRV());
 	}
 
 	if (currentScene->background != NULL)
@@ -283,6 +389,36 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, int i)
 
 	pShader->SetShader();
 }
+
+//---------------------------------------------------------
+//Create additional render states
+//---------------------------------------------------------
+void Renderer::CreateAdditionalRSStates()
+{
+	// Set up a rasterizer state with no culling
+	D3D11_RASTERIZER_DESC rd = {};
+	rd.CullMode = D3D11_CULL_NONE;
+	rd.FillMode = D3D11_FILL_SOLID;
+	rd.DepthClipEnable = true;
+	mDevice->CreateRasterizerState(&rd, &rsNoCull);
+
+	D3D11_BLEND_DESC bd = {};
+	bd.AlphaToCoverageEnable = false;
+	bd.IndependentBlendEnable = false;
+	bd.RenderTarget[0].BlendEnable = true;
+	bd.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	bd.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+
+	bd.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+
+	bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	mDevice->CreateBlendState(&bd, &bsAlphaBlend);
+}
+
 
 //---------------------------------------------------------
 //Update the depth Stencil View

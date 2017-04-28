@@ -13,6 +13,7 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 {
 	SetTexture(device, context, path);
 	hasNormal = false;
+	usesTrans = false;
 }
 
 //---------------------------------------------------------
@@ -22,6 +23,7 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 {
 	SetupSkybox(device, context, path);
 	hasNormal = false;
+	usesTrans = false;
 }
 
 //---------------------------------------------------------
@@ -150,6 +152,14 @@ void Material::PrepareSkybox(DirectX::XMFLOAT4X4 view, DirectX::XMFLOAT4X4 proje
 }
 
 //---------------------------------------------------------
+//Set whether or not the material uses transperancy
+//---------------------------------------------------------
+void Material::UseTransperancy(bool _usesTrans)
+{
+	usesTrans = _usesTrans;
+}
+
+//---------------------------------------------------------
 //Return the SRV
 //---------------------------------------------------------
 ID3D11ShaderResourceView* Material::GetSRV()
@@ -203,4 +213,12 @@ ID3D11DepthStencilState* Material::GetDepthSD()
 bool Material::HasNormalMap()
 {
 	return hasNormal;
+}
+
+//---------------------------------------------------------
+//Return if the material uses transperancy or not
+//---------------------------------------------------------
+bool Material::UseTransperancy()
+{
+	return usesTrans;
 }

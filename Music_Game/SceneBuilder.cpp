@@ -22,6 +22,11 @@ SceneBuilder::~SceneBuilder()
 	delete earthMat;
 	delete moonMat;
 	delete venusMat;
+	delete laneMat;
+	delete p1Mat;
+	delete p2Mat;
+	delete p3Mat;
+
 
 	delete cubeMesh;
 	delete asteroidMesh;
@@ -35,11 +40,11 @@ SceneBuilder::~SceneBuilder()
 	delete menuBackgroundEnt;
 	delete gameBackgroundEnt;
 	//delete creditsBackgroundEnt;
-	delete testNormals;
 	delete sunEnt;
 	delete earthEnt;
 	delete venusEnt;
 	delete moonEnt;
+	delete laneEnt;
 
 	delete ambient;
 	delete dirLight;
@@ -56,6 +61,10 @@ SceneBuilder::~SceneBuilder()
 	for (Entity *e : asteroidList) {
 		delete e;
 	}
+
+	delete p1;
+	delete p2;
+	delete p3;
 }
 
 //---------------------------------------------------------
@@ -90,15 +99,15 @@ void SceneBuilder::BuildMaterials()
 	//path = L"Assets/textures/asteroid.png";
 	path = L"Assets/textures/rock.jpg";
 	asteroidMat = new Material(device, context, path);
-
 	path = L"Assets/textures/rockNormals.jpg";
 	asteroidMat->SetNormalMap(device, context, path);
 
 	path = L"Assets/textures/pluto.jpg";
 	//plutoMat = new Material(device, context, path);
 
-	path = L"Assets/textures/space.jpg";
+	//path = L"Assets/textures/space.jpg";
 	//path = L"Assets/textures/SunnyCubeMap.dds";
+	path = L"Assets/textures/spaceBackground.dds";
 	backgroundMat = new Material(device, context, path, true);
 
 	path = L"Assets/textures/rainbow.jpg";
@@ -125,6 +134,9 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/planet3.png";
 	p3Mat = new Material(device, context, path);
 
+	path = L"Assets/textures/rainbow3.png";
+	laneMat = new Material(device, context, path);
+	laneMat->UseTransperancy(true);
 }
 
 //---------------------------------------------------------
@@ -197,15 +209,13 @@ void SceneBuilder::BuildEntities()
 		asteroidList[i]= new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 	}
 
+	laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));
 
 	menuBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	gameBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 
 	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 
-	//laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));
-
-	testNormals = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(0, 6, -8), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+3.0f, +3.0f, +3.0f));
 
 	venusEnt = new Entity(sphereMesh, venusMat, XMFLOAT3(-60, -10, 30), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
 	sunEnt = new Entity(sphereMesh, sunMat, XMFLOAT3(30, -10, 40), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
@@ -233,6 +243,10 @@ void SceneBuilder::SetupScenes()
 	scene1 = new Scene();
 	scene1->name = "Menu";
 	scene1->entities = std::vector<Entity*>();
+	scene1->opaque = std::vector<Entity*>();
+	scene1->opaqueNorm = std::vector<Entity*>();
+	scene1->transparent = std::vector<Entity*>();
+	scene1->transparentNorm = std::vector<Entity*>();
 	scene1->globalLights.push_back(ambient);
 	scene1->directionalLights.push_back(dirLight3);
 	scene1->entities.push_back(menuEnt);
@@ -245,6 +259,10 @@ void SceneBuilder::SetupScenes()
 	scene2 = new Scene();
 	scene2->name = "MainGame";
 	scene2->entities = std::vector<Entity*>();
+	scene2->opaque = std::vector<Entity*>();
+	scene2->opaqueNorm = std::vector<Entity*>();
+	scene2->transparent = std::vector<Entity*>();
+	scene2->transparentNorm = std::vector<Entity*>();
 	scene2->background = gameBackgroundEnt;
 	scene2->globalLights.push_back(ambient);
 	scene2->entities.push_back(playerEnt);
@@ -253,8 +271,9 @@ void SceneBuilder::SetupScenes()
 	}
 	//scene2->entities.push_back(asteroidEnt5);
 	//scene2->entities.push_back(plutoEnt);
-	//scene2->entities.push_back(testNormals);
 	//
+
+	scene2->entities.push_back(laneEnt);
 	scene2->entities.push_back(venusEnt);
 	scene2->entities.push_back(sunEnt);
 	scene2->entities.push_back(earthEnt);
@@ -273,9 +292,9 @@ void SceneBuilder::SetupScenes()
 	//
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
 
-	//scene2->spotLights.push_back(spotLight);
 	//scene2->directionalLights.push_back(dirLight);
 	//scene2->directionalLights.push_back(dirLight2);
+	scene2->directionalLights.push_back(dirLight3);
 	//scene2->directionalLights.push_back(dirLight4);
 
 	
@@ -284,9 +303,19 @@ void SceneBuilder::SetupScenes()
 	scene3 = new Scene();
 	scene3->name = "Game Over";
 	scene3->entities = std::vector<Entity*>();
+	scene3->opaque = std::vector<Entity*>();
+	scene3->opaqueNorm = std::vector<Entity*>();
+	scene3->transparent = std::vector<Entity*>();
+	scene3->transparentNorm = std::vector<Entity*>();
 	scene3->directionalLights.push_back(dirLight4);
 	//scene3->background = creditsBackgroundEnt;
 	scene3->musicFileName = "04_-_Bloody_Revenge.mp3";
+
+
+	//Sort the entities in the scenes
+	SortEntityList(scene1);
+	SortEntityList(scene2);
+	SortEntityList(scene3);
 }
 
 
@@ -298,6 +327,34 @@ Entity* SceneBuilder::CreateEntity(Mesh* mesh, Material* mat, XMFLOAT3 pos, XMFL
 	Entity* ent = new Entity(mesh, mat, pos, rot, scale);
 
 	return ent;
+}
+
+//---------------------------------------------------------
+//Sort the entities lists into opaque or transparent lists, with or without normal maps
+//---------------------------------------------------------
+void SceneBuilder::SortEntityList(Scene* s)
+{
+
+	for (int i = 0; i < s->entities.size(); i++)
+	{
+		if (s->entities.at(i)->GetMat()->UseTransperancy() && s->entities.at(i)->GetMat()->HasNormalMap())
+		{
+			s->transparentNorm.push_back(s->entities.at(i));
+		}
+		else if (s->entities.at(i)->GetMat()->UseTransperancy())
+		{
+			s->transparent.push_back(s->entities.at(i));
+		}
+		else if (s->entities.at(i)->GetMat()->HasNormalMap())
+		{
+			s->opaqueNorm.push_back(s->entities.at(i));
+		}
+		else
+		{
+			s->opaque.push_back(s->entities.at(i));
+		}
+	}
+
 }
 
 //---------------------------------------------------------
