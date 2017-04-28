@@ -29,9 +29,7 @@ Game::Game(HINSTANCE hInstance)
 	vertexShaderNormalMap = 0;
 	pixelShaderNormalMap = 0;
 
-	MusicPlayer musicPlayer();
-
-	SceneBuilder SceneBuild();
+	//SceneBuilder SceneBuild();
 
 	SceneManager SceneManag();
 	Renderer Render();
@@ -87,7 +85,7 @@ void Game::Init()
 	SceneNumber = 1;
 	setScene();
 
-	Render.Init(&Cam, context, backBufferRTV, swapChain, depthStencilView);
+	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, width, height);
 
 	if (SceneManag.GetScene(SceneNumber)->musicFileName) {
 		musicPlayer.setSound(SceneManag.GetScene(SceneNumber)->musicFileName);
@@ -102,8 +100,6 @@ void Game::Init()
 	asteroid3 = Asteroid(SceneBuild.GetAsteroidEntity(2));
 	asteroid4 = Asteroid(SceneBuild.GetAsteroidEntity(3));
 	asteroid5 = Asteroid(SceneBuild.GetAsteroidEntity(4));
-
-
 
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
@@ -165,7 +161,7 @@ void Game::OnResize()
 	Cam.Resize(width, height);
 
 	DXCore::OnResize();
-	Render.Resized(depthStencilView, backBufferRTV);
+	Render.Resized(depthStencilView, backBufferRTV, width, height);
 }
 
 // --------------------------------------------------------

@@ -125,7 +125,7 @@ void SceneBuilder::BuildLights()
 	dirLight3->Direction = XMFLOAT3(0, 0, 1);
 
 	dirLight4 = new DirectionalLight();
-	dirLight4->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
+	dirLight4->DiffuseColor = XMFLOAT4(238.0/255.0, 130.0 / 255.0, 238.0 / 255.0, 1);
 	dirLight4->Direction = XMFLOAT3(0, 0, -1);
 
 	//Point Lights
@@ -227,10 +227,9 @@ void SceneBuilder::SetupScenes()
 	scene2->entities.push_back(testNormals);
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
 
-
-	scene2->directionalLights.push_back(dirLight);
-	scene2->directionalLights.push_back(dirLight2);
-	scene2->directionalLights.push_back(dirLight4);
+	//scene2->directionalLights.push_back(dirLight);
+	//scene2->directionalLights.push_back(dirLight2);
+	//scene2->directionalLights.push_back(dirLight4);
 
 	
 	//Scene 3

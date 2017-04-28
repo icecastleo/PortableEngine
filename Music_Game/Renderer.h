@@ -9,6 +9,8 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "Lights.h"
+#include "GaussianBlur.h"
+#include "Bloom.h"
 
 class Renderer
 {
@@ -16,8 +18,8 @@ public:
 	Renderer();
 	~Renderer();
 
-	void Init(Camera*, ID3D11DeviceContext*, ID3D11RenderTargetView*, IDXGISwapChain*, ID3D11DepthStencilView*);
-	void Resized(ID3D11DepthStencilView*, ID3D11RenderTargetView*);
+	void Init(Camera*, ID3D11Device*, ID3D11DeviceContext*, ID3D11RenderTargetView*, IDXGISwapChain*, ID3D11DepthStencilView*, unsigned int width, unsigned int height);
+	void Resized(ID3D11DepthStencilView*, ID3D11RenderTargetView*, unsigned int width, unsigned int height);
 	void Draw(float, float);
 	void SetShaders(SimpleVertexShader*, SimplePixelShader*, SimpleVertexShader*, SimplePixelShader*, 
 		SimpleVertexShader*, SimplePixelShader*);
@@ -41,12 +43,20 @@ private:
 	DirectX::XMFLOAT4X4 viewMatrix;
 	DirectX::XMFLOAT4X4 projectionMatrix;
 
+	Camera* Cam;
+	ID3D11Device* mDevice;
 	ID3D11DeviceContext* context;
 	ID3D11RenderTargetView* backBufferRTV;
 	IDXGISwapChain* swapChain;
 	ID3D11DepthStencilView* depthStencilView;
 
-	Scene* currentScene;
+	unsigned int mWidth, mHeight;
 
-	Camera* Cam;
+	ID3D11RenderTargetView* ppRTV;	
+	ID3D11ShaderResourceView* ppSRV;
+
+	GaussianBlur *blur;
+	Bloom *bloom;
+
+	Scene* currentScene;
 };

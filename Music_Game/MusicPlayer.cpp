@@ -56,6 +56,8 @@ void MusicPlayer::setSound(char *fileName)
 
 	result = spectrumDSP->setParameterInt((int)FMOD_DSP_FFT_WINDOWTYPE, (int)FMOD_DSP_FFT_WINDOW_HAMMING);
 	ERRCHECK(result);
+
+	free(filePath);
 }
 
 void MusicPlayer::play() {

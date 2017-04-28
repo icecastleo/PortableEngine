@@ -6,31 +6,83 @@ using namespace DirectX;
 //---------------------------------------------------------
 //Default Constructor
 //---------------------------------------------------------
-Renderer::Renderer() 
+Renderer::Renderer()
 {
 	// Initialize fields
 	vertexBuffer = 0;
 	indexBuffer = 0;
 	vertexShader = 0;
 	pixelShader = 0;
-
 }
 
 //---------------------------------------------------------
 //Default Deconstructor
 //---------------------------------------------------------
-Renderer::~Renderer() {}
+Renderer::~Renderer() 
+{
+	ppSRV->Release();
+	ppRTV->Release();
+
+	delete blur;
+}
 
 //---------------------------------------------------------
 //Inititialize one time members
 //---------------------------------------------------------
-void Renderer::Init(Camera* _Cam, ID3D11DeviceContext* con, ID3D11RenderTargetView* tView, IDXGISwapChain* chain, ID3D11DepthStencilView* depth)
+void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con, ID3D11RenderTargetView* tView, IDXGISwapChain* chain, ID3D11DepthStencilView* depth, unsigned int width, unsigned int height)
 {
 	Cam = _Cam;
+	mDevice = device;
 	context = con;
 	backBufferRTV = tView;
 	swapChain = chain;
 	depthStencilView = depth;
+
+	mWidth = width;
+	mHeight = height;
+
+	// Create post process resources -----------------------------------------
+	D3D11_TEXTURE2D_DESC textureDesc = {};
+	textureDesc.Width = mWidth;
+	textureDesc.Height = mHeight;
+	textureDesc.ArraySize = 1;
+	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	textureDesc.CPUAccessFlags = 0;
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureDesc.MipLevels = 1;
+	textureDesc.MiscFlags = 0;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+
+	ID3D11Texture2D* ppTexture;
+	device->CreateTexture2D(&textureDesc, 0, &ppTexture);
+
+	// Create the Render Target View
+	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+	rtvDesc.Format = textureDesc.Format;
+	rtvDesc.Texture2D.MipSlice = 0;
+	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+	device->CreateRenderTargetView(ppTexture, &rtvDesc, &ppRTV);
+
+	// Create the Shader Resource View
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = textureDesc.Format;
+	srvDesc.Texture2D.MipLevels = 1;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+
+	device->CreateShaderResourceView(ppTexture, &srvDesc, &ppSRV);
+
+	// We don't need the texture reference itself no mo'
+	ppTexture->Release();
+
+	blur = new GaussianBlur(mDevice, context, depthStencilView);
+	blur->Init(mWidth, mHeight);
+
+	bloom = new Bloom(mDevice, context, depthStencilView);
+	bloom->Init(mWidth, mHeight);
 }
 
 //---------------------------------------------------------
@@ -68,12 +120,17 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	// Clear the render target and depth buffer (erases what's on the screen)
 	//  - Do this ONCE PER FRAME
 	//  - At the beginning of Draw (before drawing *anything*)
-	context->ClearRenderTargetView(backBufferRTV, color);
+	//context->ClearRenderTargetView(backBufferRTV, color);
 	context->ClearDepthStencilView(
 		depthStencilView,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f,
 		0);
+
+	// Post process initial setup =================
+	// Start rendering somewhere else!
+	context->ClearRenderTargetView(ppRTV, color);
+	context->OMSetRenderTargets(1, &ppRTV, depthStencilView);
 
 	// Set buffers in the input assembler
 	//  - Do this ONCE PER OBJECT you're drawing, since each object might
@@ -96,8 +153,6 @@ void Renderer::Draw(float deltaTime, float totalTime)
 			SetPixelShaderUp(pixelShader, i);
 		}
 
-		
-
 		stride = sizeof(Vertex);
 		offset = 0;
 
@@ -114,11 +169,10 @@ void Renderer::Draw(float deltaTime, float totalTime)
 			currentScene->entities.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
 			0,     // Offset to the first index we want to use
 			0);    // Offset to add to each index when looking up vertices
-
 	}
+
 	if (currentScene->background != NULL)
 	{
-
 		vertexBuffer = currentScene->background->GetMesh()->GetVertexBuffer();
 		indexBuffer = currentScene->background->GetMesh()->GetIndexBuffer();
 
@@ -135,6 +189,9 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		context->RSSetState(0);
 		context->OMSetDepthStencilState(0, 0);
 	}
+
+	//blur->Draw(deltaTime, ppSRV, backBufferRTV);
+	bloom->Draw(deltaTime, ppSRV, backBufferRTV);
 
 	// Present the back buffer to the user
 	//  - Puts the final frame we're drawing into the window so the user can see it
@@ -226,16 +283,17 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, int i)
 	pShader->SetShader();
 }
 
-
-
-
-
 //---------------------------------------------------------
 //Update the depth Stencil View
 //Program Errors on window resize if this is not updated
 //---------------------------------------------------------
-void Renderer::Resized(ID3D11DepthStencilView* depth, ID3D11RenderTargetView* bBRTV)
+void Renderer::Resized(ID3D11DepthStencilView* depth, ID3D11RenderTargetView* bBRTV, unsigned int width, unsigned int height)
 {
 	depthStencilView = depth;
 	backBufferRTV = bBRTV;
+	mWidth = width;
+	mHeight = height;
+
+	blur->SetWidthHeight(width, height);
+	bloom->SetWidthHeight(width, height);
 }

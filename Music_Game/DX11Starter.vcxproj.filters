@@ -66,6 +66,12 @@
     <ClCompile Include="MusicPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Bloom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GaussianBlur.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXCore.h">
@@ -131,6 +137,12 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Bloom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBlur.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">
@@ -158,6 +170,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="BloomExtractPixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="GaussianBlurPixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PostProcessVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
