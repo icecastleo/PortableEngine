@@ -33,6 +33,7 @@ SceneBuilder::~SceneBuilder()
 	delete sphereMesh;
 	delete quadMesh;
 	delete playerMesh;
+	delete skyboxMesh;
 
 	delete menuEnt;
 	delete playerEnt;
@@ -151,15 +152,15 @@ void SceneBuilder::BuildLights()
 	//Directional Lights
 	//-----------------------------------------------------------
 	dirLight = new DirectionalLight();
-	dirLight->DiffuseColor = XMFLOAT4(0, 0, 0, 1);
+	dirLight->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
 	dirLight->Direction = XMFLOAT3(-1, -1, -1);
 
 	dirLight2 = new DirectionalLight();
-	dirLight2->DiffuseColor = XMFLOAT4(1, 0, 0, 1);
-	dirLight2->Direction = XMFLOAT3(1, 1, 0);
+	dirLight2->DiffuseColor = XMFLOAT4(.3, .3, .3, 1);
+	dirLight2->Direction = XMFLOAT3(0, 0, 1);
 
 	dirLight3 = new DirectionalLight();
-	dirLight3->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
+	dirLight3->DiffuseColor = XMFLOAT4(.6, .6, .6, 1);
 	dirLight3->Direction = XMFLOAT3(0, 0, 1);
 
 	dirLight4 = new DirectionalLight();
@@ -187,11 +188,17 @@ void SceneBuilder::BuildLights()
 //---------------------------------------------------------
 void SceneBuilder::BuildMeshes()
 {
-	cubeMesh = new Mesh("cube", device);
-	quadMesh = new Mesh("quad", device);
-	sphereMesh = new Mesh("sphere", device);
-	playerMesh = new Mesh("sphere", device);
-	asteroidMesh = new Mesh("sphereTest", device);
+	cubeMesh = new Mesh("cube", device, false);
+
+	skyboxMesh = new Mesh("cube", device, true);
+
+	quadMesh = new Mesh("quad", device, false);
+
+	sphereMesh = new Mesh("sphere", device, false);
+
+	playerMesh = new Mesh("sphere", device, false);
+
+	asteroidMesh = new Mesh("sphereTest", device, true);
 }
 
 //---------------------------------------------------------
@@ -295,7 +302,7 @@ void SceneBuilder::SetupScenes()
 
 	//scene2->directionalLights.push_back(dirLight);
 	//scene2->directionalLights.push_back(dirLight2);
-	//scene2->directionalLights.push_back(dirLight3);
+	scene2->directionalLights.push_back(dirLight3);
 	//scene2->directionalLights.push_back(dirLight4);
 
 	

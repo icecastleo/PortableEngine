@@ -70,55 +70,55 @@ float4 main(VertexToPixel input) : SV_TARGET
 {
 	input.normal = normalize(input.normal);
 
-//Texture
-float4 surfaceColor = diffuseTexture.Sample(basicSampler, input.uv);
+	//Texture
+	float4 surfaceColor = diffuseTexture.Sample(basicSampler, input.uv);
 
-//---------------------------------------------------------------------------------------------
-//Global Light(s)
-float4 global = surfaceColor * ambient0.AmbientColor;
+	//---------------------------------------------------------------------------------------------
+	//Global Light(s)
+	float4 global = surfaceColor * ambient0.AmbientColor;
 
-//---------------------------------------------------------------------------------------------
-//Directional Light(s)
-float3 lightNorm = normalize(light0.Direction);
-float NdotL = saturate(dot(input.normal, -lightNorm));
+	//---------------------------------------------------------------------------------------------
+	//Directional Light(s)
+	float3 lightNorm = normalize(light0.Direction);
+	float NdotL = saturate(dot(input.normal, -lightNorm));
 
-float3 lightNorm2 = normalize(light1.Direction);
-float NdotL2 = saturate(dot(input.normal, -lightNorm2));
+	float3 lightNorm2 = normalize(light1.Direction);
+	float NdotL2 = saturate(dot(input.normal, -lightNorm2));
 
-float4 DirLights = (surfaceColor * (light0.DiffuseColor * NdotL))
-+ (surfaceColor * (light1.DiffuseColor * NdotL2));
+	float4 DirLights = (surfaceColor * (light0.DiffuseColor * NdotL))
+	+ (surfaceColor * (light1.DiffuseColor * NdotL2));
 
-//---------------------------------------------------------------------------------------------
-//Point Light(s)
-float3 dirToPointLight = normalize(lightP0.Position - input.worldPos);
-float pointLightAmount = dot(input.normal, dirToPointLight);
+	//---------------------------------------------------------------------------------------------
+	//Point Light(s)
+	float3 dirToPointLight = normalize(lightP0.Position - input.worldPos);
+	float pointLightAmount = dot(input.normal, dirToPointLight);
 
-float4 PLights = (surfaceColor * (pointLightAmount * lightP0.DiffuseColor));
+	float4 PLights = (surfaceColor * (pointLightAmount * lightP0.DiffuseColor));
 
-//---------------------------------------------------------------------------------------------
-//Spot Light(s)
-float3 vLight = normalize(lightS0.Position - input.worldPos);
-float SpotNdotL = max(0.0f, dot(input.normal, vLight));
+	//---------------------------------------------------------------------------------------------
+	//Spot Light(s)
+	float3 vLight = normalize(lightS0.Position - input.worldPos);
+	float SpotNdotL = max(0.0f, dot(input.normal, vLight));
 
-//float cosAngle = max(0.0f, dot(-lightS0.Direction, vLight));
-float cosAngle = dot(-lightS0.Direction, vLight);
-float spotAtten = 0;
+	//float cosAngle = max(0.0f, dot(-lightS0.Direction, vLight));
+	float cosAngle = dot(-lightS0.Direction, vLight);
+	float spotAtten = 0;
 
-if (cosAngle <= 1 && cosAngle >= 0.98f)
-{
-	//add code for distance later
-	spotAtten = smoothstep(0.98f, 1, cosAngle);
-}
+	if (cosAngle <= 1 && cosAngle >= 0.98f)
+	{
+		//add code for distance later
+		spotAtten = smoothstep(0.98f, 1, cosAngle);
+	}
 
-float4 SLights = (surfaceColor*SpotNdotL*lightS0.DiffuseColor)*spotAtten;
+	float4 SLights = (surfaceColor*SpotNdotL*lightS0.DiffuseColor)*spotAtten;
 
-//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
 
 
-float4 skyColor = Sky.Sample(basicSampler, reflect(-dirToPointLight, input.normal));
-//---------------------------------------------------------------------------------------------
+	float4 skyColor = Sky.Sample(basicSampler, reflect(-dirToPointLight, input.normal));
+	//---------------------------------------------------------------------------------------------
 
-//return lerp((global + DirLights + PLights + SLights), skyColor, 0.01f);
-return global + DirLights + PLights + SLights;
+	//return lerp((global + DirLights + PLights + SLights), skyColor, 0.01f);
+	return global + DirLights + PLights + SLights;
 
 }

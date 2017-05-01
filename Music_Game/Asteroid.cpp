@@ -31,6 +31,7 @@ void Asteroid::Update(float deltaTime)
 		rota.y += (rand() % 3)*0.005f;
 		rota.x += (rand() % 3)*0.005f;
 		rota.z += (rand() % 3)*0.005f;
+		//rota.y += 0.005f;
 		asterEntity->SetRotation(rota);
 
 

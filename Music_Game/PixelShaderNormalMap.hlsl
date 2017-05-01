@@ -138,5 +138,4 @@ float4 main(VertexToPixel input) : SV_TARGET
 	
 	//return lerp((global + DirLights + PLights + SLights), skyColor, 0.01f);
 	return global + DirLights + PLights + SLights;
-
 }
