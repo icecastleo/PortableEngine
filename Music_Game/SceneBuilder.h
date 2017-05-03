@@ -63,6 +63,7 @@ private:
 	Material* p1Mat;
 	Material* p2Mat;
 	Material* p3Mat;
+	Material* lane2Mat;
 
 	Entity* menuEnt;
 	Entity* menuBackgroundEnt;
@@ -72,6 +73,7 @@ private:
 
 
 	Entity* laneEnt;
+	Entity* laneEnt2;
 	Entity* plutoEnt;
 	Entity* venusEnt;
 	Entity* sunEnt;

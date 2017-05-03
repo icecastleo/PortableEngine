@@ -26,6 +26,7 @@ SceneBuilder::~SceneBuilder()
 	delete p1Mat;
 	delete p2Mat;
 	delete p3Mat;
+	delete lane2Mat;
 
 
 	delete cubeMesh;
@@ -46,6 +47,7 @@ SceneBuilder::~SceneBuilder()
 	delete venusEnt;
 	delete moonEnt;
 	delete laneEnt;
+	delete laneEnt2;
 
 	delete ambient;
 	delete dirLight;
@@ -138,6 +140,10 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/rainbow3.png";
 	laneMat = new Material(device, context, path);
 	laneMat->UseTransperancy(true);
+
+	path = L"Assets/textures/blueSpace3.png";
+	lane2Mat = new Material(device, context, path);
+	lane2Mat->UseTransperancy(true);
 }
 
 //---------------------------------------------------------
@@ -216,7 +222,8 @@ void SceneBuilder::BuildEntities()
 		asteroidList[i]= new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 	}
 
-	laneEnt = new Entity(quadMesh, laneMat, XMFLOAT3(-2.0f, -1.0f, 10.0f), XMFLOAT3(+1.5f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +2.0f, +2.0f));
+	laneEnt = new Entity(quadMesh, lane2Mat, XMFLOAT3(-2.8f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f));
+	laneEnt2 = new Entity(quadMesh, laneMat, XMFLOAT3(1.5f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f));
 
 	menuBackgroundEnt = new Entity(skyboxMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 	gameBackgroundEnt = new Entity(skyboxMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
@@ -279,6 +286,7 @@ void SceneBuilder::SetupScenes()
 	//
 
 	scene2->entities.push_back(laneEnt);
+	scene2->entities.push_back(laneEnt2);
 	scene2->entities.push_back(venusEnt);
 	scene2->entities.push_back(sunEnt);
 	scene2->entities.push_back(earthEnt);

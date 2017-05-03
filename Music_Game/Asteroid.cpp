@@ -107,7 +107,7 @@ void Asteroid::SetActive(int laneNumber)
 	}
 	case 2:
 	{
-		position = XMFLOAT3(-0.0f, 0.0f, 20.0f);
+		position = XMFLOAT3(+0.1f, 0.0f, 20.0f);
 		asterEntity->SetPosition(position);
 		break;
 	}
