@@ -1,6 +1,7 @@
 #pragma once
 #include "Lights.h"
 #include "Entity.h"
+#include "Emitter.h"
 
 struct Scene
 {
@@ -16,6 +17,7 @@ struct Scene
 	std::vector<SpotLight*> spotLights;
 	std::vector<GlobalLight*> globalLights;
 
+
 	Entity* sun;
 	Entity* moon;
 	Entity* earth;
@@ -25,4 +27,7 @@ struct Scene
 	Entity* planet3;
 
 	char *musicFileName = 0;
+
+	Emitter* Particles;
+
 };

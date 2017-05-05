@@ -49,8 +49,14 @@ private:
 	SimplePixelShader* pixelShaderNormalMap;
 	SimpleVertexShader* skyVS;
 	SimplePixelShader* skyPS;
+
 	SimplePixelShader* pixelShaderBlend;
 	SimplePixelShader* pixelShaderNormalMapBlend;
+
+	// Particle Shaders
+	SimpleVertexShader* particleVS;
+	SimplePixelShader* particlePS;
+
 
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.
@@ -66,6 +72,7 @@ private:
 	SceneManager SceneManag;
 	Renderer Render;
 	Camera Cam;
+
 	Player *player;
 	void SetNextAsteroid();
 	std::vector<Asteroid*> asteroids;
@@ -74,5 +81,6 @@ private:
 	float timer = 0.2f;
 	int asteroidIndex = 0;
 	float stayTime = 0;
+
 };
 

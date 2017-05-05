@@ -9,7 +9,8 @@ Asteroid::Asteroid()
 
 Asteroid::~Asteroid()
 {
-	delete asterCollider;
+	if(asterCollider != NULL)
+		delete asterCollider;
 }
 
 Asteroid::Asteroid(Entity * asterEntity)

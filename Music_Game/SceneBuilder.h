@@ -1,5 +1,6 @@
 //Darren Farr
 #pragma once
+#include "SimpleShader.h"
 #include "Entity.h"
 #include <DirectXMath.h>
 #include "Mesh.h"
@@ -7,6 +8,7 @@
 #include <vector>
 #include "Lights.h"
 #include "Scene.h"
+#include "Emitter.h"
 
 //---------------------------------------------------------
 //Scene Manager class
@@ -23,13 +25,13 @@ public:
 	void BuildLights();
 	void BuildMeshes();
 	void BuildEntities();
-
+	void BuildParticles();
 
 	Entity* CreateEntity(Mesh*, Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
 	Entity* GetPlayerEntity();
+
 	Entity* GetAsteroidEntity(int);
-	
 
 private:
 	void SetupScenes();
@@ -55,6 +57,7 @@ private:
 	Material* laneMat;
 	Material* asteroidMat;
 	Material* backgroundMat;
+
 	Material* plutoMat;
 	Material* venusMat;
 	Material* sunMat;
@@ -64,6 +67,8 @@ private:
 	Material* p2Mat;
 	Material* p3Mat;
 	Material* lane2Mat;
+
+	Material* particelMat;
 
 	Entity* menuEnt;
 	Entity* menuBackgroundEnt;
@@ -94,5 +99,10 @@ private:
 
 	SpotLight* spotLight;
 
+
 	Entity* asteroidList[12];
+
+	//Particles Emitter
+	Emitter *emitter;
+
 };

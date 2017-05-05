@@ -14,10 +14,10 @@ public:
 	// Singleton destructors
 	Collision(Collision const&) = delete;
 
-	bool BoundingSphereCollision(float firstObjBoundingSphere,
-		XMMATRIX& firstObjWorldSpace,
+	bool Collision::BoundingSphereCollision(float firstObjBoundingSphere,
+		XMFLOAT4X4& firstObjWorldSpace,
 		float secondObjBoundingSphere,
-		XMMATRIX& secondObjWorldSpace);
+		XMFLOAT4X4& secondObjWorldSpace);
 
 private:
 	Collision();

@@ -17,13 +17,24 @@ Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wch
 }
 
 //---------------------------------------------------------
-//Constructor override to create a material for a skybox
+//Constructor override to create a material for a skybox, particles, and other
+//Type 0 = skybox, 1 = particle, 
 //---------------------------------------------------------
-Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, bool isSkybox)
+Material::Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, int type)
 {
-	SetupSkybox(device, context, path);
-	hasNormal = false;
-	usesTrans = false;
+	if (type == 0)
+	{
+		SetupSkybox(device, context, path);
+		hasNormal = false;
+		usesTrans = false;
+	}
+
+	if (type == 1)
+	{
+		SetupParticle(device, context, path);
+		hasNormal = false;
+		usesTrans = false;
+	}
 }
 
 //---------------------------------------------------------
@@ -39,10 +50,21 @@ Material::~Material()
 		rsSky->Release();
 		dsSky->Release();
 	}
+
 	if (normalSRV != nullptr) { normalSRV->Release(); }
 
 	sampleState->Release();
+
+	
+	if (particleTexture != nullptr)
+	{
+		particleTexture->Release();
+		particleBlendState->Release();
+		particleDepthState->Release();
+	}
+
 	delete sampleDes;
+
 }
 
 //---------------------------------------------------------
@@ -60,7 +82,10 @@ void Material::SetTexture(ID3D11Device* device, ID3D11DeviceContext* context, co
 
 	SRV = nullptr;
 	skySRV = nullptr;
+
 	normalSRV = nullptr;
+
+	particleTexture = nullptr;
 
 	DirectX::CreateWICTextureFromFile(device, context, path, 0, &SRV);
 
@@ -95,12 +120,60 @@ void Material::SetupSkybox(ID3D11Device* device, ID3D11DeviceContext* context, c
 
 	SRV = nullptr;
 	skySRV = nullptr;
+
 	normalSRV = nullptr;
+
+	particleTexture = nullptr;
+
 
 	HRESULT hr;
 	hr = DirectX::CreateDDSTextureFromFile(device, path, 0, &skySRV);
 
 	device->CreateSamplerState(sampleDes, &sampleState);
+}
+
+void Material::SetupParticle(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path)
+{
+	SRV = nullptr;
+	skySRV = nullptr;
+	normalSRV = nullptr;
+	particleTexture = nullptr;
+
+	DirectX::CreateWICTextureFromFile(device, context, path, 0, &particleTexture);
+
+	// Create a sampler state for texture sampling
+	sampleState = nullptr;
+	sampleDes = new D3D11_SAMPLER_DESC();
+	sampleDes->AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDes->AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDes->AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDes->Filter = D3D11_FILTER_ANISOTROPIC;
+	sampleDes->MaxAnisotropy = 16;
+	sampleDes->MaxLOD = D3D11_FLOAT32_MAX;
+
+	// Ask the device to create a state
+	device->CreateSamplerState(sampleDes, &sampleState);
+
+
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+	dsDesc.DepthEnable = true;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO; // Turns off depth writing
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	device->CreateDepthStencilState(&dsDesc, &particleDepthState);
+
+	// Blend for particles (additive)
+	D3D11_BLEND_DESC blend = {};
+	blend.AlphaToCoverageEnable = false;
+	blend.IndependentBlendEnable = false;
+	blend.RenderTarget[0].BlendEnable = true;
+	blend.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blend.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blend.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	blend.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blend.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blend.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	blend.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	device->CreateBlendState(&blend, &particleBlendState);
 }
 
 //---------------------------------------------------------
@@ -221,4 +294,21 @@ bool Material::HasNormalMap()
 bool Material::UseTransperancy()
 {
 	return usesTrans;
+
+}
+
+ID3D11DepthStencilState* Material::GetParticleDepthState()
+{
+	return particleDepthState;
+}
+
+ID3D11BlendState* Material::GetParticleBlendState()
+{
+	return particleBlendState;
+}
+
+ID3D11ShaderResourceView* Material::GetParticleTexture()
+{
+	return particleTexture;
+
 }

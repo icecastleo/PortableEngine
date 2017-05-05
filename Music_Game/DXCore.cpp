@@ -363,6 +363,7 @@ HRESULT DXCore::Run()
 			// Translate and dispatch the message
 			// to our custom WindowProc function
 			TranslateMessage(&msg);
+
 			DispatchMessage(&msg);
 		}
 		else

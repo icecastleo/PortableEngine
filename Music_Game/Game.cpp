@@ -1,4 +1,4 @@
-//Original code - Chris Cascioli
+ //Original code - Chris Cascioli
 //Modified for use in homework
 
 #include "Game.h"
@@ -70,7 +70,11 @@ Game::~Game()
 		delete a;
 	}
 
+	delete particleVS;
+	delete particlePS;
+
 	delete player;
+
 }
 
 // --------------------------------------------------------
@@ -84,7 +88,8 @@ void Game::Init()
 
 	LoadShaders();
 
-	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS, pixelShaderBlend, pixelShaderNormalMapBlend);
+	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS, pixelShaderBlend, pixelShaderNormalMapBlend, particleVS, particlePS);
+
 
 	SceneBuild.Init(device, context);
 	SceneManag.AddScene(SceneBuild.GetScene(1));
@@ -103,6 +108,7 @@ void Game::Init()
 	}
 
 	player = new Player(SceneBuild.GetPlayerEntity());
+
 
 	//Make 5 Asteroids for the game
 	for (int i = 0; i < 12; i++) {
@@ -148,6 +154,7 @@ void Game::LoadShaders()
 	if (!skyPS->LoadShaderFile(L"Debug/SkyPS.cso"))
 		skyPS->LoadShaderFile(L"SkyPS.cso");
 
+
 	pixelShaderBlend = new SimplePixelShader(device, context);
 	if (!pixelShaderBlend->LoadShaderFile(L"Debug/BlendPixelShader.cso"))
 		pixelShaderBlend->LoadShaderFile(L"BlendPixelShader.cso");
@@ -155,6 +162,14 @@ void Game::LoadShaders()
 	pixelShaderNormalMapBlend = new SimplePixelShader(device, context);
 	if (!pixelShaderNormalMapBlend->LoadShaderFile(L"Debug/PixelShaderNormalMapBlend.cso"))
 		pixelShaderNormalMapBlend->LoadShaderFile(L"PixelShaderNormalMapBlend.cso");
+
+	particleVS = new SimpleVertexShader(device, context);
+	if (!particleVS->LoadShaderFile(L"Debug/ParticleVS.cso"))
+		particleVS->LoadShaderFile(L"ParticleVS.cso");
+
+	particlePS = new SimplePixelShader(device, context);
+	if (!particlePS->LoadShaderFile(L"Debug/ParticlePS.cso"))
+		particlePS->LoadShaderFile(L"ParticlePS.cso");
 }
 
 void Game::setScene()
@@ -206,8 +221,6 @@ void Game::Update(float deltaTime, float totalTime)
 
 	musicPlayer.update();
 
-	Cam.Update(prevMousePos, deltaTime);
-
 	Scene *currentScene = SceneManag.GetScene(SceneNumber);
 
 	if (SceneNumber == 2) {
@@ -247,28 +260,42 @@ void Game::Update(float deltaTime, float totalTime)
 		a->Update(deltaTime);
 	}
 
+	Cam.Update(prevMousePos, deltaTime);
+
+
 	for each (Entity* ent in currentScene->entities)
 	{
 		ent->Update();
 	}
+	
+	player->Update(deltaTime);
 
-
-
-	XMMATRIX playerWorld = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
-	XMMATRIX playerWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetPlayerEntity()->GetWorldMat()));
 	for (unsigned i = 0; i < asteroids.size(); i++) {
 		if (!asteroids[i]->collided) {
-			XMMATRIX asteroidWorldSpace = XMLoadFloat4x4(&(SceneBuild.GetAsteroidEntity(i)->GetWorldMat()));
+			
 			bool collide = Collision::Instance().BoundingSphereCollision(player->GetCollider()->GetBoudingSphere(),
-				playerWorldSpace,
+				SceneBuild.GetPlayerEntity()->GetWorldMat(),
 				asteroids[i]->GetCollider()->GetBoudingSphere(),
-				asteroidWorldSpace);
+				SceneBuild.GetAsteroidEntity(i)->GetWorldMat());
 			if (collide) {
 				//
 				asteroids[i]->collided = true;
 				printf("collided\n");
+				
+				currentScene->Particles->SetEmitterPosition(SceneBuild.GetPlayerEntity()->GetWorldMat()._14,
+					SceneBuild.GetPlayerEntity()->GetWorldMat()._24,
+					SceneBuild.GetPlayerEntity()->GetWorldMat()._34);
+
+				currentScene->Particles->SpawnParticle();
 			}
+
 		}
+	}
+
+	
+	if (currentScene->Particles != nullptr)
+	{
+		currentScene->Particles->Update(deltaTime);
 	}
 
 }

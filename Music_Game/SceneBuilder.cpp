@@ -27,7 +27,7 @@ SceneBuilder::~SceneBuilder()
 	delete p2Mat;
 	delete p3Mat;
 	delete lane2Mat;
-
+	delete particelMat;
 
 	delete cubeMesh;
 	delete asteroidMesh;
@@ -61,6 +61,7 @@ SceneBuilder::~SceneBuilder()
 	delete scene2;
 	delete scene3;
 
+
 	for (Entity *e : asteroidList) {
 		delete e;
 	}
@@ -68,6 +69,8 @@ SceneBuilder::~SceneBuilder()
 	delete p1;
 	delete p2;
 	delete p3;
+
+	delete emitter;
 }
 
 //---------------------------------------------------------
@@ -82,6 +85,7 @@ void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 	BuildLights();
 	BuildMeshes();
 	BuildEntities();
+	BuildParticles();
 	SetupScenes();
 }
 
@@ -111,7 +115,7 @@ void SceneBuilder::BuildMaterials()
 	//path = L"Assets/textures/space.jpg";
 	//path = L"Assets/textures/SunnyCubeMap.dds";
 	path = L"Assets/textures/spaceBackground.dds";
-	backgroundMat = new Material(device, context, path, true);
+	backgroundMat = new Material(device, context, path, 0);
 
 	path = L"Assets/textures/rainbow.jpg";
 	//laneMat = new Material(device, context, path);
@@ -144,6 +148,9 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/blueSpace3.png";
 	lane2Mat = new Material(device, context, path);
 	lane2Mat->UseTransperancy(true);
+
+	path = L"Assets/Textures/circleParticle.jpg"; 
+	particelMat = new Material(device, context, path, 1);
 }
 
 //---------------------------------------------------------
@@ -245,6 +252,23 @@ void SceneBuilder::BuildEntities()
 	moonEnt->SetParent(earthEnt);
 }
 
+void SceneBuilder::BuildParticles()
+{
+	emitter = new Emitter(
+		200,							// Max particles
+		200,							// Particles per second
+		0.5f,								// Particle lifetime
+		0.5f,							// Start size
+		3.0f,							// End size
+		XMFLOAT4(1, 0.1f, 0.1f, 0.2f),	// Start color
+		XMFLOAT4(1, 1.0f, 1.0f, 0),		// End color
+		XMFLOAT3(10, 10, 0),				// Start velocity
+		XMFLOAT3(0, 0, 0),				// Start position
+		XMFLOAT3(0, 0, 0),				// Start acceleration
+		device,
+		particelMat);
+}
+
 //---------------------------------------------------------
 //Setup the 3 built in scenes here
 //---------------------------------------------------------
@@ -278,6 +302,7 @@ void SceneBuilder::SetupScenes()
 	scene2->globalLights.push_back(ambient);
 	//scene2->pointLights.push_back(pointLight);
 	scene2->entities.push_back(playerEnt);
+
 	for (Entity* e : asteroidList) {
 		scene2->entities.push_back(e);
 	}
@@ -310,7 +335,9 @@ void SceneBuilder::SetupScenes()
 	scene2->directionalLights.push_back(dirLight3);
 	//scene2->directionalLights.push_back(dirLight4);
 
-	
+	scene2->Particles = emitter;
+
+
 	//Scene 3
 	//------------------------------------------------------------------
 	scene3 = new Scene();

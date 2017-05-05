@@ -103,7 +103,8 @@ void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con
 //---------------------------------------------------------
 void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader,
 	SimpleVertexShader* _vertShaderNorm, SimplePixelShader* _pixShaderNorm, SimpleVertexShader* _skyVs,
-	SimplePixelShader* _skyPs, SimplePixelShader* _pixelShaderB, SimplePixelShader* _pixShaderNormB)
+	SimplePixelShader* _skyPs, SimplePixelShader* _pixelShaderB, SimplePixelShader* _pixShaderNormB,
+	SimpleVertexShader* _particleVs, SimplePixelShader* _particlePs)
 {
 	vertexShader = _vertexShader;
 	pixelShader = _pixelShader;
@@ -113,6 +114,8 @@ void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* 
 	skyPS = _skyPs;
 	pixelShaderBlend = _pixelShaderB;
 	pixelShaderNormalMapBlend = _pixShaderNormB;
+	particleVS = _particleVs;
+	particlePS = _particlePs;
 }
 
 //---------------------------------------------------------
@@ -204,6 +207,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 			stride = sizeof(Vertex);
 			offset = 0;
 
+
 			vertexBuffer = currentScene->opaqueNorm.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 			context->IASetIndexBuffer(currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
@@ -215,8 +219,8 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		}
 	}//end of opaque with normal maps draw calls
 
-	 //------------------------------------------------------------------------------------------------------------------------------------------------
-	 //Draw the skybox if one is loaded
+	//------------------------------------------------------------------------------------------------------------------------------------------------
+	//Draw the skybox if one is loaded
 	if (currentScene->background != NULL)
 	{
 
@@ -234,6 +238,22 @@ void Renderer::Draw(float deltaTime, float totalTime)
 
 		// Reset the render states we've changed
 		context->RSSetState(0);
+		context->OMSetDepthStencilState(0, 0);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------------------------------------
+	//Draw particles if there are any
+	if (currentScene->Particles != nullptr)
+	{
+		// Particle states
+		float blend[4] = { 1,1,1,1 };
+		context->OMSetBlendState(currentScene->Particles->GetMaterial()->GetParticleBlendState(), blend, 0xffffffff);  // Additive blending
+		context->OMSetDepthStencilState(currentScene->Particles->GetMaterial()->GetParticleDepthState(), 0);			// No depth WRITING
+
+		currentScene->Particles->SetShaders(particleVS, particlePS);															// Draw the emitter
+		currentScene->Particles->Draw(context, Cam);
+
+		// Reset to default states for next frame
 		context->OMSetDepthStencilState(0, 0);
 	}
 
