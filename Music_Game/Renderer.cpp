@@ -254,9 +254,9 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		currentScene->Particles->Draw(context, Cam);
 
 		// Reset to default states for next frame
+		context->RSSetState(0);
 		context->OMSetDepthStencilState(0, 0);
 	}
-
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	//Change render states based on blending/transperancy

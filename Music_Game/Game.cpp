@@ -270,6 +270,11 @@ void Game::Update(float deltaTime, float totalTime)
 	
 	player->Update(deltaTime);
 
+	if (currentScene->Particles != nullptr)
+	{
+		currentScene->Particles->Update(deltaTime);
+	}
+
 	for (unsigned i = 0; i < asteroids.size(); i++) {
 		if (!asteroids[i]->collided) {
 			
@@ -277,8 +282,9 @@ void Game::Update(float deltaTime, float totalTime)
 				SceneBuild.GetPlayerEntity()->GetWorldMat(),
 				asteroids[i]->GetCollider()->GetBoudingSphere(),
 				SceneBuild.GetAsteroidEntity(i)->GetWorldMat());
+
 			if (collide) {
-				//
+				
 				asteroids[i]->collided = true;
 				printf("collided\n");
 				
@@ -291,13 +297,6 @@ void Game::Update(float deltaTime, float totalTime)
 
 		}
 	}
-
-	
-	if (currentScene->Particles != nullptr)
-	{
-		currentScene->Particles->Update(deltaTime);
-	}
-
 }
 
 // --------------------------------------------------------

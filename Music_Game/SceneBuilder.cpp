@@ -257,14 +257,14 @@ void SceneBuilder::BuildParticles()
 	emitter = new Emitter(
 		200,							// Max particles
 		200,							// Particles per second
-		0.5f,								// Particle lifetime
-		0.5f,							// Start size
-		3.0f,							// End size
+		0.5f,							// Particle lifetime
+		0.25f,							// Start size
+		2.0f,							// End size
 		XMFLOAT4(1, 0.1f, 0.1f, 0.2f),	// Start color
 		XMFLOAT4(1, 1.0f, 1.0f, 0),		// End color
-		XMFLOAT3(10, 10, 0),				// Start velocity
+		XMFLOAT3(10, 10, 0),			// Start velocity
 		XMFLOAT3(0, 0, 0),				// Start position
-		XMFLOAT3(0, 0, 0),				// Start acceleration
+		XMFLOAT3(10, 10, 0),			// Start acceleration
 		device,
 		particelMat);
 }
