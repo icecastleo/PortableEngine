@@ -46,13 +46,10 @@ void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con
 	depthStencilView = depth;
 	context->RSGetState(&defaultState);
 	
-	text->SetupFont();
-
 	mWidth = width;
 	mHeight = height;
 
 	text = _text;
-	text->Init(context, mDevice);
 
 	//May be moved
 	//-----------------------------------------------------------------------------------------------
@@ -324,7 +321,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 
 	//Draw Text Here
 	
-	text->DrawMyText();
+	text->DrawMyText(L"Music Game in Space", DirectX::XMFLOAT2(500, 20));
 	// Reset states to properly render next frame
 	context->RSSetState(0);
 	context->OMSetDepthStencilState(0, 0);

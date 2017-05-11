@@ -16,7 +16,7 @@ public:
 
 	void SetText(const wchar_t*);
 	void SetupFont();
-	void DrawMyText();
+	void DrawMyText(const wchar_t*, DirectX::XMFLOAT2);
 
 private:
 

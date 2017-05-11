@@ -21,7 +21,7 @@ Text2D::Text2D(const wchar_t* _path)
 //---------------------------------------------------------
 Text2D::~Text2D()
 {
-	fontSRV->Release();
+	//fontSRV->Release();
 	delete spriteBatch;
 	delete spriteFontArial;
 }
@@ -50,13 +50,13 @@ void Text2D::SetupFont()
 	spriteFontArial->GetSpriteSheet(&fontSRV);
 }
 
-void Text2D::DrawMyText()
+void Text2D::DrawMyText(const wchar_t* text, DirectX::XMFLOAT2 pos)
 {
 	spriteBatch->Begin();
 	spriteFontArial->DrawString(
 		spriteBatch,
-		L"This is some text, yo.",
-		DirectX::XMFLOAT2(10, 120));
+		text,
+		pos);
 	spriteBatch->End();
 }
 

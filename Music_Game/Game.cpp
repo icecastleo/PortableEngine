@@ -66,6 +66,8 @@ Game::~Game()
 	delete pixelShaderBlend;
 	delete pixelShaderNormalMapBlend;
 
+	delete text;
+
 	for (Asteroid *a : asteroids) {
 		delete a;
 	}
@@ -74,7 +76,7 @@ Game::~Game()
 	delete particlePS;
 
 	delete player;
-	delete text;
+	
 }
 
 // --------------------------------------------------------
