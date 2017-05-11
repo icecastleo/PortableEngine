@@ -147,8 +147,10 @@
     <ClCompile Include="SceneBuilder.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SimpleShader.cpp" />
+    <ClCompile Include="Text2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Tex2Dt.h" />
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="Camera.h" />
