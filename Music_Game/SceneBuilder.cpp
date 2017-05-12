@@ -15,7 +15,7 @@ SceneBuilder::~SceneBuilder()
 {
 	delete asteroidMat;
 	delete menuMat;
-	//delete creditsMat;
+	delete creditsMat;
 	delete playerMat;
 	delete backgroundMat;
 	delete sunMat;
@@ -41,7 +41,8 @@ SceneBuilder::~SceneBuilder()
 
 	delete menuBackgroundEnt;
 	delete gameBackgroundEnt;
-	//delete creditsBackgroundEnt;
+	delete creditsBackgroundEnt;
+
 	delete sunEnt;
 	delete earthEnt;
 	delete venusEnt;
@@ -97,28 +98,23 @@ void SceneBuilder::BuildMaterials()
 	//Texture file path
 	const wchar_t* path;
 
-	path = L"Assets/textures/menu.png";
-	menuMat = new Material(device, context, path);
-
 	path = L"Assets/textures/player.png";
 	playerMat = new Material(device, context, path);
 
-	//path = L"Assets/textures/asteroid.png";
 	path = L"Assets/textures/rock.jpg";
 	asteroidMat = new Material(device, context, path);
 	path = L"Assets/textures/rockNormals.jpg";
 	asteroidMat->SetNormalMap(device, context, path);
 
-	path = L"Assets/textures/pluto.jpg";
-	//plutoMat = new Material(device, context, path);
+	path = L"Assets/textures/title.png";
+	menuMat = new Material(device, context, path);
 
-	//path = L"Assets/textures/space.jpg";
-	//path = L"Assets/textures/SunnyCubeMap.dds";
+	path = L"Assets/textures/blueSpaec.png";
+	creditsMat = new Material(device, context, path);
+
+
 	path = L"Assets/textures/spaceBackground.dds";
 	backgroundMat = new Material(device, context, path, 0);
-
-	path = L"Assets/textures/rainbow.jpg";
-	//laneMat = new Material(device, context, path);
 
 	path = L"Assets/textures/venus.png";
 	venusMat = new Material(device, context, path);
@@ -177,8 +173,8 @@ void SceneBuilder::BuildLights()
 	dirLight3->Direction = XMFLOAT3(0, 0, 1);
 
 	dirLight4 = new DirectionalLight();
-	dirLight4->DiffuseColor = XMFLOAT4(238.0/255.0, 130.0 / 255.0, 238.0 / 255.0, 1);
-	dirLight4->Direction = XMFLOAT3(0, 0, -1);
+	dirLight4->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
+	dirLight4->Direction = XMFLOAT3(0, 0, 1);
 
 	//Point Lights
 	//-----------------------------------------------------------
@@ -232,9 +228,9 @@ void SceneBuilder::BuildEntities()
 	laneEnt = new Entity(quadMesh, lane2Mat, XMFLOAT3(-2.8f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f));
 	laneEnt2 = new Entity(quadMesh, laneMat, XMFLOAT3(1.5f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f));
 
-	menuBackgroundEnt = new Entity(skyboxMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	menuBackgroundEnt = new Entity(quadMesh, menuMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f));
 	gameBackgroundEnt = new Entity(skyboxMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
-	//creditsBackgroundEnt = new Entity(cubeMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	creditsBackgroundEnt = new Entity(quadMesh, creditsMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f));
 
 
 	venusEnt = new Entity(sphereMesh, venusMat, XMFLOAT3(-60, -10, 30), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
@@ -287,11 +283,11 @@ void SceneBuilder::SetupScenes()
 	scene1->transparentNorm = std::vector<Entity*>();
 
 	//Background
-	scene1->background = menuBackgroundEnt;
+	scene1->entities.push_back(menuBackgroundEnt);
 
 	//Lights
 	scene1->globalLights.push_back(ambient);
-	scene1->directionalLights.push_back(dirLight3);
+	scene1->directionalLights.push_back(dirLight4);
 	
 	//Sound
 	//scene1->musicFileName = "04_-_Bloody_Revenge.mp3";
@@ -368,7 +364,7 @@ void SceneBuilder::SetupScenes()
 	scene3->transparentNorm = std::vector<Entity*>();
 
 	//Background
-	//scene3->background = creditsBackgroundEnt;
+	scene3->entities.push_back(creditsBackgroundEnt);
 
 	//Lights
 	scene3->directionalLights.push_back(dirLight4);

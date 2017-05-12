@@ -51,7 +51,7 @@ private:
 	Mesh* asteroidMesh;
 	Mesh* skyboxMesh;
 	
-	//Material* creditsMat;
+	Material* creditsMat;
 	Material* menuMat;
 	Material* playerMat;
 	Material* laneMat;
@@ -73,7 +73,7 @@ private:
 	Entity* menuEnt;
 	Entity* menuBackgroundEnt;
 	Entity* gameBackgroundEnt;
-	//Entity* creditsBackgroundEnt;
+	Entity* creditsBackgroundEnt;
 	Entity* playerEnt;
 
 

@@ -190,7 +190,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 	
 	//return surfaceColor * light + RimLight;
 
-	light = surfaceColor * light + RimLight;
+	light = surfaceColor * light;
 
 	return lerp(light, skyColor, 0.01f);
 }
