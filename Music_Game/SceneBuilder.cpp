@@ -165,8 +165,8 @@ void SceneBuilder::BuildLights()
 	//Directional Lights
 	//-----------------------------------------------------------
 	dirLight = new DirectionalLight();
-	dirLight->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
-	dirLight->Direction = XMFLOAT3(-1, -1, -1);
+	dirLight->DiffuseColor = XMFLOAT4(.15f, .15f, .15f, 1);
+	dirLight->Direction = XMFLOAT3(0, 0, 1);
 
 	dirLight2 = new DirectionalLight();
 	dirLight2->DiffuseColor = XMFLOAT4(.3, .3, .3, 1);
@@ -226,7 +226,7 @@ void SceneBuilder::BuildEntities()
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 
 	for (int i = 0; i < 12; i++) {
-		asteroidList[i]= new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+		asteroidList[i]= new Entity(asteroidMesh, playerMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 	}
 
 	laneEnt = new Entity(quadMesh, lane2Mat, XMFLOAT3(-2.8f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f));
@@ -274,41 +274,47 @@ void SceneBuilder::BuildParticles()
 //---------------------------------------------------------
 void SceneBuilder::SetupScenes()
 {
-	//will be for scene 1
+	//Scene 1
+	//--------------------------------------------------------------------------------------------
 	scene1 = new Scene();
 	scene1->name = "Menu";
+
+	//Entities
 	scene1->entities = std::vector<Entity*>();
 	scene1->opaque = std::vector<Entity*>();
 	scene1->opaqueNorm = std::vector<Entity*>();
 	scene1->transparent = std::vector<Entity*>();
 	scene1->transparentNorm = std::vector<Entity*>();
+
+	//Background
+	scene1->background = menuBackgroundEnt;
+
+	//Lights
 	scene1->globalLights.push_back(ambient);
 	scene1->directionalLights.push_back(dirLight3);
-	scene1->entities.push_back(menuEnt);
-	scene1->background = menuBackgroundEnt;
+	
+	//Sound
 	//scene1->musicFileName = "04_-_Bloody_Revenge.mp3";
 	
+	//End of Scene 1 -----------------------------------------------------------------------------
 
 	//Scene 2
-	//------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------
 	scene2 = new Scene();
 	scene2->name = "MainGame";
+
+	//Entities
 	scene2->entities = std::vector<Entity*>();
 	scene2->opaque = std::vector<Entity*>();
 	scene2->opaqueNorm = std::vector<Entity*>();
 	scene2->transparent = std::vector<Entity*>();
 	scene2->transparentNorm = std::vector<Entity*>();
-	scene2->background = gameBackgroundEnt;
-	scene2->globalLights.push_back(ambient);
-	//scene2->pointLights.push_back(pointLight);
-	scene2->entities.push_back(playerEnt);
-
+	
 	for (Entity* e : asteroidList) {
 		scene2->entities.push_back(e);
 	}
-	//scene2->entities.push_back(asteroidEnt5);
-	//scene2->entities.push_back(plutoEnt);
-	//
+
+	scene2->entities.push_back(playerEnt);
 
 	scene2->entities.push_back(laneEnt);
 	scene2->entities.push_back(laneEnt2);
@@ -327,30 +333,50 @@ void SceneBuilder::SetupScenes()
 	scene2->planet1 = p1;
 	scene2->planet2 = p2;
 	scene2->planet3 = p3;
-	//
-	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
+
+	//Background
+	scene2->background = gameBackgroundEnt;
+
+	//Lights
+	scene2->globalLights.push_back(ambient);
+
+	//scene2->pointLights.push_back(pointLight);
 
 	//scene2->directionalLights.push_back(dirLight);
 	//scene2->directionalLights.push_back(dirLight2);
-	scene2->directionalLights.push_back(dirLight3);
+	//scene2->directionalLights.push_back(dirLight3);
 	//scene2->directionalLights.push_back(dirLight4);
 
+	//Sound
+	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
+
+	//Particles
 	scene2->Particles = emitter;
 
+	//End of Scene 2 -----------------------------------------------------------------------------
 
 	//Scene 3
-	//------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------
 	scene3 = new Scene();
 	scene3->name = "Game Over";
+
+	//Entities
 	scene3->entities = std::vector<Entity*>();
 	scene3->opaque = std::vector<Entity*>();
 	scene3->opaqueNorm = std::vector<Entity*>();
 	scene3->transparent = std::vector<Entity*>();
 	scene3->transparentNorm = std::vector<Entity*>();
-	scene3->directionalLights.push_back(dirLight4);
-	//scene3->background = creditsBackgroundEnt;
-	scene3->musicFileName = "04_-_Bloody_Revenge.mp3";
 
+	//Background
+	//scene3->background = creditsBackgroundEnt;
+
+	//Lights
+	scene3->directionalLights.push_back(dirLight4);
+	
+	//Sound
+	//scene3->musicFileName = "04_-_Bloody_Revenge.mp3"; //Need to find appropriate credits music
+
+	//End of Scene 3 -----------------------------------------------------------------------------
 
 	//Sort the entities in the scenes
 	SortEntityList(scene1);

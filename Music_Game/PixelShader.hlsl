@@ -123,7 +123,6 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float3 vLight = normalize(lightS0.Position - input.worldPos);
 	float SpotNdotL = max(0.0f, dot(input.normal, vLight));
 
-	//float cosAngle = max(0.0f, dot(-lightS0.Direction, vLight));
 	float cosAngle = dot(-lightS0.Direction, vLight);
 	float spotAtten = 0;
 
@@ -177,17 +176,21 @@ float4 main(VertexToPixel input) : SV_TARGET
 	//input.normal2 = normalize(input.normal2);
 	//float rim = smoothstep(0.7, 1.0, 1 - saturate(dot(input.normal2, v)));
 
-	float4 light = 
+	/*float4 light = 
 		globalLight + 
 		DirLights + 
 		PLights + 
 		SLights +
-		getBlinnSpecular(lightP0, cameraPosition, input);
+		getBlinnSpecular(lightP0, cameraPosition, input);*/
+
+	float4 light = globalLight;
 
 	//float4 RimLight = rim * RimColor * RimIntensity;
 	float4 RimLight = rim * surfaceColor * RimIntensity;
 	
-	return surfaceColor * light + RimLight;
+	//return surfaceColor * light + RimLight;
 
-	//return lerp((global + DirLights + PLights + SLights), skyColor, 0.01f);
+	light = surfaceColor * light + RimLight;
+
+	return lerp(light, skyColor, 0.01f);
 }
