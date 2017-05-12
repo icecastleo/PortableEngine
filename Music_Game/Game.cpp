@@ -66,6 +66,8 @@ Game::~Game()
 	delete pixelShaderBlend;
 	delete pixelShaderNormalMapBlend;
 
+	delete text;
+
 	for (Asteroid *a : asteroids) {
 		delete a;
 	}
@@ -74,7 +76,7 @@ Game::~Game()
 	delete particlePS;
 
 	delete player;
-
+	
 }
 
 // --------------------------------------------------------
@@ -88,8 +90,8 @@ void Game::Init()
 
 	LoadShaders();
 
-	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS, pixelShaderBlend, pixelShaderNormalMapBlend, particleVS, particlePS);
-
+	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS,
+		pixelShaderBlend, pixelShaderNormalMapBlend, particleVS, particlePS);
 
 	SceneBuild.Init(device, context);
 	SceneManag.AddScene(SceneBuild.GetScene(1));
@@ -100,7 +102,10 @@ void Game::Init()
 	SceneNumber = 2;
 	setScene();
 
-	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, width, height);
+	text = new Text2D();
+	text->Init(context, device);
+
+	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
 
 	player = new Player(SceneBuild.GetPlayerEntity());
 

@@ -14,6 +14,7 @@
 #include "Collision.h"
 #include "MusicPlayer.h"
 #include <vector>
+#include "Tex2Dt.h"
 
 class Game
 	: public DXCore
@@ -82,5 +83,6 @@ private:
 	int asteroidIndex = 0;
 	float stayTime = 0;
 
+	Text2D* text;
 };
 

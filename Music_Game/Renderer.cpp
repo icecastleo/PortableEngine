@@ -35,7 +35,8 @@ Renderer::~Renderer()
 //---------------------------------------------------------
 //Inititialize one time members
 //---------------------------------------------------------
-void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con, ID3D11RenderTargetView* tView, IDXGISwapChain* chain, ID3D11DepthStencilView* depth, unsigned int width, unsigned int height)
+void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con, ID3D11RenderTargetView* tView, 
+	IDXGISwapChain* chain, ID3D11DepthStencilView* depth, Text2D* _text, unsigned int width, unsigned int height)
 {
 	Cam = _Cam;
 	mDevice = device;
@@ -45,9 +46,10 @@ void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con
 	depthStencilView = depth;
 	context->RSGetState(&defaultState);
 	
-
 	mWidth = width;
 	mHeight = height;
+
+	text = _text;
 
 	//May be moved
 	//-----------------------------------------------------------------------------------------------
@@ -317,6 +319,15 @@ void Renderer::Draw(float deltaTime, float totalTime)
 		
 	}//end of transparent with normal maps draw calls
 
+	//Draw Text Here
+	
+	text->DrawMyText(L"Music Game in Space", DirectX::XMFLOAT2(500, 20));
+	// Reset states to properly render next frame
+	context->RSSetState(0);
+	context->OMSetDepthStencilState(0, 0);
+	float factors[4] = { 1,1,1,1 };
+	context->OMSetBlendState(0, factors, 0xFFFFFFFF);
+
 	//blur->Draw(deltaTime, ppSRV, backBufferRTV);
 	bloom->Draw(deltaTime, ppSRV, backBufferRTV);
 
@@ -453,4 +464,12 @@ void Renderer::Resized(ID3D11DepthStencilView* depth, ID3D11RenderTargetView* bB
 
 	blur->Resize(width, height, depthStencilView);
 	bloom->Resize(width, height, depthStencilView);
+}
+
+//---------------------------------------------------------
+//Sets up for 2d text drawing
+//---------------------------------------------------------
+void Renderer::Setup2D()
+{
+	
 }
