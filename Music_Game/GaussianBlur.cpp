@@ -105,6 +105,7 @@ void GaussianBlur::InitializeSampleOffsets()
 
 	mHorizontalSampleOffsets.resize(sampleCount);
 	mVerticalSampleOffsets.resize(sampleCount);
+
 	mHorizontalSampleOffsets[0] = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 	mVerticalSampleOffsets[0] = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -125,6 +126,7 @@ void GaussianBlur::InitializeSampleOffsets()
 void GaussianBlur::InitializeSampleWeights()
 {
 	mSampleWeights.resize(sampleCount);
+
 	mSampleWeights[0] = XMFLOAT4(GetWeight(0), 0.0f, 0.0f, 0.0f);
 
 	float totalWeight = mSampleWeights[0].x;

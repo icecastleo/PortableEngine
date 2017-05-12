@@ -2,7 +2,6 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <vector>
 #include "SimpleShader.h"
 #include "GaussianBlur.h"
 
@@ -31,13 +30,7 @@ public:
 	void Draw(const float& gameTime, ID3D11ShaderResourceView* inputSRV, ID3D11RenderTargetView* outputRTV);
 
 private:
-	//void DrawNormal(const GameTime& gameTime);
-	//void DrawExtractedTexture(const GameTime& gameTime);
-	//void DrawBlurredTexture(const GameTime& gameTime);
 
-	//void UpdateBloomExtractMaterial();
-	//void UpdateBloomCompositeMaterial();
-	//void UpdateNoBloomMaterial();
 	BloomSettings mBloomSettings;
 
 	static const BloomSettings DefaultBloomSettings;

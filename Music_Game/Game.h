@@ -13,7 +13,7 @@
 #include "Asteroid.h"
 #include "Collision.h"
 #include "MusicPlayer.h"
-#include<vector>
+#include <vector>
 
 class Game
 	: public DXCore

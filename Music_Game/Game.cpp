@@ -102,13 +102,7 @@ void Game::Init()
 
 	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, width, height);
 
-	if (SceneManag.GetScene(SceneNumber)->musicFileName) {
-		musicPlayer.setSound(SceneManag.GetScene(SceneNumber)->musicFileName);
-		musicPlayer.play();
-	}
-
 	player = new Player(SceneBuild.GetPlayerEntity());
-
 
 	//Make 5 Asteroids for the game
 	for (int i = 0; i < 12; i++) {
@@ -119,7 +113,6 @@ void Game::Init()
 	// geometric primitives (points, lines or triangles) we want to draw.  
 	// Essentially: "What kind of shape should the GPU draw with our data?"
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 }
 
 // --------------------------------------------------------
@@ -153,7 +146,6 @@ void Game::LoadShaders()
 	skyPS = new SimplePixelShader(device, context);
 	if (!skyPS->LoadShaderFile(L"Debug/SkyPS.cso"))
 		skyPS->LoadShaderFile(L"SkyPS.cso");
-
 
 	pixelShaderBlend = new SimplePixelShader(device, context);
 	if (!pixelShaderBlend->LoadShaderFile(L"Debug/BlendPixelShader.cso"))
