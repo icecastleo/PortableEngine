@@ -342,7 +342,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 //---------------------------------------------------------
 void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*> list, int i)
 {
-	pShader->SetFloat4("camPos", Cam->GetPositon());
+	pShader->SetFloat4("cameraPosition", Cam->GetPositon());
 
 	if (currentScene->spotLights.size() > 0) {
 		currentScene->spotLights.at(0)->Direction.x = Cam->GetDirection().x;
