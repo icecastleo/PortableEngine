@@ -45,7 +45,6 @@ struct VertexToPixel
 	float3 normal		: NORMAL;
 	float3 worldPos		: WORLDPOS;
 	float2 uv			: TEXCOORD;
-	//float3 normal2		: NORMAL2;
 };
 
 // --------------------------------------------------------
@@ -77,7 +76,6 @@ VertexToPixel main(VertexShaderInput input)
 	output.position = mul(float4(input.position, 1.0f), worldViewProj);
 
 	output.normal = mul(input.normal, (float3x3)world);
-	//output.normal2 = mul(input.normal, (float3x3)worldViewProj);
 
 	//calculate where the vertex would end up after its transformations in world space
 	output.worldPos = mul(float4(input.position, 1.0f), world).xyz;

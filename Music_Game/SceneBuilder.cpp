@@ -180,7 +180,7 @@ void SceneBuilder::BuildLights()
 	//-----------------------------------------------------------
 	pointLight = new PointLight();
 	pointLight->DiffuseColor = XMFLOAT4(1, 1, 0, 1);
-	pointLight->Position = XMFLOAT3(30, -10, 40);
+	pointLight->Position = XMFLOAT3(20, 20, 20);
 
 	//Spot Lights
 	//-----------------------------------------------------------
@@ -336,7 +336,7 @@ void SceneBuilder::SetupScenes()
 	//Lights
 	scene2->globalLights.push_back(ambient);
 
-	//scene2->pointLights.push_back(pointLight);
+	scene2->pointLights.push_back(pointLight);
 
 	//scene2->directionalLights.push_back(dirLight);
 	//scene2->directionalLights.push_back(dirLight2);

@@ -70,8 +70,8 @@ void MusicPlayer::play() {
 	result = channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, spectrumDSP);
 	ERRCHECK(result);
 
-	//result = channel->setVolume(0.1);
-	//ERRCHECK(result);
+	result = channel->setVolume(0.1);
+	ERRCHECK(result);
 }
 
 void MusicPlayer::update() {

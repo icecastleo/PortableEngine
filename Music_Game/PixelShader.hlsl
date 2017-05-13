@@ -15,7 +15,6 @@ struct VertexToPixel
 	float3 normal		: NORMAL;
 	float3 worldPos		: WORLDPOS;
 	float2 uv			: TEXCOORD;
-	//float3 normal2		: NORMAL2;
 };
 
 struct DirectionalLight
@@ -81,9 +80,9 @@ float4 getPointLightColor(PointLight light, VertexToPixel input) {
 }
 
 // Specular highlight for point light
-float getBlinnSpecular(PointLight light, VertexToPixel input, float4 cameraPosition) {
+float4 getBlinnSpecular(PointLight light, VertexToPixel input, float4 cameraPosition) {
 	float specular = saturate(dot(input.normal, normalize(light.Position - input.worldPos + cameraPosition.xyz - input.worldPos)));
-	return pow(specular, 8);
+	return pow(specular, 8) * light.DiffuseColor;
 }
 
 // --------------------------------------------------------
@@ -102,16 +101,13 @@ float4 main(VertexToPixel input) : SV_TARGET
 	//Texture
 	float4 surfaceColor = diffuseTexture.Sample(basicSampler, input.uv);
 
-	//---------------------------------------------------------------------------------------------
 	//Global Light(s)
 	float4 globalLight = ambient0.AmbientColor;
 
-	//---------------------------------------------------------------------------------------------
 	//Directional Light(s)
 	float4 DirLights = getDirLightColor(light0, input)
 	+ getDirLightColor(light1, input);
 
-	//---------------------------------------------------------------------------------------------
 	//Point Light(s)
 	float4 PLights = getPointLightColor(lightP0, input);
 
@@ -135,6 +131,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 
 	float3 dirToPointLight = normalize(lightP0.Position - input.worldPos);
 	float4 skyColor = Sky.Sample(basicSampler, reflect(-dirToPointLight, input.normal));
+
 	//---------------------------------------------------------------------------------------------
 
 	//// Edge detect
@@ -166,21 +163,15 @@ float4 main(VertexToPixel input) : SV_TARGET
 	//return float4(vdn.xxx, 1.0);
 	float rim = smoothstep(0.7, 1.0, 1.0 - saturate(dot(input.normal, v)));
 
-	// Wrong attemp with view normal, Why?
-
-	//float3 v = normalize(-input.position);
-	//input.normal2 = normalize(input.normal2);
-	//float rim = smoothstep(0.7, 1.0, 1 - saturate(dot(input.normal2, v)));
-
 	float4 light = 
-		globalLight + 
-		DirLights + 
-		PLights + 
-		SLights +
-		getBlinnSpecular(lightP0, input, cameraPosition)
+		globalLight
+		+ DirLights
+		+ PLights
+		+ SLights
+		+ getBlinnSpecular(lightP0, input, cameraPosition)
 		;
 
-	light *= surfaceColor;
+	light = saturate(light) * surfaceColor;
 
 	light = lerp(light, surfaceColor * RimIntensity, rim);
 	light = lerp(light, skyColor, 0.01f);
