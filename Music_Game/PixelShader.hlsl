@@ -52,11 +52,8 @@ cbuffer lightData : register(b0)
 	DirectionalLight light1;
 	PointLight lightP0;
 	SpotLight lightS0;
-
-	//float4 gRimColor;
 };
 
-static const float4 RimColor = float4(0.17, 0.36, 0.81, 1.0);
 static const float RimIntensity = 2.0;
 
 static const float3x3 Gx = {
@@ -84,7 +81,7 @@ float4 getPointLightColor(PointLight light, VertexToPixel input) {
 }
 
 // Specular highlight for point light
-float getBlinnSpecular(PointLight light, float4 cameraPosition, VertexToPixel input) {
+float getBlinnSpecular(PointLight light, VertexToPixel input, float4 cameraPosition) {
 	float specular = saturate(dot(input.normal, normalize(light.Position - input.worldPos + cameraPosition.xyz - input.worldPos)));
 	return pow(specular, 8);
 }
@@ -169,28 +166,24 @@ float4 main(VertexToPixel input) : SV_TARGET
 	//return float4(vdn.xxx, 1.0);
 	float rim = smoothstep(0.7, 1.0, 1.0 - saturate(dot(input.normal, v)));
 
-
 	// Wrong attemp with view normal, Why?
 
 	//float3 v = normalize(-input.position);
 	//input.normal2 = normalize(input.normal2);
 	//float rim = smoothstep(0.7, 1.0, 1 - saturate(dot(input.normal2, v)));
 
-	/*float4 light = 
+	float4 light = 
 		globalLight + 
 		DirLights + 
 		PLights + 
 		SLights +
-		getBlinnSpecular(lightP0, cameraPosition, input);*/
+		getBlinnSpecular(lightP0, input, cameraPosition)
+		;
 
-	float4 light = globalLight;
+	light *= surfaceColor;
 
-	//float4 RimLight = rim * RimColor * RimIntensity;
-	float4 RimLight = rim * surfaceColor * RimIntensity;
-	
-	//return surfaceColor * light + RimLight;
+	light = lerp(light, surfaceColor * RimIntensity, rim);
+	light = lerp(light, skyColor, 0.01f);
 
-	light = surfaceColor * light;
-
-	return lerp(light, skyColor, 0.01f);
+	return light;
 }

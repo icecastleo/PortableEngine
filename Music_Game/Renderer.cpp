@@ -173,10 +173,8 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	{
 		for (unsigned i = 0; i < currentScene->opaque.size(); i++)
 		{
-
 			currentScene->opaque.at(i)->GetMat()->PrepareMaterial(currentScene->opaque.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
 			SetPixelShaderUp(pixelShader, currentScene->opaque, i);
-
 
 			stride = sizeof(Vertex);
 			offset = 0;
@@ -201,14 +199,11 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	{
 		for (unsigned i = 0; i < currentScene->opaqueNorm.size(); i++)
 		{
-
 			currentScene->opaqueNorm.at(i)->GetMat()->PrepareMaterial(currentScene->opaqueNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
 			SetPixelShaderUp(pixelShaderNormalMap, currentScene->opaqueNorm, i);
 
-
 			stride = sizeof(Vertex);
 			offset = 0;
-
 
 			vertexBuffer = currentScene->opaqueNorm.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
@@ -225,7 +220,6 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	//Draw the skybox if one is loaded
 	if (currentScene->background != NULL)
 	{
-
 		vertexBuffer = currentScene->background->GetMesh()->GetVertexBuffer();
 		indexBuffer = currentScene->background->GetMesh()->GetIndexBuffer();
 
@@ -275,10 +269,8 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	{
 		for (unsigned i = 0; i < currentScene->transparentNorm.size(); i++)
 		{
-
 			currentScene->transparentNorm.at(i)->GetMat()->PrepareMaterial(currentScene->transparentNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
 			SetPixelShaderUp(pixelShaderNormalMapBlend, currentScene->transparentNorm, i);
-
 
 			stride = sizeof(Vertex);
 			offset = 0;
@@ -296,13 +288,10 @@ void Renderer::Draw(float deltaTime, float totalTime)
 
 	if (currentScene->transparent.size() > 0)
 	{
-		
 		for (unsigned i = 0; i < currentScene->transparent.size(); i++)
 		{
-
 			currentScene->transparent.at(i)->GetMat()->PrepareMaterial(currentScene->transparent.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
 			SetPixelShaderUp(pixelShaderBlend, currentScene->transparent, i);
-
 
 			stride = sizeof(Vertex);
 			offset = 0;
@@ -342,7 +331,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 //---------------------------------------------------------
 void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*> list, int i)
 {
-	pShader->SetFloat4("camPos", Cam->GetPositon());
+	pShader->SetFloat4("cameraPosition", Cam->GetPositon());
 
 	if (currentScene->spotLights.size() > 0) {
 		currentScene->spotLights.at(0)->Direction.x = Cam->GetDirection().x;
