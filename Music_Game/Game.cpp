@@ -99,7 +99,7 @@ void Game::Init()
 	SceneManag.AddScene(SceneBuild.GetScene(3));
 
 	//Start with scene 1
-	SceneNumber = 2;
+	SceneNumber = 1;
 	setScene();
 
 	text = new Text2D();
