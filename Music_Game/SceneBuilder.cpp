@@ -160,8 +160,11 @@ void SceneBuilder::BuildLights()
 
 	//Directional Lights
 	//-----------------------------------------------------------
+
+	//This light is for a no light place holder to be used if a dir light was used before
+	//and you don't need one in the current scene.
 	dirLight = new DirectionalLight();
-	dirLight->DiffuseColor = XMFLOAT4(.15f, .15f, .15f, 1);
+	dirLight->DiffuseColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1);
 	dirLight->Direction = XMFLOAT3(0, 0, 1);
 
 	dirLight2 = new DirectionalLight();
@@ -222,7 +225,7 @@ void SceneBuilder::BuildEntities()
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 
 	for (int i = 0; i < 12; i++) {
-		asteroidList[i]= new Entity(asteroidMesh, playerMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+		asteroidList[i]= new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 	}
 
 	laneEnt = new Entity(quadMesh, lane2Mat, XMFLOAT3(-2.8f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f));
@@ -281,6 +284,7 @@ void SceneBuilder::SetupScenes()
 	scene1->opaqueNorm = std::vector<Entity*>();
 	scene1->transparent = std::vector<Entity*>();
 	scene1->transparentNorm = std::vector<Entity*>();
+	scene1->textList = std::vector<textObject>();
 
 	//Background
 	scene1->entities.push_back(menuBackgroundEnt);
@@ -291,6 +295,9 @@ void SceneBuilder::SetupScenes()
 	
 	//Sound
 	//scene1->musicFileName = "04_-_Bloody_Revenge.mp3";
+
+	//2D Text
+	scene1->textList.push_back(textObject{ L"Music Game in Space", DirectX::XMFLOAT2(500, 20) });
 	
 	//End of Scene 1 -----------------------------------------------------------------------------
 
@@ -305,6 +312,7 @@ void SceneBuilder::SetupScenes()
 	scene2->opaqueNorm = std::vector<Entity*>();
 	scene2->transparent = std::vector<Entity*>();
 	scene2->transparentNorm = std::vector<Entity*>();
+	scene1->textList = std::vector<textObject>();
 	
 	for (Entity* e : asteroidList) {
 		scene2->entities.push_back(e);
@@ -338,7 +346,7 @@ void SceneBuilder::SetupScenes()
 
 	scene2->pointLights.push_back(pointLight);
 
-	//scene2->directionalLights.push_back(dirLight);
+	scene2->directionalLights.push_back(dirLight);
 	//scene2->directionalLights.push_back(dirLight2);
 	//scene2->directionalLights.push_back(dirLight3);
 	//scene2->directionalLights.push_back(dirLight4);
@@ -348,6 +356,9 @@ void SceneBuilder::SetupScenes()
 
 	//Particles
 	scene2->Particles = emitter;
+
+	//2D Text
+	scene2->textList.push_back(textObject{ L"Score: ", DirectX::XMFLOAT2(500, 10) });
 
 	//End of Scene 2 -----------------------------------------------------------------------------
 

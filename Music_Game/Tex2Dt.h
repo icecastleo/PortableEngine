@@ -2,6 +2,8 @@
 #include "SpriteBatch.h"
 #include "SpriteFont.h"
 #include <DirectXMath.h>
+#include "Text.h"
+#include <vector>
 
 class Text2D
 {
@@ -16,7 +18,11 @@ public:
 
 	void SetText(const wchar_t*);
 	void SetupFont();
-	void DrawMyText(const wchar_t*, DirectX::XMFLOAT2);
+	void DrawMyText();
+	void DrawLiveText(const wchar_t*, DirectX::XMFLOAT2);
+
+	void AddText(const wchar_t*, DirectX::XMFLOAT2);
+	void ClearText();
 
 private:
 
@@ -28,4 +34,6 @@ private:
 
 	const wchar_t* path;
 	const wchar_t* textToDraw;
+
+	std::vector<textObject> textList;
 };

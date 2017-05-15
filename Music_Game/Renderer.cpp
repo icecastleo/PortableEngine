@@ -310,7 +310,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 
 	//Draw Text Here
 	
-	text->DrawMyText(L"Music Game in Space", DirectX::XMFLOAT2(500, 20));
+	text->DrawMyText();
 	// Reset states to properly render next frame
 	context->RSSetState(0);
 	context->OMSetDepthStencilState(0, 0);
@@ -331,6 +331,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 //---------------------------------------------------------
 void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*> list, int i)
 {
+
 	pShader->SetFloat4("cameraPosition", Cam->GetPositon());
 
 	if (currentScene->spotLights.size() > 0) {

@@ -173,6 +173,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SimpleShader.h" />
     <ClInclude Include="Tex2Dt.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>

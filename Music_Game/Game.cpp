@@ -98,12 +98,14 @@ void Game::Init()
 	SceneManag.AddScene(SceneBuild.GetScene(2));
 	SceneManag.AddScene(SceneBuild.GetScene(3));
 
+	text = new Text2D();
+	text->Init(context, device);
+
 	//Start with scene 1
 	SceneNumber = 1;
 	setScene();
 
-	text = new Text2D();
-	text->Init(context, device);
+	
 
 	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
 
@@ -173,6 +175,18 @@ void Game::setScene()
 {
 	//Tell the game which scene it should be rendering, uses 1 based indexing
 	Render.SetScene(SceneManag.GetScene(SceneNumber));
+
+	//Setup text to draw
+	text->ClearText();
+	if (SceneManag.GetScene(SceneNumber)->textList.size() > 0)
+	{
+		Scene* temp = SceneManag.GetScene(SceneNumber);
+		for (int i = 0; i < temp->textList.size(); i++)
+		{
+			text->AddText(temp->textList.at(i).text, temp->textList.at(i).positon);
+		}
+	}
+
 
 	if (SceneManag.GetScene(SceneNumber)->musicFileName) {
 		musicPlayer.setSound(SceneManag.GetScene(SceneNumber)->musicFileName);

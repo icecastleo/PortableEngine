@@ -1,5 +1,6 @@
 #pragma once
 #include "Lights.h"
+#include "Text.h"
 #include "Entity.h"
 #include "Emitter.h"
 
@@ -16,6 +17,7 @@ struct Scene
 	std::vector<PointLight*> pointLights;
 	std::vector<SpotLight*> spotLights;
 	std::vector<GlobalLight*> globalLights;
+	std::vector<textObject> textList;
 
 
 	Entity* sun;
