@@ -25,13 +25,11 @@ private:
 	//GaussianBlur(const GaussianBlur& rhs);
 	//GaussianBlur& operator=(const GaussianBlur& rhs);
 
+	void setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
+
 	void InitializeSampleOffsets();
 	void InitializeSampleWeights();
 	float GetWeight(float x) const;
-
-	void UpdateGaussianMaterialWithHorizontalOffsets();
-	void UpdateGaussianMaterialWithVerticalOffsets();
-	void UpdateGaussianMaterialNoBlur();
 
 	ID3D11Device* mDevice;
 	ID3D11DeviceContext* mContext;
@@ -44,8 +42,6 @@ private:
 
 	SimpleVertexShader* mPostProcessVS;
 	SimplePixelShader* mGaussianBlurPS;
-
-	//ID3D11ShaderResourceView* mSceneTexture;
 
 	ID3D11RenderTargetView* mHorizontalBlurRTV;
 	//ID3D11RenderTargetView* mVerticalBlurRTV;

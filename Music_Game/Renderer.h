@@ -31,6 +31,7 @@ public:
 	void Setup2D();
 
 private:
+	void setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
 	void SetPixelShaderUp(SimplePixelShader*, std::vector<Entity*>, int);
 	void CreateAdditionalRSStates();
 
@@ -62,7 +63,7 @@ private:
 	ID3D11DeviceContext* context;
 	ID3D11RenderTargetView* backBufferRTV;
 	IDXGISwapChain* swapChain;
-	ID3D11DepthStencilView* depthStencilView;
+	ID3D11DepthStencilView* mDepthStencilView;
 
 	unsigned int mWidth, mHeight;
 

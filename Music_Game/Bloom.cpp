@@ -24,12 +24,6 @@ Bloom::~Bloom()
 
 void Bloom::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
 {
-	blur->Init(width, height, depthStencilView);
-
-	mWidth = width;
-	mHeight = height;
-	mDepthStencilView = depthStencilView;
-
 	mPostProcessVS = new SimpleVertexShader(mDevice, mContext);
 	if (!mPostProcessVS->LoadShaderFile(L"Debug/PostProcessVS.cso"))
 		mPostProcessVS->LoadShaderFile(L"PostProcessVS.cso");
@@ -41,6 +35,29 @@ void Bloom::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView
 	mCombinePS = new SimplePixelShader(mDevice, mContext);
 	if (!mCombinePS->LoadShaderFile(L"Debug/BloomCombinePixelShader.cso"))
 		mCombinePS->LoadShaderFile(L"BloomCombinePixelShader.cso");
+
+	blur->Init(width, height, depthStencilView);
+
+	mExtractRTV = 0;
+	mExtractSRV = 0;
+
+	setWidthHeight(width, height, depthStencilView);
+}
+
+void Bloom::Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
+{
+	setWidthHeight(width, height, depthStencilView);
+	blur->Resize(width, height, depthStencilView);
+}
+
+void Bloom::setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
+{
+	mWidth = width;
+	mHeight = height;
+	mDepthStencilView = depthStencilView;
+
+	if (mExtractRTV) { mExtractRTV->Release(); }
+	if (mExtractSRV) { mExtractSRV->Release(); }
 
 	// Create post process resources -----------------------------------------
 	D3D11_TEXTURE2D_DESC textureDesc = {};
@@ -58,7 +75,7 @@ void Bloom::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView
 
 	ID3D11Texture2D* mExtractTexture;
 	mDevice->CreateTexture2D(&textureDesc, 0, &mExtractTexture);
-	
+
 	// Create the Render Target View
 	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
 	rtvDesc.Format = textureDesc.Format;
@@ -79,15 +96,6 @@ void Bloom::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView
 
 	// We don't need the texture reference itself no mo'
 	mExtractTexture->Release();
-}
-
-void Bloom::Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
-{
-	mWidth = width;
-	mHeight = height;
-	mDepthStencilView = depthStencilView;
-
-	blur->Resize(width, height, depthStencilView);
 }
 
 void Bloom::Draw(const float & gameTime, ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetView * outputRTV)

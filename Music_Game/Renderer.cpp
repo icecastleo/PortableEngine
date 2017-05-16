@@ -13,6 +13,9 @@ Renderer::Renderer()
 	indexBuffer = 0;
 	vertexShader = 0;
 	pixelShader = 0;
+
+	ppRTV = 0;
+	ppSRV = 0;
 }
 
 //---------------------------------------------------------
@@ -36,66 +39,23 @@ Renderer::~Renderer()
 //Inititialize one time members
 //---------------------------------------------------------
 void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con, ID3D11RenderTargetView* tView, 
-	IDXGISwapChain* chain, ID3D11DepthStencilView* depth, Text2D* _text, unsigned int width, unsigned int height)
+	IDXGISwapChain* chain, ID3D11DepthStencilView* depthStencilView, Text2D* _text, unsigned int width, unsigned int height)
 {
 	Cam = _Cam;
 	mDevice = device;
 	context = con;
 	backBufferRTV = tView;
 	swapChain = chain;
-	depthStencilView = depth;
 	context->RSGetState(&defaultState);
-	
-	mWidth = width;
-	mHeight = height;
-
 	text = _text;
 
-	//May be moved
-	//-----------------------------------------------------------------------------------------------
-	// Create post process resources -----------------------------------------
-	D3D11_TEXTURE2D_DESC textureDesc = {};
-	textureDesc.Width = mWidth;
-	textureDesc.Height = mHeight;
-	textureDesc.ArraySize = 1;
-	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-	textureDesc.CPUAccessFlags = 0;
-	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	textureDesc.MipLevels = 1;
-	textureDesc.MiscFlags = 0;
-	textureDesc.SampleDesc.Count = 1;
-	textureDesc.SampleDesc.Quality = 0;
-	textureDesc.Usage = D3D11_USAGE_DEFAULT;
-
-	ID3D11Texture2D* ppTexture;
-	device->CreateTexture2D(&textureDesc, 0, &ppTexture);
-
-	// Create the Render Target View
-	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-	rtvDesc.Format = textureDesc.Format;
-	rtvDesc.Texture2D.MipSlice = 0;
-	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-
-	device->CreateRenderTargetView(ppTexture, &rtvDesc, &ppRTV);
-
-	// Create the Shader Resource View
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Format = textureDesc.Format;
-	srvDesc.Texture2D.MipLevels = 1;
-	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-
-	device->CreateShaderResourceView(ppTexture, &srvDesc, &ppSRV);
-
-	// We don't need the texture reference itself no mo'
-	ppTexture->Release();
+	setWidthHeight(width, height, depthStencilView);
 
 	blur = new GaussianBlur(mDevice, context);
 	blur->Init(mWidth, mHeight, depthStencilView);
 
 	bloom = new Bloom(mDevice, context);
 	bloom->Init(mWidth, mHeight, depthStencilView);
-	//-----------------------------------------------------------------------------------------------
 
 	CreateAdditionalRSStates();
 }
@@ -143,7 +103,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	//  - At the beginning of Draw (before drawing *anything*)
 	//context->ClearRenderTargetView(backBufferRTV, color);
 	context->ClearDepthStencilView(
-		depthStencilView,
+		mDepthStencilView,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 		1.0f,
 		0);
@@ -158,7 +118,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	// Post process initial setup =================
 	// Start rendering somewhere else!
 	context->ClearRenderTargetView(ppRTV, color);
-	context->OMSetRenderTargets(1, &ppRTV, depthStencilView);
+	context->OMSetRenderTargets(1, &ppRTV, mDepthStencilView);
 
 	// Set buffers in the input assembler
 	//  - Do this ONCE PER OBJECT you're drawing, since each object might
@@ -326,12 +286,58 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	swapChain->Present(0, 0);
 }
 
+void Renderer::setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView * depthStencilView)
+{
+	mWidth = width;
+	mHeight = height;
+	mDepthStencilView = depthStencilView;
+
+	if (ppRTV) { ppRTV->Release(); }
+	if (ppSRV) { ppSRV->Release(); }
+
+	// Create post process resources -----------------------------------------
+	D3D11_TEXTURE2D_DESC textureDesc = {};
+	textureDesc.Width = mWidth;
+	textureDesc.Height = mHeight;
+	textureDesc.ArraySize = 1;
+	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	textureDesc.CPUAccessFlags = 0;
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureDesc.MipLevels = 1;
+	textureDesc.MiscFlags = 0;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+
+	ID3D11Texture2D* ppTexture;
+	mDevice->CreateTexture2D(&textureDesc, 0, &ppTexture);
+
+	// Create the Render Target View
+	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+	rtvDesc.Format = textureDesc.Format;
+	rtvDesc.Texture2D.MipSlice = 0;
+	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+	mDevice->CreateRenderTargetView(ppTexture, &rtvDesc, &ppRTV);
+
+	// Create the Shader Resource View
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = textureDesc.Format;
+	srvDesc.Texture2D.MipLevels = 1;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+
+	mDevice->CreateShaderResourceView(ppTexture, &srvDesc, &ppSRV);
+
+	// We don't need the texture reference itself no mo'
+	ppTexture->Release();
+}
+
 //---------------------------------------------------------
 //Set the pixel shader up
 //---------------------------------------------------------
 void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*> list, int i)
 {
-
 	pShader->SetFloat4("cameraPosition", Cam->GetPositon());
 
 	if (currentScene->spotLights.size() > 0) {
@@ -445,12 +451,11 @@ void Renderer::CreateAdditionalRSStates()
 //Update the depth Stencil View
 //Program Errors on window resize if this is not updated
 //---------------------------------------------------------
-void Renderer::Resized(ID3D11DepthStencilView* depth, ID3D11RenderTargetView* bBRTV, unsigned int width, unsigned int height)
+void Renderer::Resized(ID3D11DepthStencilView* depthStencilView, ID3D11RenderTargetView* bBRTV, unsigned int width, unsigned int height)
 {
-	depthStencilView = depth;
 	backBufferRTV = bBRTV;
-	mWidth = width;
-	mHeight = height;
+
+	setWidthHeight(width, height, depthStencilView);
 
 	blur->Resize(width, height, depthStencilView);
 	bloom->Resize(width, height, depthStencilView);

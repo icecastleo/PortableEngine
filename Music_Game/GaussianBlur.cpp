@@ -9,7 +9,7 @@ const unsigned int sampleCount = 9;
 GaussianBlur::GaussianBlur(ID3D11Device* device, ID3D11DeviceContext * context, float blurAmount)
 	: mDevice(device), mContext(context), mBlurAmount(blurAmount)
 {
-
+	
 }
 
 GaussianBlur::~GaussianBlur()
@@ -33,10 +33,6 @@ void GaussianBlur::SetBlurAmount(float blurAmount)
 
 void GaussianBlur::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
 {
-	mWidth = width;
-	mHeight = height;
-	mDepthStencilView = depthStencilView;
-
 	mPostProcessVS = new SimpleVertexShader(mDevice, mContext);
 	if (!mPostProcessVS->LoadShaderFile(L"Debug/PostProcessVS.cso"))
 		mPostProcessVS->LoadShaderFile(L"PostProcessVS.cso");
@@ -44,9 +40,29 @@ void GaussianBlur::Init(unsigned int width, unsigned int height, ID3D11DepthSten
 	mGaussianBlurPS = new SimplePixelShader(mDevice, mContext);
 	if (!mGaussianBlurPS->LoadShaderFile(L"Debug/GaussianBlurPixelShader.cso"))
 		mGaussianBlurPS->LoadShaderFile(L"GaussianBlurPixelShader.cso");
+
+	mHorizontalBlurRTV = 0;
+	mHorizontalBlurSRV = 0;
 	
+	setWidthHeight(width, height, depthStencilView);
+}
+
+void GaussianBlur::Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
+{
+	setWidthHeight(width, height, depthStencilView);
+}
+
+void GaussianBlur::setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView * depthStencilView)
+{
+	mWidth = width;
+	mHeight = height;
+	mDepthStencilView = depthStencilView;
+
 	InitializeSampleOffsets();
 	InitializeSampleWeights();
+
+	if (mHorizontalBlurRTV) { mHorizontalBlurRTV->Release(); }
+	if (mHorizontalBlurSRV) { mHorizontalBlurSRV->Release(); }
 
 	// Create post process resources -----------------------------------------
 	D3D11_TEXTURE2D_DESC textureDesc = {};
@@ -89,13 +105,6 @@ void GaussianBlur::Init(unsigned int width, unsigned int height, ID3D11DepthSten
 	// We don't need the texture reference itself no mo'
 	mHorizontalBlurTexture->Release();
 	//mVerticalBlurTexture->Release();
-}
-
-void GaussianBlur::Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
-{
-	mWidth = width;
-	mHeight = height;
-	mDepthStencilView = depthStencilView;
 }
 
 void GaussianBlur::InitializeSampleOffsets()
@@ -159,9 +168,6 @@ void GaussianBlur::Draw(const float & gameTime, ID3D11ShaderResourceView * input
 	UINT stride = 0;
 	UINT offset = 0;
 
-	//mContext->ClearRenderTargetView(outputRTV, color);
-	//mContext->OMSetRenderTargets(1, &outputRTV, mDepthStencilView);
-
 	mContext->ClearRenderTargetView(mHorizontalBlurRTV, color);
 	mContext->ClearDepthStencilView(mDepthStencilView,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -197,7 +203,6 @@ void GaussianBlur::Draw(const float & gameTime, ID3D11ShaderResourceView * input
 	// Get the shaders ready for post processing
 	mPostProcessVS->SetShader();
 
-	//mGaussianBlurPS->SetShaderResourceView("InputTexture", inputSRV);
 	mGaussianBlurPS->SetShaderResourceView("InputTexture", mHorizontalBlurSRV);
 
 	mGaussianBlurPS->SetData("SampleOffsets",
@@ -215,17 +220,4 @@ void GaussianBlur::Draw(const float & gameTime, ID3D11ShaderResourceView * input
 
 	// Unbind the post process texture from input
 	mGaussianBlurPS->SetShaderResourceView("InputTexture", 0);
-}
-
-void GaussianBlur::UpdateGaussianMaterialWithHorizontalOffsets()
-{
-
-}
-
-void GaussianBlur::UpdateGaussianMaterialWithVerticalOffsets()
-{
-}
-
-void GaussianBlur::UpdateGaussianMaterialNoBlur()
-{
 }
