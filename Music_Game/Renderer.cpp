@@ -269,8 +269,8 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	}//end of transparent with normal maps draw calls
 
 	//Draw Text Here
-	
 	text->DrawMyText();
+
 	// Reset states to properly render next frame
 	context->RSSetState(0);
 	context->OMSetDepthStencilState(0, 0);

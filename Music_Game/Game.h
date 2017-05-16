@@ -82,6 +82,7 @@ private:
 	float timer = 0.2f;
 	int asteroidIndex = 0;
 	float stayTime = 0;
+	float sceneChangeTime = 0;
 
 	Text2D* text;
 };

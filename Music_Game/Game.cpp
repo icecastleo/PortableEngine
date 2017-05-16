@@ -98,11 +98,11 @@ void Game::Init()
 	SceneManag.AddScene(SceneBuild.GetScene(2));
 	SceneManag.AddScene(SceneBuild.GetScene(3));
 
-	text = new Text2D();
+	text = new Text2D(width, height);
 	text->Init(context, device);
 
 	//Start with scene 1
-	SceneNumber = 1;
+	SceneNumber = 3;
 	setScene();
 
 	
@@ -211,6 +211,7 @@ void Game::OnResize()
 
 	DXCore::OnResize();
 	Render.Resized(depthStencilView, backBufferRTV, width, height);
+	text->AdjustPosition(width, height);
 }
 
 // --------------------------------------------------------
@@ -223,12 +224,17 @@ void Game::Update(float deltaTime, float totalTime)
 		Quit();
 
 	//If in scene 1 go to scene 2
-	if (GetAsyncKeyState(VK_RETURN) && SceneNumber == 1)
+	if (GetAsyncKeyState(VK_RETURN))
 	{
-		SceneNumber = 2;
-		setScene();
+		//Need to insert a time delay before scene may change again
+		if (totalTime > sceneChangeTime + 2)
+		{
+			sceneChangeTime = totalTime;
+			SceneNumber = (SceneNumber % SceneManag.GetNumOfScenes()) + 1;
+			setScene();
+		}
 	}
-	
+
 
 	musicPlayer.update();
 

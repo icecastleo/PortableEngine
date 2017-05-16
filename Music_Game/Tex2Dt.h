@@ -8,8 +8,8 @@
 class Text2D
 {
 public:
-	Text2D();
-	Text2D(const wchar_t*);
+	Text2D(unsigned int, unsigned int);
+	Text2D(const wchar_t*, unsigned int, unsigned int);
 	~Text2D();
 
 	void Init(ID3D11DeviceContext*, ID3D11Device*);
@@ -23,6 +23,7 @@ public:
 
 	void AddText(const wchar_t*, DirectX::XMFLOAT2);
 	void ClearText();
+	void AdjustPosition(unsigned int, unsigned int);
 
 private:
 
@@ -34,6 +35,8 @@ private:
 
 	const wchar_t* path;
 	const wchar_t* textToDraw;
+
+	unsigned int width, height;
 
 	std::vector<textObject> textList;
 };

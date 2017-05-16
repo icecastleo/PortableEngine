@@ -40,6 +40,7 @@ private:
 	Scene* scene1;
 	Scene* scene2;
 	Scene* scene3;
+	Scene* scene4;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;

@@ -61,6 +61,7 @@ SceneBuilder::~SceneBuilder()
 	delete scene1;
 	delete scene2;
 	delete scene3;
+	delete scene4;
 
 
 	for (Entity *e : asteroidList) {
@@ -109,7 +110,7 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/title.png";
 	menuMat = new Material(device, context, path);
 
-	path = L"Assets/textures/blueSpaec.png";
+	path = L"Assets/textures/creditsTexture.jpg";
 	creditsMat = new Material(device, context, path);
 
 
@@ -294,7 +295,7 @@ void SceneBuilder::SetupScenes()
 	scene1->directionalLights.push_back(dirLight4);
 	
 	//Sound
-	//scene1->musicFileName = "04_-_Bloody_Revenge.mp3";
+	//scene1->musicFileName = "";
 
 	//2D Text
 	scene1->textList.push_back(textObject{ L"Music Game in Space", DirectX::XMFLOAT2(500, 20) });
@@ -312,7 +313,7 @@ void SceneBuilder::SetupScenes()
 	scene2->opaqueNorm = std::vector<Entity*>();
 	scene2->transparent = std::vector<Entity*>();
 	scene2->transparentNorm = std::vector<Entity*>();
-	scene1->textList = std::vector<textObject>();
+	scene2->textList = std::vector<textObject>();
 	
 	for (Entity* e : asteroidList) {
 		scene2->entities.push_back(e);
@@ -365,7 +366,7 @@ void SceneBuilder::SetupScenes()
 	//Scene 3
 	//--------------------------------------------------------------------------------------------
 	scene3 = new Scene();
-	scene3->name = "Game Over";
+	scene3->name = "Credits";
 
 	//Entities
 	scene3->entities = std::vector<Entity*>();
@@ -373,22 +374,67 @@ void SceneBuilder::SetupScenes()
 	scene3->opaqueNorm = std::vector<Entity*>();
 	scene3->transparent = std::vector<Entity*>();
 	scene3->transparentNorm = std::vector<Entity*>();
+	scene3->textList = std::vector<textObject>();
 
 	//Background
 	scene3->entities.push_back(creditsBackgroundEnt);
 
 	//Lights
+	scene3->globalLights.push_back(ambient);
 	scene3->directionalLights.push_back(dirLight4);
-	
-	//Sound
-	//scene3->musicFileName = "04_-_Bloody_Revenge.mp3"; //Need to find appropriate credits music
+
+	//2D Text
+	scene3->textList.push_back(textObject{ L"Results", DirectX::XMFLOAT2(580, 300) });
+	scene3->textList.push_back(textObject{ L"You Scored: ", DirectX::XMFLOAT2(530, 350) });
 
 	//End of Scene 3 -----------------------------------------------------------------------------
+
+	//Scene 4
+	//--------------------------------------------------------------------------------------------
+	scene4 = new Scene();
+	scene4->name = "Credits";
+
+	//Entities
+	scene4->entities = std::vector<Entity*>();
+	scene4->opaque = std::vector<Entity*>();
+	scene4->opaqueNorm = std::vector<Entity*>();
+	scene4->transparent = std::vector<Entity*>();
+	scene4->transparentNorm = std::vector<Entity*>();
+	scene4->textList = std::vector<textObject>();
+
+	//Background
+	scene4->entities.push_back(creditsBackgroundEnt);
+
+	//Lights
+	scene4->globalLights.push_back(ambient);
+	scene4->directionalLights.push_back(dirLight4);
+	
+	//Sound
+	scene4->musicFileName = "06_-_Hypnagogic.mp3";
+
+	//2D Text
+	scene4->textList.push_back(textObject{ L"Credits", DirectX::XMFLOAT2(600, 10) });
+
+	scene4->textList.push_back(textObject{ L"Designers & Developers", DirectX::XMFLOAT2(500, 50) });
+	scene4->textList.push_back(textObject{ L"Shih-Kuang Chu", DirectX::XMFLOAT2(550, 90) });
+	scene4->textList.push_back(textObject{ L"Darren Farr", DirectX::XMFLOAT2(580, 130) });
+	scene4->textList.push_back(textObject{ L"Rahul Madhyan", DirectX::XMFLOAT2(560, 170) });
+	scene4->textList.push_back(textObject{ L"Pengfei Zhang", DirectX::XMFLOAT2(562, 210) });
+
+	scene4->textList.push_back(textObject{ L"Models provided by Chris Cascioli", DirectX::XMFLOAT2(430, 300) });
+	scene4->textList.push_back(textObject{ L"Textures by Google Search", DirectX::XMFLOAT2(450, 350) });
+
+	scene4->textList.push_back(textObject{ L"Sound from FreeMusicArchive.org", DirectX::XMFLOAT2(430, 400) });
+	scene4->textList.push_back(textObject{ L"Bloody Revenge", DirectX::XMFLOAT2(580, 450) });
+	scene4->textList.push_back(textObject{ L"Hypnagogic", DirectX::XMFLOAT2(580, 500) });
+
+	//End of Scene 4 -----------------------------------------------------------------------------
 
 	//Sort the entities in the scenes
 	SortEntityList(scene1);
 	SortEntityList(scene2);
 	SortEntityList(scene3);
+	SortEntityList(scene4);
 }
 
 
@@ -438,9 +484,8 @@ Scene* SceneBuilder::GetScene(int num)
 	if (num == 1) { return scene1; }
 	else if (num == 2) { return scene2; }
 	else if (num == 3) { return scene3; }
+	else if (num == 4) { return scene4; }
 	else { return nullptr; }
-
-	return scene1;
 }
 
 //---------------------------------------------------------
