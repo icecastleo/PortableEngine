@@ -183,7 +183,7 @@ void SceneBuilder::BuildLights()
 	//Point Lights
 	//-----------------------------------------------------------
 	pointLight = new PointLight();
-	pointLight->DiffuseColor = XMFLOAT4(1, 1, 0, 1);
+	pointLight->DiffuseColor = XMFLOAT4(0.6, 1.0, 1.0, 1);
 	pointLight->Position = XMFLOAT3(20, 20, 20);
 
 	//Spot Lights

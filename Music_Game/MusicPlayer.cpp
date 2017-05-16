@@ -42,8 +42,8 @@ void MusicPlayer::setSound(char *fileName)
 {
 	char *filePath = (char *)calloc(256, sizeof(char));
 
-	strcat(filePath, "Assets/musics/");
-	strcat(filePath, fileName);
+	strcat_s(filePath, 256, "Assets/musics/");
+	strcat_s(filePath, 256, fileName);
 
 	result = system->createSound(filePath, FMOD_DEFAULT, 0, &sound);
 	ERRCHECK(result);
