@@ -97,6 +97,7 @@ void Game::Init()
 	SceneManag.AddScene(SceneBuild.GetScene(1));
 	SceneManag.AddScene(SceneBuild.GetScene(2));
 	SceneManag.AddScene(SceneBuild.GetScene(3));
+	SceneManag.AddScene(SceneBuild.GetScene(4));
 
 	text = new Text2D(width, height);
 	text->Init(context, device);
@@ -232,6 +233,7 @@ void Game::Update(float deltaTime, float totalTime)
 			sceneChangeTime = totalTime;
 			SceneNumber = (SceneNumber % SceneManag.GetNumOfScenes()) + 1;
 			setScene();
+			printf("%d\n", SceneManag.GetNumOfScenes());
 		}
 	}
 

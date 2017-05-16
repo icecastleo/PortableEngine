@@ -296,9 +296,6 @@ void SceneBuilder::SetupScenes()
 	
 	//Sound
 	//scene1->musicFileName = "";
-
-	//2D Text
-	scene1->textList.push_back(textObject{ L"Music Game in Space", DirectX::XMFLOAT2(500, 20) });
 	
 	//End of Scene 1 -----------------------------------------------------------------------------
 
