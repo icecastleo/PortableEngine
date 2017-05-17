@@ -36,8 +36,7 @@ public:
 	void OnMouseUp(WPARAM buttonState, int x, int y);
 	void OnMouseMove(WPARAM buttonState, int x, int y);
 	void OnMouseWheel(float wheelDelta, int x, int y);
-
-	static int score;
+	
 private:
 	int SceneNumber;
 
@@ -86,6 +85,7 @@ private:
 	float stayTime = 0;
 	float sceneChangeTime = 0;
 
+	int score;
 
 	Text2D* text;
 };

@@ -7,6 +7,8 @@ Text2D::Text2D(unsigned int _width, unsigned int _height)
 {
 	width = _width;
 	height = _height;
+	initWidth = _width;
+	initHeight = _height;
 
 	textList = std::vector<textObject>();
 	path = L"Assets/fonts/Arial.spritefont";
@@ -19,6 +21,8 @@ Text2D::Text2D(const wchar_t* _path, unsigned int _width, unsigned int _height)
 {
 	width = _width;
 	height = _height;
+	initWidth = _width;
+	initHeight = _height;
 
 	textList = std::vector<textObject>();
 	path = _path;
@@ -69,12 +73,12 @@ void Text2D::DrawMyText()
 	//loop through the different items to draw
 	if (textList.size() > 0)
 	{
-		for (int t = 0; t < textList.size(); t++)
+		for (unsigned int t = 0; t < textList.size(); t++)
 		{
 			spriteFontArial->DrawString(
 				spriteBatch,
 				textList.at(t).text,
-				textList.at(t).positon);
+				textList.at(t).position);
 		}
 	}
 	//end drawing
@@ -98,6 +102,32 @@ void Text2D::DrawLiveText(const wchar_t* text, DirectX::XMFLOAT2 pos)
 	spriteBatch->End();
 }
 
+void Text2D::DrawLiveText(int score, DirectX::XMFLOAT2 pos)
+{
+	std::wstring s = std::to_wstring(score);
+	wchar_t* wc = const_cast<wchar_t*>(s.c_str());
+
+	//Use the default screen size to calculate where to text should display
+	float xPercent = (pos.x * 100.0f) / (float)initWidth;
+	float yPercent = (pos.y * 100.0f) / (float)initHeight;
+
+	DirectX::XMFLOAT2 position;
+
+	position.x = ((float)width * xPercent) / 100.0f;
+	position.y = ((float)height * yPercent) / 100.0f;
+
+	//Begin the sprite batch drawing
+	spriteBatch->Begin();
+
+	spriteFontArial->DrawString(
+		spriteBatch,
+		wc,
+		position);
+
+	//end drawing
+	spriteBatch->End();
+}
+
 //---------------------------------------------------------
 //Add a text object to be drawn
 //---------------------------------------------------------
@@ -105,7 +135,7 @@ void Text2D::AddText(const wchar_t* _text, DirectX::XMFLOAT2 _pos)
 {
 	textObject temp;
 	temp.text = _text;
-	temp.positon = _pos;
+	temp.position = _pos;
 
 	//Find the percentage location
 	temp.xPercent = (_pos.x * 100.0f) / (float)width;
@@ -144,10 +174,10 @@ void Text2D::AdjustPosition(unsigned int _width, unsigned int _height)
 
 	if (textList.size() > 0)
 	{
-		for (int i = 0; i < textList.size(); i++)
+		for (unsigned int i = 0; i < textList.size(); i++)
 		{
-			textList.at(i).positon.x = ((float)width * textList.at(i).xPercent) / 100.0f;
-			textList.at(i).positon.y = ((float)height * textList.at(i).yPercent) / 100.0f;
+			textList.at(i).position.x = ((float)width * textList.at(i).xPercent) / 100.0f;
+			textList.at(i).position.y = ((float)height * textList.at(i).yPercent) / 100.0f;
 		}
 	}
 }

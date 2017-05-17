@@ -76,7 +76,6 @@ Game::~Game()
 	delete particlePS;
 
 	delete player;
-	
 }
 
 // --------------------------------------------------------
@@ -111,6 +110,8 @@ void Game::Init()
 	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
 
 	player = new Player(SceneBuild.GetPlayerEntity());
+
+	score = 0;
 
 	//Make 5 Asteroids for the game
 	for (int i = 0; i < 12; i++) {
@@ -182,9 +183,9 @@ void Game::setScene()
 	if (SceneManag.GetScene(SceneNumber)->textList.size() > 0)
 	{
 		Scene* temp = SceneManag.GetScene(SceneNumber);
-		for (int i = 0; i < temp->textList.size(); i++)
+		for (unsigned int i = 0; i < temp->textList.size(); i++)
 		{
-			text->AddText(temp->textList.at(i).text, temp->textList.at(i).positon);
+			text->AddText(temp->textList.at(i).text, temp->textList.at(i).position);
 		}
 	}
 
@@ -193,6 +194,16 @@ void Game::setScene()
 	if (SceneManag.GetScene(SceneNumber)->musicFileName) {
 		musicPlayer.setSound(SceneManag.GetScene(SceneNumber)->musicFileName);
 		musicPlayer.play();
+	}
+
+	if (SceneNumber == 2)
+	{
+		score = 0;
+		Render.SetScorePos({ 590.0f, 10.0f });
+	}
+	else if (SceneNumber == 3)
+	{
+		Render.SetScorePos({ 700.0f, 350.0f });
 	}
 }
 
@@ -234,7 +245,6 @@ void Game::Update(float deltaTime, float totalTime)
 			sceneChangeTime = totalTime;
 			SceneNumber = (SceneNumber % SceneManag.GetNumOfScenes()) + 1;
 			setScene();
-			printf("%d\n", SceneManag.GetNumOfScenes());
 		}
 	}
 
@@ -260,7 +270,6 @@ void Game::Update(float deltaTime, float totalTime)
 		planet1->SetRotation(DirectX::XMFLOAT3(planet1->GetRotation().x, planet1->GetRotation().y + 0.01f, planet1->GetRotation().z));
 		planet2->SetRotation(DirectX::XMFLOAT3(planet2->GetRotation().x, planet2->GetRotation().y - 0.008f, planet2->GetRotation().z));
 		planet3->SetRotation(DirectX::XMFLOAT3(planet3->GetRotation().x, planet3->GetRotation().y + 0.003f, planet3->GetRotation().z));
-		
 	}
 
 	//Temp code
@@ -311,7 +320,7 @@ void Game::Update(float deltaTime, float totalTime)
 					SceneBuild.GetPlayerEntity()->GetWorldMat()._34);
 
 				currentScene->Particles->SpawnParticle();
-			}
+			}//end if collide
 
 		}
 	}
@@ -322,6 +331,7 @@ void Game::Update(float deltaTime, float totalTime)
 // --------------------------------------------------------
 void Game::Draw(float deltaTime, float totalTime)
 {
+	Render.SetScore(score);
 	Render.Draw(deltaTime, totalTime);
 }
 
@@ -386,5 +396,4 @@ void Game::OnMouseWheel(float wheelDelta, int x, int y)
 	// Add any custom code here...
 }
 
-int Game::score = 0;
 #pragma endregion

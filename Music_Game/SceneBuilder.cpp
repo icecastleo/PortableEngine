@@ -164,7 +164,7 @@ void SceneBuilder::BuildLights()
 {
 	//global ambient light
 	ambient = new GlobalLight();
-	ambient->AmbientColor = XMFLOAT4(0.4f, 0.4f, 0.4f, 1);
+	ambient->AmbientColor = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 
 	//Directional Lights
 	//-----------------------------------------------------------
@@ -172,34 +172,34 @@ void SceneBuilder::BuildLights()
 	//This light is for a no light place holder to be used if a dir light was used before
 	//and you don't need one in the current scene.
 	dirLight = new DirectionalLight();
-	dirLight->DiffuseColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1);
-	dirLight->Direction = XMFLOAT3(0, 0, 1);
+	dirLight->DiffuseColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	dirLight->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	dirLight2 = new DirectionalLight();
-	dirLight2->DiffuseColor = XMFLOAT4(.3, .3, .3, 1);
-	dirLight2->Direction = XMFLOAT3(0, 0, 1);
+	dirLight2->DiffuseColor = XMFLOAT4(.3f, .3f, .3f, 1);
+	dirLight2->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	dirLight3 = new DirectionalLight();
-	dirLight3->DiffuseColor = XMFLOAT4(.6, .6, .6, 1);
-	dirLight3->Direction = XMFLOAT3(0, 0, 1);
+	dirLight3->DiffuseColor = XMFLOAT4(.6f, .6f, .6f, 1.0f);
+	dirLight3->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	dirLight4 = new DirectionalLight();
-	dirLight4->DiffuseColor = XMFLOAT4(1, 1, 1, 1);
-	dirLight4->Direction = XMFLOAT3(0, 0, 1);
+	dirLight4->DiffuseColor = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	dirLight4->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	//Point Lights
 	//-----------------------------------------------------------
 	pointLight = new PointLight();
-	pointLight->DiffuseColor = XMFLOAT4(0.6, 1.0, 1.0, 1);
-	pointLight->Position = XMFLOAT3(20, 20, 20);
+	pointLight->DiffuseColor = XMFLOAT4(0.6f, 1.0f, 1.0f, 1.0f);
+	pointLight->Position = XMFLOAT3(20.0f, 20.0f, 20.0f);
 
 	//Spot Lights
 	//-----------------------------------------------------------
 	spotLight = new SpotLight();
 	spotLight->DiffuseColor = XMFLOAT4(0.8f, 0.3f, 0.0f, 1);
-	spotLight->Direction = XMFLOAT3(0, 0, 1);
+	spotLight->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	spotLight->phi = 0.0f;
-	spotLight->Position = XMFLOAT3(0, 15, 0);
+	spotLight->Position = XMFLOAT3(0.0f, 15.0f, 0.0f);
 	spotLight->theta = 90.0f;
 }
 
@@ -358,9 +358,6 @@ void SceneBuilder::SetupScenes()
 	scene2->pointLights.push_back(pointLight);
 
 	scene2->directionalLights.push_back(dirLight);
-	//scene2->directionalLights.push_back(dirLight2);
-	//scene2->directionalLights.push_back(dirLight3);
-	//scene2->directionalLights.push_back(dirLight4);
 
 	//Sound
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
@@ -376,7 +373,7 @@ void SceneBuilder::SetupScenes()
 	//Scene 3
 	//--------------------------------------------------------------------------------------------
 	scene3 = new Scene();
-	scene3->name = "Credits";
+	scene3->name = "Results";
 
 	//Entities
 	scene3->entities = std::vector<Entity*>();
@@ -464,7 +461,7 @@ Entity* SceneBuilder::CreateEntity(Mesh* mesh, Material* mat, XMFLOAT3 pos, XMFL
 void SceneBuilder::SortEntityList(Scene* s)
 {
 
-	for (int i = 0; i < s->entities.size(); i++)
+	for (unsigned int i = 0; i < s->entities.size(); i++)
 	{
 		if (s->entities.at(i)->GetMat()->UseTransperancy() && s->entities.at(i)->GetMat()->HasNormalMap())
 		{

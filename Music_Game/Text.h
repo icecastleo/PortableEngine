@@ -4,7 +4,7 @@
 struct textObject
 {
 	const wchar_t* text;
-	DirectX::XMFLOAT2 positon;
+	DirectX::XMFLOAT2 position;
 	float xPercent;
 	float yPercent;
 };

@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include "Text.h"
 #include <vector>
+#include <string>
 
 class Text2D
 {
@@ -20,6 +21,7 @@ public:
 	void SetupFont();
 	void DrawMyText();
 	void DrawLiveText(const wchar_t*, DirectX::XMFLOAT2);
+	void DrawLiveText(int, DirectX::XMFLOAT2);
 
 	void AddText(const wchar_t*, DirectX::XMFLOAT2);
 	void ClearText();
@@ -36,6 +38,7 @@ private:
 	const wchar_t* path;
 	const wchar_t* textToDraw;
 
+	unsigned int initWidth, initHeight;
 	unsigned int width, height;
 
 	std::vector<textObject> textList;

@@ -125,7 +125,6 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	//    have different geometry.
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
-	currentScene->name = "d";
 	
 	//Loop through the list of Entities and draw each one
 	//Draw opaque entities first then opaque with normals then transparent with normals and finally transparent objects
@@ -271,6 +270,11 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	//Draw Text Here
 	text->DrawMyText();
 
+	if (currentScene->name == "MainGame" || currentScene->name == "Results")
+	{
+		DrawScore();
+	}
+
 	// Reset states to properly render next frame
 	context->RSSetState(0);
 	context->OMSetDepthStencilState(0, 0);
@@ -286,6 +290,9 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	swapChain->Present(0, 0);
 }
 
+//---------------------------------------------------------
+//Set the render width and height
+//---------------------------------------------------------
 void Renderer::setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView * depthStencilView)
 {
 	mWidth = width;
@@ -351,7 +358,7 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*>
 
 	//loop through lights
 	//global lights
-	for (int g = 0; g < currentScene->globalLights.size(); g++)
+	for (unsigned int g = 0; g < currentScene->globalLights.size(); g++)
 	{
 		std::string name = "ambient" + std::to_string(g);
 		//setup lights
@@ -363,7 +370,7 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*>
 	}
 
 	//directional lights
-	for (int d = 0; d < currentScene->directionalLights.size(); d++)
+	for (unsigned int d = 0; d < currentScene->directionalLights.size(); d++)
 	{
 		std::string name = "light" + std::to_string(d);
 		//setup lights
@@ -375,7 +382,7 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*>
 	}
 
 	//point lights
-	for (int p = 0; p < currentScene->pointLights.size(); p++)
+	for (unsigned int p = 0; p < currentScene->pointLights.size(); p++)
 	{
 		std::string name = "lightP" + std::to_string(p);
 		//setup lights
@@ -387,7 +394,7 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*>
 	}
 
 	//spot lights
-	for (int s = 0; s < currentScene->spotLights.size(); s++)
+	for (unsigned int s = 0; s < currentScene->spotLights.size(); s++)
 	{
 		std::string name = "lightS" + std::to_string(s);
 		//setup lights
@@ -459,6 +466,30 @@ void Renderer::Resized(ID3D11DepthStencilView* depthStencilView, ID3D11RenderTar
 
 	blur->Resize(width, height, depthStencilView);
 	bloom->Resize(width, height, depthStencilView);
+}
+
+//---------------------------------------------------------
+//Draw player score
+//---------------------------------------------------------
+void Renderer::DrawScore()
+{
+	text->DrawLiveText(score, scorePos);
+}
+
+//---------------------------------------------------------
+//Set player score
+//---------------------------------------------------------
+void Renderer::SetScore(int _score)
+{
+	score = _score;
+}
+
+//---------------------------------------------------------
+//Set Score screen position
+//---------------------------------------------------------
+void Renderer::SetScorePos(DirectX::XMFLOAT2 _pos)
+{
+	scorePos = _pos;
 }
 
 //---------------------------------------------------------

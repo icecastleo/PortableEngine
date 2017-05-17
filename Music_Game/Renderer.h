@@ -29,11 +29,14 @@ public:
 	void SetScene(Scene*);
 
 	void Setup2D();
+	void SetScore(int);
+	void Renderer::SetScorePos(DirectX::XMFLOAT2);
 
 private:
 	void setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
 	void SetPixelShaderUp(SimplePixelShader*, std::vector<Entity*>, int);
 	void CreateAdditionalRSStates();
+	void DrawScore();
 
 	SimpleVertexShader* vertexShader;
 	SimplePixelShader* pixelShader;
@@ -66,6 +69,8 @@ private:
 	ID3D11DepthStencilView* mDepthStencilView;
 
 	unsigned int mWidth, mHeight;
+	int score;
+	DirectX::XMFLOAT2 scorePos;
 
 	//These may need to be moved
 	//-----------------------------------
@@ -85,4 +90,5 @@ private:
 
 	//2D Text
 	Text2D* text;
+	std::vector<textObject*> flexTextList;
 };
