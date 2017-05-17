@@ -39,7 +39,6 @@ void Asteroid::Update(float deltaTime)
 		XMStoreFloat3(&position, pos);
 		if (position.z < -10) {
 			active = false;
-			Game::nextScore = 10;
 		}
 
 		if (position.z < -1.0f) {

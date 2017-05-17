@@ -73,6 +73,9 @@ SceneBuilder::~SceneBuilder()
 	delete p3;
 
 	delete emitter;
+
+	delete titleEnt;
+	delete titleMat;
 }
 
 //---------------------------------------------------------

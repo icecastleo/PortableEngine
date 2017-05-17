@@ -10,6 +10,7 @@ public:
 
 	void setSound(char* fileName);
 	void play();
+	void stop();
 	void update();
 
 private:

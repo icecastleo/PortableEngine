@@ -66,12 +66,31 @@ void MusicPlayer::setSound(char *fileName)
 void MusicPlayer::play() {
 	result = system->playSound(sound, 0, false, &channel);
 	ERRCHECK(result);
-
+	
 	result = channel->addDSP(FMOD_CHANNELCONTROL_DSP_HEAD, spectrumDSP);
 	ERRCHECK(result);
 
 	result = channel->setVolume(0.1);
 	ERRCHECK(result);
+}
+
+void MusicPlayer::stop()
+{
+	if (!channel)
+		return;
+
+	//bool playing = false;
+
+	//result = channel->isPlaying(&playing);
+	//ERRCHECK(result);
+
+	//if (playing) {
+		result = channel->stop();
+		ERRCHECK(result);
+
+		if (result == FMOD_OK)
+			channel = 0;
+	//}
 }
 
 void MusicPlayer::update() {

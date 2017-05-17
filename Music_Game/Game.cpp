@@ -188,6 +188,7 @@ void Game::setScene()
 		}
 	}
 
+	musicPlayer.stop();
 
 	if (SceneManag.GetScene(SceneNumber)->musicFileName) {
 		musicPlayer.setSound(SceneManag.GetScene(SceneNumber)->musicFileName);
