@@ -1,6 +1,6 @@
 #include "Asteroid.h"
 using namespace DirectX;
-
+#include "Game.h"
 
 Asteroid::Asteroid()
 {
@@ -39,10 +39,11 @@ void Asteroid::Update(float deltaTime)
 		XMStoreFloat3(&position, pos);
 		if (position.z < -10) {
 			active = false;
+			Game::nextScore = 10;
 		}
 
 		if (position.z < -1.0f) {
-			collided = true;
+			collided = true;			
 		}
 
 	}

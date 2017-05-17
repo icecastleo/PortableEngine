@@ -68,10 +68,12 @@ private:
 	Material* p2Mat;
 	Material* p3Mat;
 	Material* lane2Mat;
+	Material* titleMat;
 
 	Material* particelMat;
 
 	Entity* menuEnt;
+	Entity* titleEnt;
 	Entity* menuBackgroundEnt;
 	Entity* gameBackgroundEnt;
 	Entity* creditsBackgroundEnt;

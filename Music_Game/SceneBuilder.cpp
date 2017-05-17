@@ -148,6 +148,10 @@ void SceneBuilder::BuildMaterials()
 
 	path = L"Assets/Textures/circleParticle.jpg"; 
 	particelMat = new Material(device, context, path, 1);
+
+	path = L"Assets/Textures/titleText.png";
+	titleMat = new Material(device, context, path);
+
 }
 
 //---------------------------------------------------------
@@ -223,6 +227,8 @@ void SceneBuilder::BuildEntities()
 
 	menuEnt = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +3.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
 
+	titleEnt = new Entity(quadMesh, titleMat, XMFLOAT3(+0.0f, +5.0f, +0.0f), XMFLOAT3(+0.2f, +0.0f, +0.0f), XMFLOAT3(+13.0f, +1.0f, +1.0f));
+
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
 
 	for (int i = 0; i < 12; i++) {
@@ -289,10 +295,14 @@ void SceneBuilder::SetupScenes()
 
 	//Background
 	scene1->entities.push_back(menuBackgroundEnt);
+	scene1->entities.push_back(titleEnt);
 
 	//Lights
 	scene1->globalLights.push_back(ambient);
 	scene1->directionalLights.push_back(dirLight4);
+
+	//Text
+	scene1->textList.push_back(textObject{ L"press ENTER to start!", DirectX::XMFLOAT2(500, 550) });
 	
 	//Sound
 	//scene1->musicFileName = "";

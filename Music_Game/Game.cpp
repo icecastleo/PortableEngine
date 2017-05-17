@@ -103,7 +103,7 @@ void Game::Init()
 	text->Init(context, device);
 
 	//Start with scene 1
-	SceneNumber = 3;
+	SceneNumber = 1;
 	setScene();
 
 	
@@ -303,10 +303,8 @@ void Game::Update(float deltaTime, float totalTime)
 				SceneBuild.GetAsteroidEntity(i)->GetWorldMat());
 
 			if (collide) {
-				
 				asteroids[i]->collided = true;
-				printf("collided\n");
-				
+				score += 10;	
 				currentScene->Particles->SetEmitterPosition(SceneBuild.GetPlayerEntity()->GetWorldMat()._14,
 					SceneBuild.GetPlayerEntity()->GetWorldMat()._24,
 					SceneBuild.GetPlayerEntity()->GetWorldMat()._34);
@@ -386,4 +384,6 @@ void Game::OnMouseWheel(float wheelDelta, int x, int y)
 {
 	// Add any custom code here...
 }
+
+int Game::score = 0;
 #pragma endregion
