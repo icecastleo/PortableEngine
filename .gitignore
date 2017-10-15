@@ -290,5 +290,5 @@ __pycache__/
 #*.dds
 
 #
-!Music_Game/Assets/models/*.obj
-!Music_Game/lib/*
+!ProtableEngine/Assets/models/*.obj
+!ProtableEngine/lib/*
