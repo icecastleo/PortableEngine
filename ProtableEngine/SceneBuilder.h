@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include <DirectXMath.h>
 #include "Mesh.h"
-#include "Material.h"
+#include "D3D11Material.h"
 #include <vector>
 #include "Lights.h"
 #include "Scene.h"
@@ -27,7 +27,7 @@ public:
 	void BuildEntities();
 	void BuildParticles();
 
-	Entity* CreateEntity(Mesh*, Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
+	Entity* CreateEntity(Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
 	Entity* GetPlayerEntity();
 
@@ -52,25 +52,25 @@ private:
 	Mesh* asteroidMesh;
 	Mesh* skyboxMesh;
 	
-	Material* creditsMat;
-	Material* menuMat;
-	Material* playerMat;
-	Material* laneMat;
-	Material* asteroidMat;
-	Material* backgroundMat;
+	D3D11Material* creditsMat;
+	D3D11Material* menuMat;
+	D3D11Material* playerMat;
+	D3D11Material* laneMat;
+	D3D11Material* asteroidMat;
+	D3D11Material* backgroundMat;
 
-	Material* plutoMat;
-	Material* venusMat;
-	Material* sunMat;
-	Material* earthMat;
-	Material* moonMat;
-	Material* p1Mat;
-	Material* p2Mat;
-	Material* p3Mat;
-	Material* lane2Mat;
-	Material* titleMat;
+	D3D11Material* plutoMat;
+	D3D11Material* venusMat;
+	D3D11Material* sunMat;
+	D3D11Material* earthMat;
+	D3D11Material* moonMat;
+	D3D11Material* p1Mat;
+	D3D11Material* p2Mat;
+	D3D11Material* p3Mat;
+	D3D11Material* lane2Mat;
+	D3D11Material* titleMat;
 
-	Material* particelMat;
+	D3D11Material* particelMat;
 
 	Entity* menuEnt;
 	Entity* titleEnt;

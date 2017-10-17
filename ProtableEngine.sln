@@ -1,14 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DX11Engine", "ProtableEngine\DX11Engine.vcxproj", "{2970F509-783A-4EB6-BF2B-7D5612205186}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MusicGame", "ProtableEngine\DX11Engine.vcxproj", "{2970F509-783A-4EB6-BF2B-7D5612205186}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		PC_Debug|x64 = PC_Debug|x64
+		PC_Debug|x86 = PC_Debug|x86
+		PS4_Debug|x64 = PS4_Debug|x64
+		PS4_Debug|x86 = PS4_Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -17,6 +21,14 @@ Global
 		{2970F509-783A-4EB6-BF2B-7D5612205186}.Debug|x64.Build.0 = Debug|x64
 		{2970F509-783A-4EB6-BF2B-7D5612205186}.Debug|x86.ActiveCfg = Debug|Win32
 		{2970F509-783A-4EB6-BF2B-7D5612205186}.Debug|x86.Build.0 = Debug|Win32
+		{2970F509-783A-4EB6-BF2B-7D5612205186}.PC_Debug|x64.ActiveCfg = PC_Debug|x64
+		{2970F509-783A-4EB6-BF2B-7D5612205186}.PC_Debug|x64.Build.0 = PC_Debug|x64
+		{2970F509-783A-4EB6-BF2B-7D5612205186}.PC_Debug|x86.ActiveCfg = PC_Debug|Win32
+		{2970F509-783A-4EB6-BF2B-7D5612205186}.PC_Debug|x86.Build.0 = PC_Debug|Win32
+		{2970F509-783A-4EB6-BF2B-7D5612205186}.PS4_Debug|x64.ActiveCfg = PS4_Debug|x64
+		{2970F509-783A-4EB6-BF2B-7D5612205186}.PS4_Debug|x64.Build.0 = PS4_Debug|x64
+		{2970F509-783A-4EB6-BF2B-7D5612205186}.PS4_Debug|x86.ActiveCfg = PS4_Debug|Win32
+		{2970F509-783A-4EB6-BF2B-7D5612205186}.PS4_Debug|x86.Build.0 = PS4_Debug|Win32
 		{2970F509-783A-4EB6-BF2B-7D5612205186}.Release|x64.ActiveCfg = Release|x64
 		{2970F509-783A-4EB6-BF2B-7D5612205186}.Release|x64.Build.0 = Release|x64
 		{2970F509-783A-4EB6-BF2B-7D5612205186}.Release|x86.ActiveCfg = Release|Win32

@@ -4,7 +4,7 @@
 
 #include "Camera.h"
 #include "SimpleShader.h"
-#include "Material.h"
+#include "D3D11Material.h"
 
 struct Particle
 {
@@ -38,7 +38,7 @@ public:
 		DirectX::XMFLOAT3 emitterPosition,
 		DirectX::XMFLOAT3 emitterAcceleration,
 		ID3D11Device* device,
-		Material* material
+		D3D11Material* material
 	);
 	~Emitter();
 
@@ -55,7 +55,7 @@ public:
 
 	void SetEmitterPosition(float x, float y, float z);
 
-	Material* GetMaterial();
+	D3D11Material* GetMaterial();
 private:
 	// Emission properties
 	int particlesPerSecond;
@@ -88,5 +88,5 @@ private:
 	SimpleVertexShader* vs;
 	SimplePixelShader* ps;
 
-	Material* material;
+	D3D11Material* material;
 };

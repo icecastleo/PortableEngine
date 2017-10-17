@@ -14,7 +14,7 @@ Emitter::Emitter(
 	DirectX::XMFLOAT3 emitterPosition,
 	DirectX::XMFLOAT3 emitterAcceleration,
 	ID3D11Device* device,
-	Material* material
+	D3D11Material* material
 )
 {
 	// Save params
@@ -306,7 +306,7 @@ void Emitter::SetEmitterPosition(float x, float y, float z)
 	emitterPosition = XMFLOAT3(x, y, z);
 }
 
-Material* Emitter::GetMaterial()
+D3D11Material* Emitter::GetMaterial()
 {
 	return material;
 }

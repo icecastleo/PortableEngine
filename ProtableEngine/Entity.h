@@ -3,7 +3,7 @@
 
 #include <DirectXMath.h>
 #include "Mesh.h"
-#include "Material.h"
+#include "D3D11Material.h"
 #include <vector>
 #include "Transform.h"
 
@@ -15,7 +15,7 @@ class Entity
 public:
 	Entity();
 	~Entity();
-	Entity(Mesh*, Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
+	Entity(Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 
 	void Update();
 
@@ -30,7 +30,7 @@ public:
 	void Reset();
 
 	Mesh* GetMesh();
-	Material* GetMat();
+	D3D11Material* GetMat();
 
 	Entity* parent;
 	std::vector<Entity*> children;
@@ -38,13 +38,10 @@ public:
 	void SetParent(Entity* e);
 
 private:
-
 	void SetWorldMat();
 	
 	Mesh* mesh;
-	Material* mat;
-
-
+	D3D11Material* mat;
 
 	DirectX::XMFLOAT4X4 worldMat;
 	DirectX::XMFLOAT4X4 localMat;
