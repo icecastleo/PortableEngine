@@ -105,8 +105,6 @@ void Game::Init()
 	SceneNumber = 1;
 	setScene();
 
-	
-
 	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
 
 	player = new Player(SceneBuild.GetPlayerEntity());
@@ -133,43 +131,43 @@ void Game::Init()
 void Game::LoadShaders()
 {
 	vertexShader = new SimpleVertexShader(device, context);
-	if (!vertexShader->LoadShaderFile(L"Assets/ShaderObjs/VertexShader.cso"))
+	if (!vertexShader->LoadShaderFile(L"../Assets/ShaderObjs/VertexShader.cso"))
 		vertexShader->LoadShaderFile(L"VertexShader.cso");
 
 	pixelShader = new SimplePixelShader(device, context);
-	if (!pixelShader->LoadShaderFile(L"Assets/ShaderObjs/PixelShader.cso"))
+	if (!pixelShader->LoadShaderFile(L"../Assets/ShaderObjs/PixelShader.cso"))
 		pixelShader->LoadShaderFile(L"PixelShader.cso");
 
 	vertexShaderNormalMap = new SimpleVertexShader(device, context);
-	if (!vertexShaderNormalMap->LoadShaderFile(L"Assets/ShaderObjs/VertexShaderNormalMap.cso"))
+	if (!vertexShaderNormalMap->LoadShaderFile(L"../Assets/ShaderObjs/VertexShaderNormalMap.cso"))
 		vertexShaderNormalMap->LoadShaderFile(L"VertexShaderNormalMap.cso");
 
 	pixelShaderNormalMap = new SimplePixelShader(device, context);
-	if (!pixelShaderNormalMap->LoadShaderFile(L"Assets/ShaderObjs/PixelShaderNormalMap.cso"))
+	if (!pixelShaderNormalMap->LoadShaderFile(L"../Assets/ShaderObjs/PixelShaderNormalMap.cso"))
 		pixelShaderNormalMap->LoadShaderFile(L"PixelShaderNormalMap.cso");
 
 	skyVS = new SimpleVertexShader(device, context);
-	if (!skyVS->LoadShaderFile(L"Assets/ShaderObjs/SkyVS.cso"))
+	if (!skyVS->LoadShaderFile(L"../Assets/ShaderObjs/SkyVS.cso"))
 		skyVS->LoadShaderFile(L"SkyVS.cso");
 
 	skyPS = new SimplePixelShader(device, context);
-	if (!skyPS->LoadShaderFile(L"Assets/ShaderObjs/SkyPS.cso"))
+	if (!skyPS->LoadShaderFile(L"../Assets/ShaderObjs/SkyPS.cso"))
 		skyPS->LoadShaderFile(L"SkyPS.cso");
 
 	pixelShaderBlend = new SimplePixelShader(device, context);
-	if (!pixelShaderBlend->LoadShaderFile(L"Assets/ShaderObjs/BlendPixelShader.cso"))
+	if (!pixelShaderBlend->LoadShaderFile(L"../Assets/ShaderObjs/BlendPixelShader.cso"))
 		pixelShaderBlend->LoadShaderFile(L"BlendPixelShader.cso");
 
 	pixelShaderNormalMapBlend = new SimplePixelShader(device, context);
-	if (!pixelShaderNormalMapBlend->LoadShaderFile(L"Assets/ShaderObjs/PixelShaderNormalMapBlend.cso"))
+	if (!pixelShaderNormalMapBlend->LoadShaderFile(L"../Assets/ShaderObjs/PixelShaderNormalMapBlend.cso"))
 		pixelShaderNormalMapBlend->LoadShaderFile(L"PixelShaderNormalMapBlend.cso");
 
 	particleVS = new SimpleVertexShader(device, context);
-	if (!particleVS->LoadShaderFile(L"Assets/ShaderObjs/ParticleVS.cso"))
+	if (!particleVS->LoadShaderFile(L"../Assets/ShaderObjs/ParticleVS.cso"))
 		particleVS->LoadShaderFile(L"ParticleVS.cso");
 
 	particlePS = new SimplePixelShader(device, context);
-	if (!particlePS->LoadShaderFile(L"Assets/ShaderObjs/ParticlePS.cso"))
+	if (!particlePS->LoadShaderFile(L"../Assets/ShaderObjs/ParticlePS.cso"))
 		particlePS->LoadShaderFile(L"ParticlePS.cso");
 }
 
@@ -274,15 +272,14 @@ void Game::Update(float deltaTime, float totalTime)
 
 	//Temp code
 	//----------------------------------------------------------------------------------------
-	
+
 	//Spawn an inactive asteroid in a random lane.
 	srand(time(NULL));
 	if (timer > 0.5f) {
 		timer = 0;
-		asteroids[asteroidIndex%12]->SetActive(rand() % 2 + 1);
+		asteroids[asteroidIndex % 12]->SetActive(rand() % 2 + 1);
 		asteroidIndex++;
 	}
-
 
 	player->Update(deltaTime);
 	for (Asteroid* a : asteroids) {
@@ -291,12 +288,11 @@ void Game::Update(float deltaTime, float totalTime)
 
 	Cam.Update(prevMousePos, deltaTime);
 
-
 	for each (Entity* ent in currentScene->entities)
 	{
 		ent->Update();
 	}
-	
+
 	player->Update(deltaTime);
 
 	if (currentScene->Particles != nullptr)
@@ -306,7 +302,7 @@ void Game::Update(float deltaTime, float totalTime)
 
 	for (unsigned i = 0; i < asteroids.size(); i++) {
 		if (!asteroids[i]->collided) {
-			
+
 			bool collide = Collision::Instance().BoundingSphereCollision(player->GetCollider()->GetBoudingSphere(),
 				SceneBuild.GetPlayerEntity()->GetWorldMat(),
 				asteroids[i]->GetCollider()->GetBoudingSphere(),
@@ -314,14 +310,13 @@ void Game::Update(float deltaTime, float totalTime)
 
 			if (collide) {
 				asteroids[i]->collided = true;
-				score += 10;	
+				score += 10;
 				currentScene->Particles->SetEmitterPosition(SceneBuild.GetPlayerEntity()->GetWorldMat()._14,
 					SceneBuild.GetPlayerEntity()->GetWorldMat()._24,
 					SceneBuild.GetPlayerEntity()->GetWorldMat()._34);
 
 				currentScene->Particles->SpawnParticle();
 			}//end if collide
-
 		}
 	}
 }

@@ -13,7 +13,7 @@ class Mesh
 
 public:
 	Mesh();
-	Mesh(char*, ID3D11Device*, bool);
+	Mesh(wchar_t*, ID3D11Device*, bool);
 	Mesh(Vertex*, int, UINT*, int, ID3D11Device*);
 	~Mesh();
 

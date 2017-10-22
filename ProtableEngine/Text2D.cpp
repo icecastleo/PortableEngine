@@ -11,7 +11,7 @@ Text2D::Text2D(unsigned int _width, unsigned int _height)
 	initHeight = _height;
 
 	textList = std::vector<textObject>();
-	path = L"Assets/fonts/Arial.spritefont";
+	path = L"../Assets/fonts/Arial.spritefont";
 }
 
 //---------------------------------------------------------

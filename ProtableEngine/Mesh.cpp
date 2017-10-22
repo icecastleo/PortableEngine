@@ -13,11 +13,11 @@ Mesh::Mesh() {}
 // Constructor to load a file
 // File read code provided by Chris Cascioli
 // --------------------------------------------------------
-Mesh::Mesh(char* objFile, ID3D11Device *device, bool _hasNormalMap)
+Mesh::Mesh(wchar_t* objFile, ID3D11Device *device, bool _hasNormalMap)
 {
 	//-------------------------------------------------------------------
 	//Change Later??
-	std::string path = "Assets/Models/" + (std::string)objFile + ".obj";
+	std::wstring path = L"../Assets/Models/" + (std::wstring)objFile + L".obj";
 
 	// File input object
 	std::ifstream obj(path);
