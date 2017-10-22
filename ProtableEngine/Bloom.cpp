@@ -25,15 +25,15 @@ Bloom::~Bloom()
 void Bloom::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
 {
 	mPostProcessVS = new SimpleVertexShader(mDevice, mContext);
-	if (!mPostProcessVS->LoadShaderFile(L"../Assets/ShaderObjs/PostProcessVS.cso"))
+	if (!mPostProcessVS->LoadShaderFile(L"Assets/ShaderObjs/PostProcessVS.cso"))
 		mPostProcessVS->LoadShaderFile(L"PostProcessVS.cso");
 
 	mExtractPS = new SimplePixelShader(mDevice, mContext);
-	if (!mExtractPS->LoadShaderFile(L"../Assets/ShaderObjs/BloomExtractPixelShader.cso"))
+	if (!mExtractPS->LoadShaderFile(L"Assets/ShaderObjs/BloomExtractPixelShader.cso"))
 		mExtractPS->LoadShaderFile(L"BloomExtractPixelShader.cso");
 
 	mCombinePS = new SimplePixelShader(mDevice, mContext);
-	if (!mCombinePS->LoadShaderFile(L"../Assets/ShaderObjs/BloomCombinePixelShader.cso"))
+	if (!mCombinePS->LoadShaderFile(L"Assets/ShaderObjs/BloomCombinePixelShader.cso"))
 		mCombinePS->LoadShaderFile(L"BloomCombinePixelShader.cso");
 
 	blur->Init(width, height, depthStencilView);

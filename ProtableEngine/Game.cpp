@@ -131,43 +131,43 @@ void Game::Init()
 void Game::LoadShaders()
 {
 	vertexShader = new SimpleVertexShader(device, context);
-	if (!vertexShader->LoadShaderFile(L"../Assets/ShaderObjs/VertexShader.cso"))
+	if (!vertexShader->LoadShaderFile(L"Assets/ShaderObjs/VertexShader.cso"))
 		vertexShader->LoadShaderFile(L"VertexShader.cso");
 
 	pixelShader = new SimplePixelShader(device, context);
-	if (!pixelShader->LoadShaderFile(L"../Assets/ShaderObjs/PixelShader.cso"))
+	if (!pixelShader->LoadShaderFile(L"Assets/ShaderObjs/PixelShader.cso"))
 		pixelShader->LoadShaderFile(L"PixelShader.cso");
 
 	vertexShaderNormalMap = new SimpleVertexShader(device, context);
-	if (!vertexShaderNormalMap->LoadShaderFile(L"../Assets/ShaderObjs/VertexShaderNormalMap.cso"))
+	if (!vertexShaderNormalMap->LoadShaderFile(L"Assets/ShaderObjs/VertexShaderNormalMap.cso"))
 		vertexShaderNormalMap->LoadShaderFile(L"VertexShaderNormalMap.cso");
 
 	pixelShaderNormalMap = new SimplePixelShader(device, context);
-	if (!pixelShaderNormalMap->LoadShaderFile(L"../Assets/ShaderObjs/PixelShaderNormalMap.cso"))
+	if (!pixelShaderNormalMap->LoadShaderFile(L"Assets/ShaderObjs/PixelShaderNormalMap.cso"))
 		pixelShaderNormalMap->LoadShaderFile(L"PixelShaderNormalMap.cso");
 
 	skyVS = new SimpleVertexShader(device, context);
-	if (!skyVS->LoadShaderFile(L"../Assets/ShaderObjs/SkyVS.cso"))
+	if (!skyVS->LoadShaderFile(L"Assets/ShaderObjs/SkyVS.cso"))
 		skyVS->LoadShaderFile(L"SkyVS.cso");
 
 	skyPS = new SimplePixelShader(device, context);
-	if (!skyPS->LoadShaderFile(L"../Assets/ShaderObjs/SkyPS.cso"))
+	if (!skyPS->LoadShaderFile(L"Assets/ShaderObjs/SkyPS.cso"))
 		skyPS->LoadShaderFile(L"SkyPS.cso");
 
 	pixelShaderBlend = new SimplePixelShader(device, context);
-	if (!pixelShaderBlend->LoadShaderFile(L"../Assets/ShaderObjs/BlendPixelShader.cso"))
+	if (!pixelShaderBlend->LoadShaderFile(L"Assets/ShaderObjs/BlendPixelShader.cso"))
 		pixelShaderBlend->LoadShaderFile(L"BlendPixelShader.cso");
 
 	pixelShaderNormalMapBlend = new SimplePixelShader(device, context);
-	if (!pixelShaderNormalMapBlend->LoadShaderFile(L"../Assets/ShaderObjs/PixelShaderNormalMapBlend.cso"))
+	if (!pixelShaderNormalMapBlend->LoadShaderFile(L"Assets/ShaderObjs/PixelShaderNormalMapBlend.cso"))
 		pixelShaderNormalMapBlend->LoadShaderFile(L"PixelShaderNormalMapBlend.cso");
 
 	particleVS = new SimpleVertexShader(device, context);
-	if (!particleVS->LoadShaderFile(L"../Assets/ShaderObjs/ParticleVS.cso"))
+	if (!particleVS->LoadShaderFile(L"Assets/ShaderObjs/ParticleVS.cso"))
 		particleVS->LoadShaderFile(L"ParticleVS.cso");
 
 	particlePS = new SimplePixelShader(device, context);
-	if (!particlePS->LoadShaderFile(L"../Assets/ShaderObjs/ParticlePS.cso"))
+	if (!particlePS->LoadShaderFile(L"Assets/ShaderObjs/ParticlePS.cso"))
 		particlePS->LoadShaderFile(L"ParticlePS.cso");
 }
 

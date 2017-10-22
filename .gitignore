@@ -290,8 +290,9 @@ __pycache__/
 #*.dds
 
 # Compiled shaders
-Assets/ShaderObjs/
+ProtableEngine/Assets/ShaderObjs/
 
 #
-!Assets/models/*.obj
+!ProtableEngine/Assets/models/*.obj
 !ProtableEngine/lib/*
+!ProtableEngine/*.dll

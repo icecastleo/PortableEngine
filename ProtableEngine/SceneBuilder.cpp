@@ -102,57 +102,57 @@ void SceneBuilder::BuildMaterials()
 	//Texture file path
 	const wchar_t* path;
 
-	path = L"../Assets/textures/player.png";
+	path = L"Assets/textures/player.png";
 	playerMat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/rock.jpg";
+	path = L"Assets/textures/rock.jpg";
 	asteroidMat = new D3D11Material(device, context, path);
-	path = L"../Assets/textures/rockNormals.jpg";
+	path = L"Assets/textures/rockNormals.jpg";
 	asteroidMat->SetNormalMap(device, context, path);
 
-	path = L"../Assets/textures/title.png";
+	path = L"Assets/textures/title.png";
 	menuMat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/creditsTexture.jpg";
+	path = L"Assets/textures/creditsTexture.jpg";
 	creditsMat = new D3D11Material(device, context, path);
 
 
-	path = L"../Assets/textures/spaceBackground.dds";
+	path = L"Assets/textures/spaceBackground.dds";
 	backgroundMat = new D3D11Material(device, context, path, 0);
 
-	path = L"../Assets/textures/venus.png";
+	path = L"Assets/textures/venus.png";
 	venusMat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/sun.jpg";
+	path = L"Assets/textures/sun.jpg";
 	sunMat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/earth.jpg";
+	path = L"Assets/textures/earth.jpg";
 	earthMat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/moon.jpg";
+	path = L"Assets/textures/moon.jpg";
 	moonMat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/planet1.jpg";
+	path = L"Assets/textures/planet1.jpg";
 	p1Mat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/planet2.png";
+	path = L"Assets/textures/planet2.png";
 	p2Mat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/planet3.png";
+	path = L"Assets/textures/planet3.png";
 	p3Mat = new D3D11Material(device, context, path);
 
-	path = L"../Assets/textures/rainbow3.png";
+	path = L"Assets/textures/rainbow3.png";
 	laneMat = new D3D11Material(device, context, path);
 	laneMat->UseTransperancy(true);
 
-	path = L"../Assets/textures/blueSpace3.png";
+	path = L"Assets/textures/blueSpace3.png";
 	lane2Mat = new D3D11Material(device, context, path);
 	lane2Mat->UseTransperancy(true);
 
-	path = L"../Assets/Textures/circleParticle.jpg"; 
+	path = L"Assets/Textures/circleParticle.jpg"; 
 	particelMat = new D3D11Material(device, context, path, 1);
 
-	path = L"../Assets/Textures/titleText.png";
+	path = L"Assets/Textures/titleText.png";
 	titleMat = new D3D11Material(device, context, path);
 
 }

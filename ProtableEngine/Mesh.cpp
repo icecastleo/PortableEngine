@@ -17,7 +17,7 @@ Mesh::Mesh(wchar_t* objFile, ID3D11Device *device, bool _hasNormalMap)
 {
 	//-------------------------------------------------------------------
 	//Change Later??
-	std::wstring path = L"../Assets/Models/" + (std::wstring)objFile + L".obj";
+	std::wstring path = L"Assets/Models/" + (std::wstring)objFile + L".obj";
 
 	// File input object
 	std::ifstream obj(path);

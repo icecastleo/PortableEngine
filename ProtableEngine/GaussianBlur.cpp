@@ -34,11 +34,11 @@ void GaussianBlur::SetBlurAmount(float blurAmount)
 void GaussianBlur::Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView)
 {
 	mPostProcessVS = new SimpleVertexShader(mDevice, mContext);
-	if (!mPostProcessVS->LoadShaderFile(L"../Assets/ShaderObjs/PostProcessVS.cso"))
+	if (!mPostProcessVS->LoadShaderFile(L"Assets/ShaderObjs/PostProcessVS.cso"))
 		mPostProcessVS->LoadShaderFile(L"PostProcessVS.cso");
 
 	mGaussianBlurPS = new SimplePixelShader(mDevice, mContext);
-	if (!mGaussianBlurPS->LoadShaderFile(L"../Assets/ShaderObjs/GaussianBlurPixelShader.cso"))
+	if (!mGaussianBlurPS->LoadShaderFile(L"Assets/ShaderObjs/GaussianBlurPixelShader.cso"))
 		mGaussianBlurPS->LoadShaderFile(L"GaussianBlurPixelShader.cso");
 
 	mHorizontalBlurRTV = 0;
