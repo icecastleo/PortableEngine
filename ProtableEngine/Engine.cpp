@@ -15,6 +15,8 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	if (renderSystem)
+		delete renderSystem;
 }
 
 void Engine::Run()
