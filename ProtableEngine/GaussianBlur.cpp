@@ -160,7 +160,7 @@ float GaussianBlur::GetWeight(float x) const
 	return (float)(exp(-(x * x) / (2 * mBlurAmount * mBlurAmount)));
 }
 
-void GaussianBlur::Draw(const float & gameTime, ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetView * outputRTV)
+void GaussianBlur::Draw(ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetView * outputRTV)
 {
 	// Background color for clearing
 	const float color[4] = { 0,0,0,0 };

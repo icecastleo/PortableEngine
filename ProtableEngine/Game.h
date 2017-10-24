@@ -21,21 +21,21 @@ class Game
 {
 
 public:
-	Game(HINSTANCE hInstance);
+	Game(HINSTANCE hInstance, HWND hWnd);
 	~Game();
 
 	// Overridden setup and game loop methods, which
 	// will be called automatically
 	void Init();
 	void OnResize();
-	void Update(float deltaTime, float totalTime);
-	void Draw(float deltaTime, float totalTime);
+	void Update(float deltaTime);
+	void Draw();
 
-	// Overridden mouse input helper methods
-	void OnMouseDown(WPARAM buttonState, int x, int y);
-	void OnMouseUp(WPARAM buttonState, int x, int y);
-	void OnMouseMove(WPARAM buttonState, int x, int y);
-	void OnMouseWheel(float wheelDelta, int x, int y);
+	//// Overridden mouse input helper methods
+	//void OnMouseDown(WPARAM buttonState, int x, int y);
+	//void OnMouseUp(WPARAM buttonState, int x, int y);
+	//void OnMouseMove(WPARAM buttonState, int x, int y);
+	//void OnMouseWheel(float wheelDelta, int x, int y);
 	
 private:
 	int SceneNumber;

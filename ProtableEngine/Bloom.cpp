@@ -98,7 +98,7 @@ void Bloom::setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthS
 	mExtractTexture->Release();
 }
 
-void Bloom::Draw(const float & gameTime, ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetView * outputRTV)
+void Bloom::Draw(ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetView * outputRTV)
 {
 	// Background color for clearing
 	const float color[4] = { 0,0,0,0 };
@@ -130,7 +130,7 @@ void Bloom::Draw(const float & gameTime, ID3D11ShaderResourceView * inputSRV, ID
 	// Unbind the post process texture from input
 	mExtractPS->SetShaderResourceView("InputTexture", 0);
 
-	blur->Draw(gameTime, mExtractSRV, mExtractRTV);
+	blur->Draw(mExtractSRV, mExtractRTV);
 
 	// Combined
 	mContext->ClearRenderTargetView(outputRTV, color);

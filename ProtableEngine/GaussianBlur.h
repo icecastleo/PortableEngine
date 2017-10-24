@@ -18,7 +18,7 @@ public:
 	void SetBlurAmount(float blurAmount);
 
 	//virtual void Initialize() override;
-	void Draw(const float& gameTime, ID3D11ShaderResourceView* inputSRV, ID3D11RenderTargetView* outputRTV);
+	void Draw(ID3D11ShaderResourceView* inputSRV, ID3D11RenderTargetView* outputRTV);
 
 private:
 	//GaussianBlur();

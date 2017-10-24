@@ -1,6 +1,15 @@
 
-#include <Windows.h>
 #include "Game.h"
+#include "PC_Engine.h"
+
+#if _PC
+#include <Windows.h>
+//typedef float gFloat;
+#endif
+
+#if _PS4
+// PS4 Resource Manager or Material Manager
+#endif
 
 // --------------------------------------------------------
 // Entry point for a graphical (non-console) Windows application
@@ -19,24 +28,41 @@ int WINAPI WinMain(
 	//_CrtSetBreakAlloc(1477);
 #endif
 
-	// Create the Game object using
-	// the app handle we got from WinMain
-	Game dxGame(hInstance);
+#if _PC
+	PC_Engine engine = PC_Engine(
+		hInstance,		   // The application's handle
+		"DirectX Game",	   // Text for the window's title bar
+		1280,			   // Width of the window's client area
+		720,			   // Height of the window's client area
+		true);			   // Show extra stats (fps) in title bar?
 
-	// Result variable for function calls below
-	HRESULT hr = S_OK;
+	engine.Run();
+#endif
 
-	// Attempt to create the window for our program, and
-	// exit early if something failed
-	hr = dxGame.InitWindow();
-	if(FAILED(hr)) return hr;
+#if _PS4
+	// PS4 Resource Manager or Material Manager
+#endif
 
-	// Attempt to initialize DirectX, and exit
-	// early if something failed
-	hr = dxGame.InitDirectX();
-	if(FAILED(hr)) return hr;
+	//// Create the Game object using
+	//// the app handle we got from WinMain
+	//Game dxGame(hInstance);
 
-	// Begin the message and game loop, and then return
-	// whatever we get back once the game loop is over
-	return dxGame.Run();
+	//// Result variable for function calls below
+	//HRESULT hr = S_OK;
+
+	//// Attempt to create the window for our program, and
+	//// exit early if something failed
+	//hr = dxGame.InitWindow();
+	//if(FAILED(hr)) return hr;
+
+	//// Attempt to initialize DirectX, and exit
+	//// early if something failed
+	//hr = dxGame.InitDirectX();
+	//if(FAILED(hr)) return hr;
+
+	//// Begin the message and game loop, and then return
+	//// whatever we get back once the game loop is over
+	//return dxGame.Run();
+
+	return 0;
 }

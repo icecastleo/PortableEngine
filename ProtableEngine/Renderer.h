@@ -21,7 +21,7 @@ public:
 
 	void Init(Camera*, ID3D11Device*, ID3D11DeviceContext*, ID3D11RenderTargetView*, IDXGISwapChain*, ID3D11DepthStencilView*, Text2D*, unsigned int width, unsigned int height);
 	void Resized(ID3D11DepthStencilView*, ID3D11RenderTargetView*, unsigned int width, unsigned int height);
-	void Draw(float, float);
+	void Draw();
 
 	void SetShaders(SimpleVertexShader*, SimplePixelShader*, SimpleVertexShader*, SimplePixelShader*,
 		SimpleVertexShader*, SimplePixelShader*, SimplePixelShader*, SimplePixelShader*, SimpleVertexShader*, SimplePixelShader*);

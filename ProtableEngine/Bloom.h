@@ -27,7 +27,7 @@ public:
 	//const BloomSettings& GetBloomSettings() const;
 	//void SetBloomSettings(const BloomSettings& bloomSettings);
 
-	void Draw(const float& gameTime, ID3D11ShaderResourceView* inputSRV, ID3D11RenderTargetView* outputRTV);
+	void Draw(ID3D11ShaderResourceView* inputSRV, ID3D11RenderTargetView* outputRTV);
 
 private:
 

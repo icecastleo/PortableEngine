@@ -15,13 +15,15 @@ using namespace DirectX;
 //
 // hInstance - the application's OS-level handle (unique ID)
 // --------------------------------------------------------
-Game::Game(HINSTANCE hInstance)
+Game::Game(HINSTANCE hInstance, HWND hWnd)
 	: DXCore(
-		hInstance,		   // The application's handle
-		"DirectX Game",	   // Text for the window's title bar
+		//hInstance,		   // The application's handle
+		//"DirectX Game",	   // Text for the window's title bar
 		1280,			   // Width of the window's client area
 		720,			   // Height of the window's client area
-		true)			   // Show extra stats (fps) in title bar?
+		hWnd
+		//true
+	)			   // Show extra stats (fps) in title bar?
 {
 	// Initialize fields
 	vertexShader = 0;
@@ -37,11 +39,13 @@ Game::Game(HINSTANCE hInstance)
 	Renderer Render();
 	Camera Cam(width, height);
 
-#if defined(DEBUG) || defined(_DEBUG)
-	// Do we want a console window?  Probably only in debug mode
-	CreateConsoleWindow(500, 120, 32, 120);
-	printf("Console window created successfully.  Feel free to printf() here.");
-#endif
+//#if defined(DEBUG) || defined(_DEBUG)
+//	// Do we want a console window?  Probably only in debug mode
+//	CreateConsoleWindow(500, 120, 32, 120);
+//	printf("Console window created successfully.  Feel free to printf() here.");
+//#endif
+
+	Init();
 }
 
 // --------------------------------------------------------
@@ -228,24 +232,33 @@ void Game::OnResize()
 // --------------------------------------------------------
 // Update your game here - user input, move objects, AI, etc.
 // --------------------------------------------------------
-void Game::Update(float deltaTime, float totalTime)
+void Game::Update(float deltaTime)
 {
-	// Quit if the escape key is pressed
-	if (GetAsyncKeyState(VK_ESCAPE))
-		Quit();
+	//// Quit if the escape key is pressed
+	//if (GetAsyncKeyState(VK_ESCAPE))
+	//	Quit();
 
 	//If in scene 1 go to scene 2
 	if (GetAsyncKeyState(VK_RETURN))
 	{
-		//Need to insert a time delay before scene may change again
-		if (totalTime > sceneChangeTime + 2)
-		{
-			sceneChangeTime = totalTime;
+		////Need to insert a time delay before scene may change again
+		//if (totalTime > sceneChangeTime + 2)
+		//{
+		//	sceneChangeTime = totalTime;
+		//	SceneNumber = (SceneNumber % SceneManag.GetNumOfScenes()) + 1;
+		//	setScene();
+		//}
+
+		static float updateTemp = 0;
+
+		updateTemp += deltaTime;
+
+		if (updateTemp > 0.5f) {
+			updateTemp -= 0.5f;
 			SceneNumber = (SceneNumber % SceneManag.GetNumOfScenes()) + 1;
 			setScene();
 		}
 	}
-
 
 	musicPlayer.update();
 
@@ -324,71 +337,71 @@ void Game::Update(float deltaTime, float totalTime)
 // --------------------------------------------------------
 // Clear the screen, redraw everything, present to the user
 // --------------------------------------------------------
-void Game::Draw(float deltaTime, float totalTime)
+void Game::Draw()
 {
 	Render.SetScore(score);
-	Render.Draw(deltaTime, totalTime);
+	Render.Draw();
 }
 
-#pragma region Mouse Input
-
-// --------------------------------------------------------
-// Helper method for mouse clicking.  We get this information
-// from the OS-level messages anyway, so these helpers have
-// been created to provide basic mouse input if you want it.
-// --------------------------------------------------------
-void Game::OnMouseDown(WPARAM buttonState, int x, int y)
-{
-	// Add any custom code here...
-
-	// Save the previous mouse position, so we have it for the future
-	prevMousePos.x = x;
-	prevMousePos.y = y;
-
-	Cam.MouseDown(true);
-
-	// Caputure the mouse so we keep getting mouse move
-	// events even if the mouse leaves the window.  we'll be
-	// releasing the capture once a mouse button is released
-	SetCapture(hWnd);
-}
-
-// --------------------------------------------------------
-// Helper method for mouse release
-// --------------------------------------------------------
-void Game::OnMouseUp(WPARAM buttonState, int x, int y)
-{
-	// Add any custom code here...
-
-	// We don't care about the tracking the cursor outside
-	// the window anymore (we're not dragging if the mouse is up)
-	Cam.MouseDown(false);
-
-	ReleaseCapture();
-}
-
-// --------------------------------------------------------
-// Helper method for mouse movement.  We only get this message
-// if the mouse is currently over the window, or if we're 
-// currently capturing the mouse.
-// --------------------------------------------------------
-void Game::OnMouseMove(WPARAM buttonState, int x, int y)
-{
-	// Add any custom code here...
-
-	// Save the previous mouse position, so we have it for the future
-	prevMousePos.x = x;
-	prevMousePos.y = y;
-}
-
-// --------------------------------------------------------
-// Helper method for mouse wheel scrolling.  
-// WheelDelta may be positive or negative, depending 
-// on the direction of the scroll
-// --------------------------------------------------------
-void Game::OnMouseWheel(float wheelDelta, int x, int y)
-{
-	// Add any custom code here...
-}
-
-#pragma endregion
+//#pragma region Mouse Input
+//
+//// --------------------------------------------------------
+//// Helper method for mouse clicking.  We get this information
+//// from the OS-level messages anyway, so these helpers have
+//// been created to provide basic mouse input if you want it.
+//// --------------------------------------------------------
+//void Game::OnMouseDown(WPARAM buttonState, int x, int y)
+//{
+//	// Add any custom code here...
+//
+//	// Save the previous mouse position, so we have it for the future
+//	prevMousePos.x = x;
+//	prevMousePos.y = y;
+//
+//	Cam.MouseDown(true);
+//
+//	// Caputure the mouse so we keep getting mouse move
+//	// events even if the mouse leaves the window.  we'll be
+//	// releasing the capture once a mouse button is released
+//	SetCapture(hWnd);
+//}
+//
+//// --------------------------------------------------------
+//// Helper method for mouse release
+//// --------------------------------------------------------
+//void Game::OnMouseUp(WPARAM buttonState, int x, int y)
+//{
+//	// Add any custom code here...
+//
+//	// We don't care about the tracking the cursor outside
+//	// the window anymore (we're not dragging if the mouse is up)
+//	Cam.MouseDown(false);
+//
+//	ReleaseCapture();
+//}
+//
+//// --------------------------------------------------------
+//// Helper method for mouse movement.  We only get this message
+//// if the mouse is currently over the window, or if we're 
+//// currently capturing the mouse.
+//// --------------------------------------------------------
+//void Game::OnMouseMove(WPARAM buttonState, int x, int y)
+//{
+//	// Add any custom code here...
+//
+//	// Save the previous mouse position, so we have it for the future
+//	prevMousePos.x = x;
+//	prevMousePos.y = y;
+//}
+//
+//// --------------------------------------------------------
+//// Helper method for mouse wheel scrolling.  
+//// WheelDelta may be positive or negative, depending 
+//// on the direction of the scroll
+//// --------------------------------------------------------
+//void Game::OnMouseWheel(float wheelDelta, int x, int y)
+//{
+//	// Add any custom code here...
+//}
+//
+//#pragma endregion

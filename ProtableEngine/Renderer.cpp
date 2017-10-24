@@ -93,7 +93,7 @@ void Renderer::SetScene(Scene* _scene)
 //Intitial code from original game.cpp - Chris Cascioli
 //Rewritten to work with a list of entities
 //---------------------------------------------------------
-void Renderer::Draw(float deltaTime, float totalTime)
+void Renderer::Draw()
 {
 	// Background color (Cornflower Blue in this case) for clearing
 	const float color[4] = { 0.4f, 0.6f, 0.75f, 0.0f };
@@ -282,7 +282,7 @@ void Renderer::Draw(float deltaTime, float totalTime)
 	context->OMSetBlendState(0, factors, 0xFFFFFFFF);
 
 	//blur->Draw(deltaTime, ppSRV, backBufferRTV);
-	bloom->Draw(deltaTime, ppSRV, backBufferRTV);
+	bloom->Draw(ppSRV, backBufferRTV);
 
 	// Present the back buffer to the user
 	//  - Puts the final frame we're drawing into the window so the user can see it
