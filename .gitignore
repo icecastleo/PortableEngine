@@ -13,10 +13,10 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
+**[Dd]ebug/
+**[Dd]ebugPublic/
+**[Rr]elease/
+**[Rr]eleases/
 x64/
 x86/
 bld/
@@ -290,9 +290,9 @@ __pycache__/
 #*.dds
 
 # Compiled shaders
-ProtableEngine/Assets/ShaderObjs/
+Assets/ShaderObjs/
 
-#
-!ProtableEngine/Assets/models/*.obj
-!ProtableEngine/lib/*
-!ProtableEngine/*.dll
+# Exclude Files
+!Assets/models/*.obj
+!lib/*
+!*.dll
