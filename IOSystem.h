@@ -1,7 +1,7 @@
 #pragma once
 #include "Vertex.h"
 #include <vector>
-#include "DXCore.h"
+//#include "DXCore.h"
 
 using namespace std;
 class IOSystem
