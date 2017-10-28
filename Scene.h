@@ -26,9 +26,8 @@ public:
 
 	std::vector<textObject> textList;
 
-	Entity* skybox;
-
-	Emitter* Particles;
+	Entity* skybox = nullptr;
+	Emitter* Particles = nullptr;
 
 	char *musicFileName = 0;
 

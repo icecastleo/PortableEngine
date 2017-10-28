@@ -99,7 +99,7 @@ WindowsRenderSystem::~WindowsRenderSystem()
 	delete particleVS;
 	delete particlePS;
 
-	delete player;
+	//delete player;
 }
 
 // --------------------------------------------------------

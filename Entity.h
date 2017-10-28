@@ -36,7 +36,7 @@ public:
 
 	void SetParent(Entity* e);
 
-	Entity *dirtyUpdate;
+	Entity *dirtyUpdate = nullptr;
 
 private:
 	void SetWorldMat();
