@@ -11,6 +11,7 @@
 #endif
 
 #include "RenderSystem.h"
+#include "IOSystem.h"
 
 class Engine
 {
@@ -34,6 +35,7 @@ protected:
 	virtual bool platformUpdate(float deltaTime) { return true; }
 
 	RenderSystem  *renderSystem;
+	IOSystem *ioSystem;
 
 private:
 	// Timing related data
