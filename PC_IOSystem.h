@@ -1,7 +1,7 @@
 #pragma once
 #include "IOSystem.h"
 #include <fstream>
-
+#include "WindowsRenderSystem.h"
 
 //#include <d3d11.h>
 //#include <DirectXMath.h>
