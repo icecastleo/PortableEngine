@@ -1,8 +1,6 @@
 
-#include "Game.h"
-#include "PC_Engine.h"
-
 #if _PC
+#include "WindowsEngine.h"
 #include <Windows.h>
 //typedef float gFloat;
 #endif
@@ -29,7 +27,7 @@ int WINAPI WinMain(
 #endif
 
 #if _PC
-	PC_Engine engine = PC_Engine(
+	WindowsEngine engine = WindowsEngine(
 		hInstance,		   // The application's handle
 		"DirectX Game",	   // Text for the window's title bar
 		1280,			   // Width of the window's client area
@@ -45,7 +43,7 @@ int WINAPI WinMain(
 
 	//// Create the Game object using
 	//// the app handle we got from WinMain
-	//Game dxGame(hInstance);
+	//WindowsRenderSystem dxGame(hInstance);
 
 	//// Result variable for function calls below
 	//HRESULT hr = S_OK;

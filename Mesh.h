@@ -1,7 +1,6 @@
 //Darren Farr GGP
 #pragma once
 
-#include "DXCore.h"
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "Vertex.h"

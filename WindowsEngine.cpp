@@ -1,13 +1,13 @@
-#include "PC_Engine.h"
+#include "WindowsEngine.h"
 #include <WindowsX.h>
 #include <sstream>
-#include "Game.h"
+#include "WindowsRenderSystem.h"
 
 // Define the static instance variable so our OS-level 
 // message handling function below can talk to our object
-PC_Engine* PC_Engine::EngineInstance = 0;
+WindowsEngine* WindowsEngine::EngineInstance = 0;
 
-PC_Engine::PC_Engine(
+WindowsEngine::WindowsEngine(
 	HINSTANCE hInstance,		// The application's handle
 	char* titleBarText,			// Text for the window's title bar
 	unsigned int windowWidth,	// Width of the window's client area
@@ -33,10 +33,10 @@ PC_Engine::PC_Engine(
 #endif
 
 	InitWindow(hInstance);
-	renderSystem = new Game(width, height, hWnd);
+	renderSystem = new WindowsRenderSystem(width, height, hWnd);
 }
 
-PC_Engine::~PC_Engine()
+WindowsEngine::~WindowsEngine()
 {
 }
 
@@ -48,7 +48,7 @@ PC_Engine::~PC_Engine()
 // windowLines   - Number of lines visible at once in the window
 // windowColumns - Number of columns visible at once in the window
 // --------------------------------------------------------
-void PC_Engine::CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, int windowColumns)
+void WindowsEngine::CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, int windowColumns)
 {
 	// Our temp console info struct
 	CONSOLE_SCREEN_BUFFER_INFO coninfo;
@@ -78,13 +78,13 @@ void PC_Engine::CreateConsoleWindow(int bufferLines, int bufferColumns, int wind
 	EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
 }
 
-HRESULT PC_Engine::InitWindow(HINSTANCE hInstance)
+HRESULT WindowsEngine::InitWindow(HINSTANCE hInstance)
 {
 	// Start window creation by filling out the
 	// appropriate window class struct
 	WNDCLASS wndClass = {}; // Zero out the memory
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;	// Redraw on horizontal or vertical movement/adjustment
-	wndClass.lpfnWndProc = PC_Engine::WindowProc;
+	wndClass.lpfnWndProc = WindowsEngine::WindowProc;
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
 	wndClass.hInstance = hInstance;						// Our app's handle
@@ -158,7 +158,7 @@ HRESULT PC_Engine::InitWindow(HINSTANCE hInstance)
 // This needs to be a global function (not part of a class), but we want
 // to forward the parameters to our class to properly handle them.
 // --------------------------------------------------------
-LRESULT PC_Engine::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT WindowsEngine::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	return EngineInstance->ProcessMessage(hWnd, uMsg, wParam, lParam);
 }
@@ -169,7 +169,7 @@ LRESULT PC_Engine::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 // our program to hang and Windows would think it was
 // unresponsive.
 // --------------------------------------------------------
-LRESULT PC_Engine::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT WindowsEngine::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// Check the incoming message and handle any we care about
 	switch (uMsg)
@@ -233,7 +233,7 @@ LRESULT PC_Engine::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-bool PC_Engine::platformUpdate(float deltaTime)
+bool WindowsEngine::platformUpdate(float deltaTime)
 {
 	if (GetAsyncKeyState(VK_ESCAPE)) {
 		PostQuitMessage(0);
@@ -262,7 +262,7 @@ bool PC_Engine::platformUpdate(float deltaTime)
 	return false;
 }
 
-void PC_Engine::UpdateTitleBarStats(float deltaTime)
+void WindowsEngine::UpdateTitleBarStats(float deltaTime)
 {
 	fpsFrameCount++;
 
@@ -312,7 +312,7 @@ void PC_Engine::UpdateTitleBarStats(float deltaTime)
 // from the OS-level messages anyway, so these helpers have
 // been created to provide basic mouse input if you want it.
 // --------------------------------------------------------
-void PC_Engine::OnMouseDown(WPARAM buttonState, int x, int y)
+void WindowsEngine::OnMouseDown(WPARAM buttonState, int x, int y)
 {
 	// Add any custom code here...
 
@@ -331,7 +331,7 @@ void PC_Engine::OnMouseDown(WPARAM buttonState, int x, int y)
 // --------------------------------------------------------
 // Helper method for mouse release
 // --------------------------------------------------------
-void PC_Engine::OnMouseUp(WPARAM buttonState, int x, int y)
+void WindowsEngine::OnMouseUp(WPARAM buttonState, int x, int y)
 {
 	// Add any custom code here...
 
@@ -347,7 +347,7 @@ void PC_Engine::OnMouseUp(WPARAM buttonState, int x, int y)
 // if the mouse is currently over the window, or if we're 
 // currently capturing the mouse.
 // --------------------------------------------------------
-void PC_Engine::OnMouseMove(WPARAM buttonState, int x, int y)
+void WindowsEngine::OnMouseMove(WPARAM buttonState, int x, int y)
 {
 	// Add any custom code here...
 
@@ -361,7 +361,7 @@ void PC_Engine::OnMouseMove(WPARAM buttonState, int x, int y)
 // WheelDelta may be positive or negative, depending 
 // on the direction of the scroll
 // --------------------------------------------------------
-void PC_Engine::OnMouseWheel(float wheelDelta, int x, int y)
+void WindowsEngine::OnMouseWheel(float wheelDelta, int x, int y)
 {
 	// Add any custom code here...
 }

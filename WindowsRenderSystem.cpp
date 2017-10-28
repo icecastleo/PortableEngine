@@ -1,7 +1,7 @@
  //Original code - Chris Cascioli
 //Modified for use in homework
 
-#include "Game.h"
+#include "WindowsRenderSystem.h"
 #include <time.h> 
 #include <iostream>
 // For the DirectX Math library
@@ -15,7 +15,7 @@ using namespace DirectX;
 //
 // hInstance - the application's OS-level handle (unique ID)
 // --------------------------------------------------------
-Game::Game(unsigned int windowWidth, unsigned int windowHeight,	HWND hWnd)					
+WindowsRenderSystem::WindowsRenderSystem(unsigned int windowWidth, unsigned int windowHeight,	HWND hWnd)					
 {
 	this->width = windowWidth;
 	this->height = windowHeight;
@@ -51,7 +51,7 @@ Game::Game(unsigned int windowWidth, unsigned int windowHeight,	HWND hWnd)
 //  - Release all DirectX objects created here
 //  - Delete any objects to prevent memory leaks
 // --------------------------------------------------------
-Game::~Game()
+WindowsRenderSystem::~WindowsRenderSystem()
 {
 	// Release all DirectX resources
 	if (depthStencilView) { depthStencilView->Release(); }
@@ -76,7 +76,7 @@ Game::~Game()
 	if (device) { device->Release(); }
 
 	// Release any (and all!) DirectX objects
-	// we've made in the Game class
+	// we've made in the WindowsRenderSystem class
 	//if (vertexBuffer) { vertexBuffer->Release(); }
 
 	// Delete our simple shader objects, which
@@ -107,7 +107,7 @@ Game::~Game()
 // also creates several DirectX objects we'll need to start
 // drawing things to the screen.
 // --------------------------------------------------------
-HRESULT Game::InitDirectX()
+HRESULT WindowsRenderSystem::InitDirectX()
 {
 	// This will hold options for DirectX initialization
 	unsigned int deviceFlags = 0;
@@ -219,7 +219,7 @@ HRESULT Game::InitDirectX()
 // Called once per program, after DirectX and the window
 // are initialized but before the game loop.
 // --------------------------------------------------------
-void Game::Init()
+void WindowsRenderSystem::Init()
 {
 	Cam.SetWidthHeight(width, height);
 	Cam.Init();
@@ -265,7 +265,7 @@ void Game::Init()
 // - SimpleShader provides helpful methods for sending
 //   data to individual variables on the GPU
 // --------------------------------------------------------
-void Game::LoadShaders()
+void WindowsRenderSystem::LoadShaders()
 {
 	vertexShader = new SimpleVertexShader(device, context);
 	if (!vertexShader->LoadShaderFile(L"Assets/ShaderObjs/VertexShader.cso"))
@@ -308,7 +308,7 @@ void Game::LoadShaders()
 		particlePS->LoadShaderFile(L"ParticlePS.cso");
 }
 
-void Game::setScene()
+void WindowsRenderSystem::setScene()
 {
 	//Tell the game which scene it should be rendering, uses 1 based indexing
 	Render.SetScene(SceneManag.GetScene(SceneNumber));
@@ -342,7 +342,7 @@ void Game::setScene()
 	}
 }
 
-void Game::SetNextAsteroid()
+void WindowsRenderSystem::SetNextAsteroid()
 {
 	curAsteroid->collided = true;
 	curIndex++;
@@ -353,7 +353,7 @@ void Game::SetNextAsteroid()
 // Handle resizing DirectX "stuff" to match the new window size.
 // For instance, updating our projection matrix's aspect ratio.
 // --------------------------------------------------------
-void Game::OnResize()
+void WindowsRenderSystem::OnResize()
 {
 	// Probably move 
 	Cam.Resize(width, height);
@@ -419,7 +419,7 @@ void Game::OnResize()
 // --------------------------------------------------------
 // Update your game here - user input, move objects, AI, etc.
 // --------------------------------------------------------
-void Game::Update(float deltaTime)
+void WindowsRenderSystem::Update(float deltaTime)
 {
 	//// Quit if the escape key is pressed
 	//if (GetAsyncKeyState(VK_ESCAPE))
@@ -524,7 +524,7 @@ void Game::Update(float deltaTime)
 // --------------------------------------------------------
 // Clear the screen, redraw everything, present to the user
 // --------------------------------------------------------
-void Game::Draw()
+void WindowsRenderSystem::Draw()
 {
 	Render.SetScore(score);
 	Render.Draw();

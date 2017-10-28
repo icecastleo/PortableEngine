@@ -3,22 +3,22 @@
 #include <string>
 #include <Windows.h>
 
-class PC_Engine :
+class WindowsEngine :
 	public Engine
 {
 public:
-	PC_Engine(
+	WindowsEngine(
 		HINSTANCE hInstance,		// The application's handle
 		char* titleBarText,			// Text for the window's title bar
 		unsigned int windowWidth,	// Width of the window's client area
 		unsigned int windowHeight,	// Height of the window's client area
 		bool debugTitleBarStats);	// Show extra stats (fps) in title bar?);
 
-	~PC_Engine();
+	~WindowsEngine();
 
 	HRESULT InitWindow(HINSTANCE hInstance);
 
-	static PC_Engine* EngineInstance;
+	static WindowsEngine* EngineInstance;
 	static LRESULT CALLBACK WindowProc(
 		HWND hWnd,		// Window handle
 		UINT uMsg,		// Message

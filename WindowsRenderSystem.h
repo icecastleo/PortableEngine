@@ -2,7 +2,8 @@
 //Modified for use in homework
 #pragma once
 
-#include "DXCore.h"
+#include "RenderSystem.h"
+#include "D3D11.h"
 #include "SimpleShader.h"
 #include <DirectXMath.h>
 #include "SceneManager.h"
@@ -16,13 +17,18 @@
 #include <vector>
 #include "Tex2Dt.h"
 
-class Game
+// We can include the correct library files here
+// instead of in Visual Studio settings if we want
+#pragma comment(lib, "d3d11.lib")
+
+
+class WindowsRenderSystem
 	: public RenderSystem
 {
 
 public:
-	Game(unsigned int windowWidth, unsigned int windowHeight, HWND hWnd);
-	~Game();
+	WindowsRenderSystem(unsigned int windowWidth, unsigned int windowHeight, HWND hWnd);
+	~WindowsRenderSystem();
 
 	// Overridden setup and game loop methods, which
 	// will be called automatically

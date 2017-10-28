@@ -1,6 +1,5 @@
 #include "Asteroid.h"
 using namespace DirectX;
-#include "Game.h"
 
 Asteroid::Asteroid()
 {
