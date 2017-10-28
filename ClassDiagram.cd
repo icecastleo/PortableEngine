@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="PS4_Engine">
+    <Position X="9.834" Y="6.031" Height="0.673" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Audio System">
+    <Position X="7.063" Y="3.755" Height="0.735" Width="1.7" />
+  </Comment>
+  <Comment CommentText="PS4_RenderSystem">
+    <Position X="3.73" Y="6.467" Height="0.704" Width="1.851" />
+  </Comment>
+  <Comment CommentText="Input System">
+    <Position X="9.002" Y="3.309" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="I/O System">
+    <Position X="11.003" Y="3.755" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Physics System">
+    <Position X="11.268" Y="4.959" Height="0.75" Width="1.7" />
+  </Comment>
+  <Class Name="Bloom" Collapsed="true">
+    <Position X="4.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAgAAAAQBwAAAAAAAAAAABA8AAAEAAACYBEEAAI=</HashCode>
+      <FileName>Bloom.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera" Collapsed="true">
+    <Position X="17.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAAAAQCAIIAQAQACAIkAQACBQGAgAAAACABEAAAA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DemoScene" Collapsed="true">
+    <Position X="15.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>DemoScene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine" Collapsed="true">
+    <Position X="9" Y="5" Width="1.75" />
+    <Members>
+      <Field Name="renderSystem" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAUAAAAAAAAgAAAAAQAAAAKABAAAAAAAAAY=</HashCode>
+      <FileName>Engine.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="renderSystem" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Entity" Collapsed="true">
+    <Position X="14.5" Y="4.25" Width="1.5" />
+    <Members>
+      <Field Name="mat" Hidden="true" />
+      <Field Name="mesh" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EBYAkAAAACCBBARAAAAAAAAIACAFAgggIEAIBgAAAAA=</HashCode>
+      <FileName>Entity.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mat" />
+      <Field Name="mesh" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="GaussianBlur" Collapsed="true">
+    <Position X="4.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAgAAAACKAABwQAIAEBAAAAAAAxAAAAQCACIBEAAAI=</HashCode>
+      <FileName>GaussianBlur.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="D3D11Material" Collapsed="true">
+    <Position X="13.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAgAAoQAABAAwABQAkKAEAAkhiEAAAAhAwAgpAAAAAA=</HashCode>
+      <FileName>D3D11Material.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Material" Collapsed="true">
+    <Position X="13.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Material.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mesh" Collapsed="true">
+    <Position X="15.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAACACAEAEAAIAREAAABAAAAAAAAAAAgwAAAAAAAwA=</HashCode>
+      <FileName>Mesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PC_Engine" Collapsed="true">
+    <Position X="8" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAYAAQSAQAAAIEwAABAEAAAIIAIAABACAAQ=</HashCode>
+      <FileName>PC_Engine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PC_RenderSystem" Collapsed="true">
+    <Position X="5.75" Y="6.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAABEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PC_RenderSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RenderSystem" Collapsed="true">
+    <Position X="6.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAIAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>RenderSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="13" />
+</ClassDiagram>
