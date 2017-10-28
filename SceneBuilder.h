@@ -3,7 +3,7 @@
 #include "SimpleShader.h"
 #include "Entity.h"
 #include <DirectXMath.h>
-#include "Mesh.h"
+#include "D3D11Mesh.h"
 #include "D3D11Material.h"
 #include <vector>
 #include "Lights.h"
@@ -27,7 +27,7 @@ public:
 	void BuildEntities();
 	void BuildParticles();
 
-	Entity* CreateEntity(Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
+	Entity* CreateEntity(D3D11Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
 	Entity* GetPlayerEntity();
 
@@ -45,12 +45,13 @@ private:
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
 
-	Mesh* cubeMesh;
-	Mesh* quadMesh;
-	Mesh* sphereMesh;
-	Mesh* playerMesh;
-	Mesh* asteroidMesh;
-	Mesh* skyboxMesh;
+	D3D11Mesh* cubeMesh;
+	D3D11Mesh* quadMesh;
+	D3D11Mesh* sphereMesh;
+	D3D11Mesh* playerMesh;
+	D3D11Mesh* asteroidMesh;
+	D3D11Mesh* skyboxMesh;
+
 	
 	D3D11Material* creditsMat;
 	D3D11Material* menuMat;

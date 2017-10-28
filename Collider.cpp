@@ -6,7 +6,7 @@ Collider::Collider()
 	
 }
 
-Collider::Collider(Mesh* _mesh) : mesh(_mesh)
+Collider::Collider(D3D11Mesh* _mesh) : mesh(_mesh)
 {
 	boundingSphere = 0.0f;
 

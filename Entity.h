@@ -2,7 +2,7 @@
 #pragma once
 
 #include <DirectXMath.h>
-#include "Mesh.h"
+#include "D3D11Mesh.h"
 #include "D3D11Material.h"
 #include <vector>
 #include "Transform.h"
@@ -15,7 +15,7 @@ class Entity
 public:
 	Entity();
 	~Entity();
-	Entity(Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
+	Entity(D3D11Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 
 	void Update();
 
@@ -29,7 +29,7 @@ public:
 	void SetScale(DirectX::XMFLOAT3);
 	void Reset();
 
-	Mesh* GetMesh();
+	D3D11Mesh* GetMesh();
 	D3D11Material* GetMat();
 
 	Entity* parent;
@@ -40,7 +40,7 @@ public:
 private:
 	void SetWorldMat();
 	
-	Mesh* mesh;
+	D3D11Mesh* mesh;
 	D3D11Material* mat;
 
 	DirectX::XMFLOAT4X4 worldMat;

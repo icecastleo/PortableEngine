@@ -45,7 +45,7 @@
       <Field Name="renderSystem" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAgAAAAAUAAAAAAAAgAAAAAQAAAAKABAAAAAAAAAY=</HashCode>
+      <HashCode>AAAAgAAAAAUAAAAAAAAgAAAAAQAAAAKABAAAAAAAEAY=</HashCode>
       <FileName>Engine.h</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -63,8 +63,8 @@
       <FileName>Entity.h</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="mat" />
       <Field Name="mesh" />
+      <Field Name="mat" />
     </ShowAsAssociation>
   </Class>
   <Class Name="GaussianBlur" Collapsed="true">
@@ -88,13 +88,6 @@
       <FileName>Material.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Mesh" Collapsed="true">
-    <Position X="15.5" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>CAAACACAEAEAAIAREAAABAAAAAAAAAAAgwAAAAAAAwA=</HashCode>
-      <FileName>Mesh.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="PC_Engine" Collapsed="true">
     <Position X="8" Y="6" Width="1.5" />
     <TypeIdentifier>
@@ -114,6 +107,13 @@
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAgAAAAAAIAAAAAAAAAAAAAACAAAAAAA=</HashCode>
       <FileName>RenderSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="D3D11Mesh" Collapsed="true">
+    <Position X="15.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAACICAECAAAIAREAAABAAAAAAAAAAAggAAAAAAAwA=</HashCode>
+      <FileName>D3D11Mesh.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="13" />

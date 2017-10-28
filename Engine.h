@@ -35,7 +35,7 @@ protected:
 	virtual bool platformUpdate(float deltaTime) { return true; }
 
 	RenderSystem  *renderSystem;
-	IOSystem *ioSystem;
+	//IOSystem *ioSystem;
 
 private:
 	// Timing related data

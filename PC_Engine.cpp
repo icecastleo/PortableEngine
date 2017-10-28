@@ -2,6 +2,7 @@
 #include <WindowsX.h>
 #include <sstream>
 #include "Game.h"
+#include "PC_IOSystem.h"
 
 // Define the static instance variable so our OS-level 
 // message handling function below can talk to our object
@@ -34,7 +35,12 @@ PC_Engine::PC_Engine(
 
 	InitWindow(hInstance);
 	renderSystem = new Game(hInstance, hWnd);
+	
+
 }
+
+PC_IOSystem *PC_IOSystem::IO_instance = 0;
+
 
 PC_Engine::~PC_Engine()
 {

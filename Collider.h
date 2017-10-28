@@ -4,7 +4,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include "Vertex.h"
-#include "Mesh.h"
+#include "D3D11Mesh.h"
 
 using namespace DirectX;
 
@@ -12,13 +12,13 @@ class Collider
 {
 public:
 	Collider();
-	Collider(Mesh*);
+	Collider(D3D11Mesh*);
 	~Collider();
 
 	float GetBoudingSphere();
 
 private:
-	Mesh* mesh;
+	D3D11Mesh* mesh;
 
 	float boundingSphere;
 

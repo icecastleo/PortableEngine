@@ -208,17 +208,18 @@ void SceneBuilder::BuildLights()
 //---------------------------------------------------------
 void SceneBuilder::BuildMeshes()
 {
-	cubeMesh = new Mesh(L"cube", device, false);
 
-	skyboxMesh = new Mesh(L"cube", device, true);
+	cubeMesh = new D3D11Mesh(L"cube", device, false);
 
-	quadMesh = new Mesh(L"quad", device, false);
+	skyboxMesh = new D3D11Mesh(L"cube", device, true);
 
-	sphereMesh = new Mesh(L"sphere", device, false);
+	quadMesh = new D3D11Mesh(L"quad", device, false);
 
-	playerMesh = new Mesh(L"sphere", device, false);
+	sphereMesh = new D3D11Mesh(L"sphere", device, false);
 
-	asteroidMesh = new Mesh(L"sphereTest", device, true);
+	playerMesh = new D3D11Mesh(L"sphere", device, false);
+
+	asteroidMesh = new D3D11Mesh(L"sphereTest", device, true);
 }
 
 //---------------------------------------------------------
@@ -445,7 +446,7 @@ void SceneBuilder::SetupScenes()
 //---------------------------------------------------------
 //Create Entities found in the scene
 //---------------------------------------------------------
-Entity* SceneBuilder::CreateEntity(Mesh* mesh, D3D11Material* mat, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scale)
+Entity* SceneBuilder::CreateEntity(D3D11Mesh* mesh, D3D11Material* mat, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scale)
 {
 	Entity* ent = new Entity(mesh, mat, pos, rot, scale);
 

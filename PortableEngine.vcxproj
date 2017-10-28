@@ -288,6 +288,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="D3D11Material.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="D3D11Mesh.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="PC_Engine.cpp" />
@@ -318,6 +319,7 @@
     <ClInclude Include="Lights.h" />
     <ClInclude Include="D3D11Material.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="D3D11Mesh.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="Particle.h" />
