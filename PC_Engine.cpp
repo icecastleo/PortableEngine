@@ -33,7 +33,7 @@ PC_Engine::PC_Engine(
 #endif
 
 	InitWindow(hInstance);
-	renderSystem = new Game(hInstance, hWnd);
+	renderSystem = new Game(width, height, hWnd);
 }
 
 PC_Engine::~PC_Engine()

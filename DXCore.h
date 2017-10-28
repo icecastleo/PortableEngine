@@ -17,7 +17,7 @@ public:
 		//char* titleBarText,			// Text for the window's title bar
 		unsigned int windowWidth,	// Width of the window's client area
 		unsigned int windowHeight,	// Height of the window's client area
-		HWND hWnd
+		HWND hWnd					// The handle to the window itself
 		//bool debugTitleBarStats
 	);	// Show extra stats (fps) in title bar?
 	~DXCore();

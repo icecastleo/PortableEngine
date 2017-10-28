@@ -17,11 +17,11 @@
 #include "Tex2Dt.h"
 
 class Game
-	: public DXCore
+	: public RenderSystem
 {
 
 public:
-	Game(HINSTANCE hInstance, HWND hWnd);
+	Game(unsigned int windowWidth, unsigned int windowHeight, HWND hWnd);
 	~Game();
 
 	// Overridden setup and game loop methods, which
@@ -31,13 +31,27 @@ public:
 	void Update(float deltaTime);
 	void Draw();
 
-	//// Overridden mouse input helper methods
-	//void OnMouseDown(WPARAM buttonState, int x, int y);
-	//void OnMouseUp(WPARAM buttonState, int x, int y);
-	//void OnMouseMove(WPARAM buttonState, int x, int y);
-	//void OnMouseWheel(float wheelDelta, int x, int y);
+	HRESULT InitDirectX();
 	
 private:
+	HWND		hWnd;			// The handle to the window itself
+
+	unsigned int width;			// Size of the window's client area
+	unsigned int height;
+
+	// DirectX related objects and variables
+	D3D_FEATURE_LEVEL		dxFeatureLevel;
+	IDXGISwapChain*			swapChain;
+	ID3D11Device*			device;
+	ID3D11DeviceContext*	context;
+
+	ID3D11RenderTargetView* backBufferRTV;
+	ID3D11DepthStencilView* depthStencilView;
+
+	// Keeps track of the old mouse position.  Useful for 
+	// determining how far the mouse moved in a single frame.
+	POINT prevMousePos;
+
 	int SceneNumber;
 
 	// Initialization helper methods - feel free to customize, combine, etc.
@@ -58,11 +72,6 @@ private:
 	// Particle Shaders
 	SimpleVertexShader* particleVS;
 	SimplePixelShader* particlePS;
-
-
-	// Keeps track of the old mouse position.  Useful for 
-	// determining how far the mouse moved in a single frame.
-	POINT prevMousePos;
 
 	MusicPlayer musicPlayer;
 
