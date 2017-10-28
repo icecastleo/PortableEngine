@@ -4,13 +4,14 @@
 #include "Entity.h"
 #include "Collider.h"
 
-class Asteroid
+class Asteroid :
+	public Entity
 {
 public:
 	Asteroid();
 	~Asteroid();
 
-	Asteroid(Entity* asterEntity);
+	Asteroid(Entity* entity);
 
 	void Update(float deltaTime);
 	void SetActive(int);
@@ -22,12 +23,10 @@ public:
 	bool collided = false;
 
 private:
-	Entity* asterEntity;
+	Entity* entity;
 	Collider* asterCollider;
 
 	void Move(float x, float y, float z, float deltaTime);
 	void RandomPos();
-
-	
 };
 

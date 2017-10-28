@@ -177,19 +177,19 @@ void Renderer::Draw()
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 	//Draw the skybox if one is loaded
-	if (currentScene->background != NULL)
+	if (currentScene->skybox != NULL)
 	{
-		vertexBuffer = currentScene->background->GetMesh()->GetVertexBuffer();
-		indexBuffer = currentScene->background->GetMesh()->GetIndexBuffer();
+		vertexBuffer = currentScene->skybox->GetMesh()->GetVertexBuffer();
+		indexBuffer = currentScene->skybox->GetMesh()->GetIndexBuffer();
 
 		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-		currentScene->background->GetMat()->PrepareSkybox(Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), skyVS, skyPS);
+		currentScene->skybox->GetMat()->PrepareSkybox(Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), skyVS, skyPS);
 
-		context->RSSetState(currentScene->background->GetMat()->GetRast());
-		context->OMSetDepthStencilState(currentScene->background->GetMat()->GetDepthSD(), 0);
-		context->DrawIndexed(currentScene->background->GetMesh()->GetIndexCount(), 0, 0);
+		context->RSSetState(currentScene->skybox->GetMat()->GetRast());
+		context->OMSetDepthStencilState(currentScene->skybox->GetMat()->GetDepthSD(), 0);
+		context->DrawIndexed(currentScene->skybox->GetMesh()->GetIndexCount(), 0, 0);
 
 		// Reset the render states we've changed
 		context->RSSetState(0);
@@ -414,9 +414,9 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*>
 		pShader->SetShaderResourceView("NormalMap", list.at(i)->GetMat()->GetNormalSRV());
 	}
 
-	if (currentScene->background != NULL)
+	if (currentScene->skybox != NULL)
 	{
-		pShader->SetShaderResourceView("Sky", currentScene->background->GetMat()->GetSkySRV());
+		pShader->SetShaderResourceView("Sky", currentScene->skybox->GetMat()->GetSkySRV());
 	}
 
 	pShader->CopyAllBufferData();

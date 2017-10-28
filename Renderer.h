@@ -1,6 +1,5 @@
-//Darren Farr
 #pragma once
-#include "DXCore.h"
+
 #include "SimpleShader.h"
 #include "Vertex.h"
 #include <DirectXMath.h>

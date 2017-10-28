@@ -27,11 +27,11 @@ public:
 	void BuildEntities();
 	void BuildParticles();
 
-	Entity* CreateEntity(D3D11Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
+	//Entity* CreateEntity(Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
 	Entity* GetPlayerEntity();
 
-	Entity* GetAsteroidEntity(int);
+	//Entity* GetAsteroidEntity(int);
 
 private:
 	void SetupScenes();
@@ -73,24 +73,10 @@ private:
 
 	D3D11Material* particelMat;
 
-	Entity* menuEnt;
-	Entity* titleEnt;
-	Entity* menuBackgroundEnt;
-	Entity* gameBackgroundEnt;
-	Entity* creditsBackgroundEnt;
 	Entity* playerEnt;
-
 
 	Entity* laneEnt;
 	Entity* laneEnt2;
-	Entity* plutoEnt;
-	Entity* venusEnt;
-	Entity* sunEnt;
-	Entity* moonEnt;
-	Entity* earthEnt;
-	Entity* p1;
-	Entity* p2;
-	Entity* p3;
 
 	GlobalLight* ambient;
 
@@ -103,10 +89,8 @@ private:
 
 	SpotLight* spotLight;
 
-
-	Entity* asteroidList[12];
+	//Entity* asteroidList[12];
 
 	//Particles Emitter
 	Emitter *emitter;
-
 };

@@ -5,7 +5,7 @@ using ms = std::chrono::duration<float, std::milli>;
 Engine::Engine()
 {
 //#if _PC
-//	renderSystem = new Game();
+//	renderSystem = new WindowsRenderSystem();
 //#endif
 //
 //#if _PS4

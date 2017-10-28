@@ -18,7 +18,7 @@ public:
 	float GetBoudingSphere();
 
 private:
-	D3D11Mesh* mesh;
+	//D3D11Mesh* mesh;
 
 	float boundingSphere;
 

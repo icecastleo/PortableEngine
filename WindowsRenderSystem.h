@@ -2,7 +2,8 @@
 //Modified for use in homework
 #pragma once
 
-#include "DXCore.h"
+#include "RenderSystem.h"
+#include "D3D11.h"
 #include "SimpleShader.h"
 #include <DirectXMath.h>
 #include "SceneManager.h"
@@ -16,13 +17,18 @@
 #include <vector>
 #include "Tex2Dt.h"
 
-class Game
-	: public DXCore
+// We can include the correct library files here
+// instead of in Visual Studio settings if we want
+#pragma comment(lib, "d3d11.lib")
+
+
+class WindowsRenderSystem
+	: public RenderSystem
 {
 
 public:
-	Game(HINSTANCE hInstance, HWND hWnd);
-	~Game();
+	WindowsRenderSystem(unsigned int windowWidth, unsigned int windowHeight, HWND hWnd);
+	~WindowsRenderSystem();
 
 	// Overridden setup and game loop methods, which
 	// will be called automatically
@@ -31,13 +37,27 @@ public:
 	void Update(float deltaTime);
 	void Draw();
 
-	//// Overridden mouse input helper methods
-	//void OnMouseDown(WPARAM buttonState, int x, int y);
-	//void OnMouseUp(WPARAM buttonState, int x, int y);
-	//void OnMouseMove(WPARAM buttonState, int x, int y);
-	//void OnMouseWheel(float wheelDelta, int x, int y);
+	HRESULT InitDirectX();
 	
 private:
+	HWND		hWnd;			// The handle to the window itself
+
+	unsigned int width;			// Size of the window's client area
+	unsigned int height;
+
+	// DirectX related objects and variables
+	D3D_FEATURE_LEVEL		dxFeatureLevel;
+	IDXGISwapChain*			swapChain;
+	ID3D11Device*			device;
+	ID3D11DeviceContext*	context;
+
+	ID3D11RenderTargetView* backBufferRTV;
+	ID3D11DepthStencilView* depthStencilView;
+
+	// Keeps track of the old mouse position.  Useful for 
+	// determining how far the mouse moved in a single frame.
+	POINT prevMousePos;
+
 	int SceneNumber;
 
 	// Initialization helper methods - feel free to customize, combine, etc.
@@ -59,11 +79,6 @@ private:
 	SimpleVertexShader* particleVS;
 	SimplePixelShader* particlePS;
 
-
-	// Keeps track of the old mouse position.  Useful for 
-	// determining how far the mouse moved in a single frame.
-	POINT prevMousePos;
-
 	MusicPlayer musicPlayer;
 
 	Scene* menueScene;
@@ -76,8 +91,8 @@ private:
 	Camera Cam;
 
 	Player *player;
-	void SetNextAsteroid();
-	std::vector<Asteroid*> asteroids;
+	//void SetNextAsteroid();
+	//std::vector<Asteroid*> asteroids;
 	Asteroid* curAsteroid;
 	int curIndex = 0;
 	float timer = 0.2f;

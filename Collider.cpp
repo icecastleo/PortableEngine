@@ -6,7 +6,7 @@ Collider::Collider()
 	
 }
 
-Collider::Collider(D3D11Mesh* _mesh) : mesh(_mesh)
+Collider::Collider(D3D11Mesh* mesh)
 {
 	boundingSphere = 0.0f;
 
@@ -16,7 +16,8 @@ Collider::Collider(D3D11Mesh* _mesh) : mesh(_mesh)
 }
 
 Collider::~Collider()
-{}
+{
+}
 
 void Collider::CreateBoundingVolumes(std::vector<Vertex> &vertPosArray,	float &boundingSphere)
 {

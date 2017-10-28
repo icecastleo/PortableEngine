@@ -1,6 +1,5 @@
 #include "Asteroid.h"
 using namespace DirectX;
-#include "Game.h"
 
 Asteroid::Asteroid()
 {
@@ -8,15 +7,15 @@ Asteroid::Asteroid()
 
 Asteroid::~Asteroid()
 {
-	if(asterCollider != NULL)
+	if(asterCollider)
 		delete asterCollider;
 }
 
-Asteroid::Asteroid(Entity * asterEntity)
+Asteroid::Asteroid(Entity * entity)
 {
-	this->asterEntity = asterEntity;
+	this->entity = entity;
 
-	asterCollider = new Collider(asterEntity->GetMesh());
+	asterCollider = new Collider(entity->GetMesh());
 	active = false;
 }
 
@@ -25,14 +24,14 @@ void Asteroid::Update(float deltaTime)
 	if (active)
 	{
 		Move(-0.2f, 0, 2, deltaTime);
-		XMVECTOR pos = XMLoadFloat3(&(asterEntity->GetPosition()));
+		XMVECTOR pos = XMLoadFloat3(&(entity->GetPosition()));
 		XMFLOAT3 position;
-		XMFLOAT3 rota = asterEntity->GetRotation();
+		XMFLOAT3 rota = entity->GetRotation();
 		rota.y += (rand() % 3)*0.005f;
 		rota.x += (rand() % 3)*0.005f;
 		rota.z += (rand() % 3)*0.005f;
 		//rota.y += 0.005f;
-		asterEntity->SetRotation(rota);
+		entity->SetRotation(rota);
 
 		XMStoreFloat3(&position, pos);
 		if (position.z < -10) {
@@ -49,7 +48,7 @@ void Asteroid::RandomPos() {
 	XMVECTOR pos = XMVectorSet(rand()%4-2, rand() % 5 - 2, 20, 0);
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);
-	asterEntity->SetPosition(position);
+	entity->SetPosition(position);
 }
 
 void Asteroid::Move(float x, float y, float z,float deltaTime)
@@ -63,7 +62,7 @@ void Asteroid::Move(float x, float y, float z,float deltaTime)
 	XMVECTOR up = XMVectorSet(0, 1, 0, 0);
 	XMVECTOR right = XMVectorSet(1, 0, 0, 0);
 
-	XMVECTOR pos = XMLoadFloat3(&(asterEntity->GetPosition()));
+	XMVECTOR pos = XMLoadFloat3(&(entity->GetPosition()));
 
 	moveX = XMVector3Cross(fwd, up);
 	moveY = XMVector3Cross(fwd, right);
@@ -78,7 +77,7 @@ void Asteroid::Move(float x, float y, float z,float deltaTime)
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);
 
-	asterEntity->SetPosition(position);
+	entity->SetPosition(position);
 }
 
 Collider* Asteroid::GetCollider()
@@ -100,13 +99,13 @@ void Asteroid::SetActive(int laneNumber)
 	case 1:
 	{
 		position = XMFLOAT3(-4.0f, 0.0f, 20.0f);
-		asterEntity->SetPosition(position);
+		entity->SetPosition(position);
 		break;
 	}
 	case 2:
 	{
 		position = XMFLOAT3(+0.1f, 0.0f, 20.0f);
-		asterEntity->SetPosition(position);
+		entity->SetPosition(position);
 		break;
 	}
 	default:

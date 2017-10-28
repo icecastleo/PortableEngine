@@ -1,8 +1,6 @@
 
-#include "Game.h"
-#include "PC_Engine.h"
-
 #if _PC
+#include "WindowsEngine.h"
 #include <Windows.h>
 //typedef float gFloat;
 #endif
@@ -25,11 +23,11 @@ int WINAPI WinMain(
 	// way of determining if we forgot to clean something up
 	//  - You may want to use something more advanced, like Visual Leak Detector
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-	//_CrtSetBreakAlloc(1477);
+	//_CrtSetBreakAlloc(1430);
 #endif
 
 #if _PC
-	PC_Engine engine = PC_Engine(
+	WindowsEngine engine = WindowsEngine(
 		hInstance,		   // The application's handle
 		"DirectX Game",	   // Text for the window's title bar
 		1280,			   // Width of the window's client area
@@ -45,7 +43,7 @@ int WINAPI WinMain(
 
 	//// Create the Game object using
 	//// the app handle we got from WinMain
-	//Game dxGame(hInstance);
+	//WindowsRenderSystem dxGame(hInstance);
 
 	//// Result variable for function calls below
 	//HRESULT hr = S_OK;

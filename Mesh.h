@@ -1,5 +1,6 @@
 #pragma once
-#include "DXCore.h"
+
+//#include "DXCore.h"
 #include <d3d11.h>
 #include <DirectXMath.h>    //will change
 #include "Vertex.h"

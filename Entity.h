@@ -14,10 +14,10 @@ class Entity
 {
 public:
 	Entity();
-	~Entity();
+	virtual ~Entity();
 	Entity(D3D11Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 
-	void Update();
+	virtual void Update(float deltaTime);
 
 	DirectX::XMFLOAT4X4 GetWorldMat();
 	DirectX::XMFLOAT3 GetPosition();
@@ -27,7 +27,6 @@ public:
 	void SetPosition(DirectX::XMFLOAT3);
 	void SetRotation(DirectX::XMFLOAT3);
 	void SetScale(DirectX::XMFLOAT3);
-	void Reset();
 
 	D3D11Mesh* GetMesh();
 	D3D11Material* GetMat();
@@ -37,17 +36,15 @@ public:
 
 	void SetParent(Entity* e);
 
+	Entity *dirtyUpdate;
+
 private:
 	void SetWorldMat();
 	
 	D3D11Mesh* mesh;
 	D3D11Material* mat;
 
+	Transform transform;
 	DirectX::XMFLOAT4X4 worldMat;
 	DirectX::XMFLOAT4X4 localMat;
-	Transform transform;
-
-	DirectX::XMFLOAT3 posOrig;
-	DirectX::XMFLOAT3 rotOrig;
-	DirectX::XMFLOAT3 scaleOrig;
 };
