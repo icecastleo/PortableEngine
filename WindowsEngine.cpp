@@ -2,6 +2,7 @@
 #include <WindowsX.h>
 #include <sstream>
 #include "WindowsRenderSystem.h"
+#include "PC_IOSystem.h"
 
 // Define the static instance variable so our OS-level 
 // message handling function below can talk to our object
@@ -36,6 +37,7 @@ WindowsEngine::WindowsEngine(
 	renderSystem = new WindowsRenderSystem(width, height, hWnd);
 }
 
+PC_IOSystem *PC_IOSystem::IO_instance = 0;
 WindowsEngine::~WindowsEngine()
 {
 }

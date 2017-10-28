@@ -17,9 +17,9 @@ Engine::~Engine()
 {
 	if (renderSystem)
 		delete renderSystem;
-	if (ioSystem)
-		delete ioSystem;
 }
+
+//IOSystem *IOSystem::IO_instance = 0;
 
 void Engine::Run()
 {

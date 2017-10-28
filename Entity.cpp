@@ -22,7 +22,7 @@ Entity::~Entity()
 //Override constructor using the Identity Matrix 
 //for world matrix
 // --------------------------------------------------------
-Entity::Entity(Mesh* _mesh, D3D11Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _rot, XMFLOAT3 _scale)
+Entity::Entity(D3D11Mesh* _mesh, D3D11Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _rot, XMFLOAT3 _scale)
 {
 	mesh = _mesh;
 	mat = _mat;
@@ -160,10 +160,8 @@ XMFLOAT3 Entity::GetScale()
 // --------------------------------------------------------
 //Return the entities mesh
 // --------------------------------------------------------
-Mesh* Entity::GetMesh()
-{
-	return mesh;
-}
+D3D11Mesh* Entity::GetMesh()
+{ return mesh; }
 
 // --------------------------------------------------------
 //Return the entities material
