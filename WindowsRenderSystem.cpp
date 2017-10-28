@@ -92,9 +92,9 @@ WindowsRenderSystem::~WindowsRenderSystem()
 
 	delete text;
 
-	for (Asteroid *a : asteroids) {
-		delete a;
-	}
+	//for (Asteroid *a : asteroids) {
+	//	delete a;
+	//}
 
 	delete particleVS;
 	delete particlePS;
@@ -244,14 +244,14 @@ void WindowsRenderSystem::Init()
 
 	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
 
-	player = new Player(SceneBuild.GetPlayerEntity());
+	//player = new Player(SceneBuild.GetPlayerEntity());
 
 	score = 0;
 
 	//Make 5 Asteroids for the game
-	for (int i = 0; i < 12; i++) {
-		asteroids.push_back(new Asteroid(SceneBuild.GetAsteroidEntity(i)));
-	}
+	//for (int i = 0; i < 12; i++) {
+	//	asteroids.push_back(new Asteroid(SceneBuild.GetAsteroidEntity(i)));
+	//}
 
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
@@ -342,12 +342,12 @@ void WindowsRenderSystem::setScene()
 	}
 }
 
-void WindowsRenderSystem::SetNextAsteroid()
-{
-	curAsteroid->collided = true;
-	curIndex++;
-	curAsteroid = asteroids[curIndex % 12];
-}
+//void WindowsRenderSystem::SetNextAsteroid()
+//{
+//	curAsteroid->collided = true;
+//	curIndex++;
+//	curAsteroid = asteroids[curIndex % 12];
+//}
 
 // --------------------------------------------------------
 // Handle resizing DirectX "stuff" to match the new window size.
@@ -453,72 +453,56 @@ void WindowsRenderSystem::Update(float deltaTime)
 
 	if (SceneNumber == 2) {
 		timer += deltaTime;
-		Entity* sun = currentScene->sun;
-		Entity* earth = currentScene->earth;
-		Entity* moon = currentScene->moon;
-		Entity* venus = currentScene->venus;
-		Entity* planet1 = currentScene->planet1;
-		Entity* planet2 = currentScene->planet2;
-		Entity* planet3 = currentScene->planet3;
-
-		sun->SetRotation(DirectX::XMFLOAT3(sun->GetRotation().x, sun->GetRotation().y + 0.002f, sun->GetRotation().z));
-		earth->SetRotation(DirectX::XMFLOAT3(earth->GetRotation().x, earth->GetRotation().y + 0.004f, earth->GetRotation().z));
-		moon->SetRotation(DirectX::XMFLOAT3(moon->GetRotation().x, moon->GetRotation().y + 0.006f, moon->GetRotation().z));
-		venus->SetRotation(DirectX::XMFLOAT3(venus->GetRotation().x , venus->GetRotation().y + 0.0001f, venus->GetRotation().z ));
-		planet1->SetRotation(DirectX::XMFLOAT3(planet1->GetRotation().x, planet1->GetRotation().y + 0.01f, planet1->GetRotation().z));
-		planet2->SetRotation(DirectX::XMFLOAT3(planet2->GetRotation().x, planet2->GetRotation().y - 0.008f, planet2->GetRotation().z));
-		planet3->SetRotation(DirectX::XMFLOAT3(planet3->GetRotation().x, planet3->GetRotation().y + 0.003f, planet3->GetRotation().z));
 	}
 
 	//Temp code
 	//----------------------------------------------------------------------------------------
 
 	//Spawn an inactive asteroid in a random lane.
-	srand(time(NULL));
-	if (timer > 0.5f) {
-		timer = 0;
-		asteroids[asteroidIndex % 12]->SetActive(rand() % 2 + 1);
-		asteroidIndex++;
-	}
+	//srand(time(NULL));
+	//if (timer > 0.5f) {
+	//	timer = 0;
+	//	asteroids[asteroidIndex % 12]->SetActive(rand() % 2 + 1);
+	//	asteroidIndex++;
+	//}
 
-	player->Update(deltaTime);
-	for (Asteroid* a : asteroids) {
-		a->Update(deltaTime);
-	}
+	//for (Asteroid* a : asteroids) {
+	//	a->Update(deltaTime);
+	//}
 
 	Cam.Update(prevMousePos, deltaTime);
 
 	for each (Entity* ent in currentScene->entities)
 	{
-		ent->Update();
+		ent->Update(deltaTime);
 	}
 
-	player->Update(deltaTime);
+	//player->Update(deltaTime);
 
-	if (currentScene->Particles != nullptr)
-	{
-		currentScene->Particles->Update(deltaTime);
-	}
+	//if (currentScene->Particles != nullptr)
+	//{
+	//	currentScene->Particles->Update(deltaTime);
+	//}
 
-	for (unsigned i = 0; i < asteroids.size(); i++) {
-		if (!asteroids[i]->collided) {
+	//for (unsigned i = 0; i < asteroids.size(); i++) {
+	//	if (!asteroids[i]->collided) {
 
-			bool collide = Collision::Instance().BoundingSphereCollision(player->GetCollider()->GetBoudingSphere(),
-				SceneBuild.GetPlayerEntity()->GetWorldMat(),
-				asteroids[i]->GetCollider()->GetBoudingSphere(),
-				SceneBuild.GetAsteroidEntity(i)->GetWorldMat());
+	//		bool collide = Collision::Instance().BoundingSphereCollision(player->GetCollider()->GetBoudingSphere(),
+	//			SceneBuild.GetPlayerEntity()->GetWorldMat(),
+	//			asteroids[i]->GetCollider()->GetBoudingSphere(),
+	//			SceneBuild.GetAsteroidEntity(i)->GetWorldMat());
 
-			if (collide) {
-				asteroids[i]->collided = true;
-				score += 10;
-				currentScene->Particles->SetEmitterPosition(SceneBuild.GetPlayerEntity()->GetWorldMat()._14,
-					SceneBuild.GetPlayerEntity()->GetWorldMat()._24,
-					SceneBuild.GetPlayerEntity()->GetWorldMat()._34);
+	//		if (collide) {
+	//			asteroids[i]->collided = true;
+	//			score += 10;
+	//			currentScene->Particles->SetEmitterPosition(SceneBuild.GetPlayerEntity()->GetWorldMat()._14,
+	//				SceneBuild.GetPlayerEntity()->GetWorldMat()._24,
+	//				SceneBuild.GetPlayerEntity()->GetWorldMat()._34);
 
-				currentScene->Particles->SpawnParticle();
-			}//end if collide
-		}
-	}
+	//			currentScene->Particles->SpawnParticle();
+	//		}//end if collide
+	//	}
+	//}
 }
 
 // --------------------------------------------------------

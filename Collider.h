@@ -18,8 +18,6 @@ public:
 	float GetBoudingSphere();
 
 private:
-	Mesh* mesh;
-
 	float boundingSphere;
 
 	void CreateBoundingVolumes(std::vector<Vertex> &vertPosArray,    // The array containing our models vertex positions

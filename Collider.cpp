@@ -6,7 +6,7 @@ Collider::Collider()
 	
 }
 
-Collider::Collider(Mesh* _mesh) : mesh(_mesh)
+Collider::Collider(Mesh* mesh)
 {
 	boundingSphere = 0.0f;
 
@@ -16,7 +16,8 @@ Collider::Collider(Mesh* _mesh) : mesh(_mesh)
 }
 
 Collider::~Collider()
-{}
+{
+}
 
 void Collider::CreateBoundingVolumes(std::vector<Vertex> &vertPosArray,	float &boundingSphere)
 {

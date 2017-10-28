@@ -1,5 +1,7 @@
 //Darren Farr
 #include "SceneBuilder.h"
+#include "Asteroid.h"
+#include "Planet.h"
 
 using namespace DirectX;
 
@@ -28,6 +30,7 @@ SceneBuilder::~SceneBuilder()
 	delete p3Mat;
 	delete lane2Mat;
 	delete particelMat;
+	delete titleMat;
 
 	delete cubeMesh;
 	delete asteroidMesh;
@@ -35,20 +38,6 @@ SceneBuilder::~SceneBuilder()
 	delete quadMesh;
 	delete playerMesh;
 	delete skyboxMesh;
-
-	delete menuEnt;
-	delete playerEnt;
-
-	delete menuBackgroundEnt;
-	delete gameBackgroundEnt;
-	delete creditsBackgroundEnt;
-
-	delete sunEnt;
-	delete earthEnt;
-	delete venusEnt;
-	delete moonEnt;
-	delete laneEnt;
-	delete laneEnt2;
 
 	delete ambient;
 	delete dirLight;
@@ -63,19 +52,11 @@ SceneBuilder::~SceneBuilder()
 	delete scene3;
 	delete scene4;
 
-
-	for (Entity *e : asteroidList) {
-		delete e;
-	}
-
-	delete p1;
-	delete p2;
-	delete p3;
+	//for (Entity *e : asteroidList) {
+	//	delete e;
+	//}
 
 	delete emitter;
-
-	delete titleEnt;
-	delete titleMat;
 }
 
 //---------------------------------------------------------
@@ -83,13 +64,12 @@ SceneBuilder::~SceneBuilder()
 //---------------------------------------------------------
 void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 {
-	asteroidList[12];
+	//asteroidList[12];
 	device = _device;
 	context = _context;
 	BuildMaterials();
 	BuildLights();
 	BuildMeshes();
-	BuildEntities();
 	BuildParticles();
 	SetupScenes();
 }
@@ -116,17 +96,16 @@ void SceneBuilder::BuildMaterials()
 	path = L"Assets/textures/creditsTexture.jpg";
 	creditsMat = new D3D11Material(device, context, path);
 
-
 	path = L"Assets/textures/spaceBackground.dds";
 	backgroundMat = new D3D11Material(device, context, path, 0);
 
-	path = L"Assets/textures/venus.png";
+	path = L"Assets/textures/venus.jpg";
 	venusMat = new D3D11Material(device, context, path);
 
 	path = L"Assets/textures/sun.jpg";
 	sunMat = new D3D11Material(device, context, path);
 
-	path = L"Assets/textures/earth.jpg";
+	path = L"Assets/textures/earth.png";
 	earthMat = new D3D11Material(device, context, path);
 
 	path = L"Assets/textures/moon.jpg";
@@ -227,38 +206,7 @@ void SceneBuilder::BuildMeshes()
 void SceneBuilder::BuildEntities()
 {
 	//Entity template (mesh name, material name, position, rotation, scale)
-
-	menuEnt = new Entity(quadMesh, menuMat, XMFLOAT3(+0.0f, +3.0f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+1.0f, +1.0f, +1.0f));
-
-	titleEnt = new Entity(quadMesh, titleMat, XMFLOAT3(+0.0f, +5.0f, +0.0f), XMFLOAT3(+0.2f, +0.0f, +0.0f), XMFLOAT3(+13.0f, +1.0f, +1.0f));
-
 	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
-
-	for (int i = 0; i < 12; i++) {
-		asteroidList[i]= new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
-	}
-
-	laneEnt = new Entity(quadMesh, lane2Mat, XMFLOAT3(-2.8f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f));
-	laneEnt2 = new Entity(quadMesh, laneMat, XMFLOAT3(1.5f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f));
-
-	menuBackgroundEnt = new Entity(quadMesh, menuMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f));
-	gameBackgroundEnt = new Entity(skyboxMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
-	creditsBackgroundEnt = new Entity(quadMesh, creditsMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f));
-
-
-	venusEnt = new Entity(sphereMesh, venusMat, XMFLOAT3(-60, -10, 30), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
-	sunEnt = new Entity(sphereMesh, sunMat, XMFLOAT3(30, -10, 40), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
-	earthEnt = new Entity(sphereMesh, earthMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.5f, +0.5f, +0.5f));
-	moonEnt = new Entity(sphereMesh, moonMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
-	p1= new Entity(sphereMesh, p1Mat, XMFLOAT3(0, 0, 1.5f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.7f, +0.7f, +0.7f));
-	p2 = new Entity(sphereMesh, p2Mat, XMFLOAT3(-1.5f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
-	p3 = new Entity(sphereMesh, p3Mat, XMFLOAT3(-1.5f, 0, -1), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.6f, +0.6f, +0.6f));
-
-	p1->SetParent(sunEnt);
-	p2->SetParent(sunEnt);
-	p3->SetParent(sunEnt);
-	earthEnt->SetParent(sunEnt);
-	moonEnt->SetParent(earthEnt);
 }
 
 void SceneBuilder::BuildParticles()
@@ -288,17 +236,11 @@ void SceneBuilder::SetupScenes()
 	scene1 = new Scene();
 	scene1->name = "Menu";
 
-	//Entities
-	scene1->entities = std::vector<Entity*>();
-	scene1->opaque = std::vector<Entity*>();
-	scene1->opaqueNorm = std::vector<Entity*>();
-	scene1->transparent = std::vector<Entity*>();
-	scene1->transparentNorm = std::vector<Entity*>();
-	scene1->textList = std::vector<textObject>();
+	Entity *background = new Entity(quadMesh, menuMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f));
+	scene1->entities.push_back(background);
 
-	//Background
-	scene1->entities.push_back(menuBackgroundEnt);
-	scene1->entities.push_back(titleEnt);
+	Entity *title = new Entity(quadMesh, titleMat, XMFLOAT3(+0.0f, +5.0f, +0.0f), XMFLOAT3(+0.2f, +0.0f, +0.0f), XMFLOAT3(+13.0f, +1.0f, +1.0f));
+	scene1->entities.push_back(title);
 
 	//Lights
 	scene1->globalLights.push_back(ambient);
@@ -316,47 +258,59 @@ void SceneBuilder::SetupScenes()
 	//--------------------------------------------------------------------------------------------
 	scene2 = new Scene();
 	scene2->name = "MainGame";
-
-	//Entities
-	scene2->entities = std::vector<Entity*>();
-	scene2->opaque = std::vector<Entity*>();
-	scene2->opaqueNorm = std::vector<Entity*>();
-	scene2->transparent = std::vector<Entity*>();
-	scene2->transparentNorm = std::vector<Entity*>();
-	scene2->textList = std::vector<textObject>();
 	
-	for (Entity* e : asteroidList) {
-		scene2->entities.push_back(e);
+	for (int i = 0; i < 12; i++) {
+		Entity *entity = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+		entity->dirtyUpdate = new Asteroid(entity);
+		scene2->entities.push_back(entity);
 	}
 
-	scene2->entities.push_back(playerEnt);
+	//scene2->entities.push_back(playerEnt);
 
-	scene2->entities.push_back(laneEnt);
-	scene2->entities.push_back(laneEnt2);
-	scene2->entities.push_back(venusEnt);
-	scene2->entities.push_back(sunEnt);
-	scene2->entities.push_back(earthEnt);
-	scene2->entities.push_back(moonEnt);
+	Entity *sun = new Entity(sphereMesh, sunMat, XMFLOAT3(30, -10, 40), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	sun->dirtyUpdate = new Planet(sun, 0.002f);
+	scene2->entities.push_back(sun);
+
+	Entity *venus = new Entity(sphereMesh, venusMat, XMFLOAT3(-60, -10, 30), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
+	venus->dirtyUpdate = new Planet(venus, 0.0001f);
+	scene2->entities.push_back(venus);
+
+	Entity *earth = new Entity(sphereMesh, earthMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.5f, +0.5f, +0.5f));
+	earth->dirtyUpdate = new Planet(earth, 0.004f);
+	scene2->entities.push_back(earth);
+
+	Entity *moon = new Entity(sphereMesh, moonMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
+	moon->dirtyUpdate = new Planet(moon, 0.006f);
+	scene2->entities.push_back(moon);
+
+	Entity *p1 = new Entity(sphereMesh, p1Mat, XMFLOAT3(0, 0, 1.5f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.7f, +0.7f, +0.7f));
+	p1->dirtyUpdate = new Planet(p1, 0.01f);
 	scene2->entities.push_back(p1);
-	scene2->entities.push_back(p2);
-	scene2->entities.push_back(p3);
-	scene2->sun = sunEnt;
-	scene2->moon = moonEnt;
-	scene2->earth = earthEnt;
-	scene2->venus = venusEnt;
 
-	scene2->planet1 = p1;
-	scene2->planet2 = p2;
-	scene2->planet3 = p3;
+	Entity *p2 = new Entity(sphereMesh, p2Mat, XMFLOAT3(-1.5f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
+	p2->dirtyUpdate = new Planet(p2, -0.008f);
+	scene2->entities.push_back(p2);
+
+	Entity *p3 = new Entity(sphereMesh, p3Mat, XMFLOAT3(-1.5f, 0, -1), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.6f, +0.6f, +0.6f));
+	p3->dirtyUpdate = new Planet(p3, 0.003f);
+	scene2->entities.push_back(p3);
+
+	p1->SetParent(sun);
+	p2->SetParent(sun);
+	p3->SetParent(sun);
+	earth->SetParent(sun);
+	moon->SetParent(earth);
+
+	// color lines
+	scene2->entities.push_back(new Entity(quadMesh, lane2Mat, XMFLOAT3(-2.8f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f)));
+	scene2->entities.push_back(new Entity(quadMesh, laneMat, XMFLOAT3(1.5f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f)));
 
 	//Background
-	scene2->background = gameBackgroundEnt;
+	scene2->skybox = new Entity(skyboxMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
 
 	//Lights
 	scene2->globalLights.push_back(ambient);
-
 	scene2->pointLights.push_back(pointLight);
-
 	scene2->directionalLights.push_back(dirLight);
 
 	//Sound
@@ -375,16 +329,8 @@ void SceneBuilder::SetupScenes()
 	scene3 = new Scene();
 	scene3->name = "Results";
 
-	//Entities
-	scene3->entities = std::vector<Entity*>();
-	scene3->opaque = std::vector<Entity*>();
-	scene3->opaqueNorm = std::vector<Entity*>();
-	scene3->transparent = std::vector<Entity*>();
-	scene3->transparentNorm = std::vector<Entity*>();
-	scene3->textList = std::vector<textObject>();
-
 	//Background
-	scene3->entities.push_back(creditsBackgroundEnt);
+	scene3->entities.push_back(new Entity(quadMesh, creditsMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f)));
 
 	//Lights
 	scene3->globalLights.push_back(ambient);
@@ -401,16 +347,8 @@ void SceneBuilder::SetupScenes()
 	scene4 = new Scene();
 	scene4->name = "Credits";
 
-	//Entities
-	scene4->entities = std::vector<Entity*>();
-	scene4->opaque = std::vector<Entity*>();
-	scene4->opaqueNorm = std::vector<Entity*>();
-	scene4->transparent = std::vector<Entity*>();
-	scene4->transparentNorm = std::vector<Entity*>();
-	scene4->textList = std::vector<textObject>();
-
 	//Background
-	scene4->entities.push_back(creditsBackgroundEnt);
+	scene4->entities.push_back(new Entity(quadMesh, creditsMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f)));
 
 	//Lights
 	scene4->globalLights.push_back(ambient);
@@ -441,23 +379,11 @@ void SceneBuilder::SetupScenes()
 	SortEntityList(scene4);
 }
 
-
-//---------------------------------------------------------
-//Create Entities found in the scene
-//---------------------------------------------------------
-Entity* SceneBuilder::CreateEntity(Mesh* mesh, D3D11Material* mat, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scale)
-{
-	Entity* ent = new Entity(mesh, mat, pos, rot, scale);
-
-	return ent;
-}
-
 //---------------------------------------------------------
 //Sort the entities lists into opaque or transparent lists, with or without normal maps
 //---------------------------------------------------------
 void SceneBuilder::SortEntityList(Scene* s)
 {
-
 	for (unsigned int i = 0; i < s->entities.size(); i++)
 	{
 		if (s->entities.at(i)->GetMat()->UseTransperancy() && s->entities.at(i)->GetMat()->HasNormalMap())
@@ -477,7 +403,6 @@ void SceneBuilder::SortEntityList(Scene* s)
 			s->opaque.push_back(s->entities.at(i));
 		}
 	}
-
 }
 
 //---------------------------------------------------------
@@ -501,8 +426,8 @@ Entity* SceneBuilder::GetPlayerEntity()
 	return playerEnt;
 }
 
-Entity* SceneBuilder::GetAsteroidEntity(int num)
-{
-	return asteroidList[num];
-}
+//Entity* SceneBuilder::GetAsteroidEntity(int num)
+//{
+//	return asteroidList[num];
+//}
 

@@ -281,6 +281,8 @@
     <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="WindowsRenderSystem.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="IOSystem.cpp" />
@@ -309,6 +311,8 @@
     <ClInclude Include="Emitter.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Planet.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="WindowsRenderSystem.h" />
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="IOSystem.h" />
@@ -324,7 +328,6 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneBuilder.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SimpleShader.h" />
