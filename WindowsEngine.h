@@ -19,6 +19,7 @@ public:
 	HRESULT InitWindow(HINSTANCE hInstance);
 
 	static WindowsEngine* EngineInstance;
+
 	static LRESULT CALLBACK WindowProc(
 		HWND hWnd,		// Window handle
 		UINT uMsg,		// Message
@@ -30,7 +31,7 @@ public:
 	LRESULT ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
-	 bool platformUpdate(float) override;
+	 bool platformUpdate() override;
 
 private:
 	HINSTANCE	hInstance;		// The handle to the application

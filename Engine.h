@@ -32,19 +32,19 @@ public:
 
 protected:
 	Engine();
-	virtual bool platformUpdate(float deltaTime) { return true; }
+	virtual bool platformUpdate() { return true; }
+
+	float deltaTime;
+	float totalTime;
 
 	RenderSystem  *renderSystem;
 	//IOSystem *ioSystem;
 
 private:
 	// Timing related data
-	std::chrono::time_point<std::chrono::steady_clock> startTime;
-	std::chrono::time_point<std::chrono::steady_clock> currentTime;
-	std::chrono::time_point<std::chrono::steady_clock> previousTime;
-
-	float totalTime;
-	float deltaTime;
+	std::chrono::steady_clock::time_point startTime;
+	std::chrono::steady_clock::time_point currentTime;
+	std::chrono::steady_clock::time_point previousTime;
 
 	//virtual void update(float deltaTime) {}
 };

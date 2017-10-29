@@ -2,6 +2,8 @@
 
 using namespace DirectX;
 
+PC_IOSystem *PC_IOSystem::IO_instance = 0;
+
 PC_IOSystem::PC_IOSystem()
 {
 }

@@ -15,8 +15,7 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-	if (renderSystem)
-		delete renderSystem;
+	
 }
 
 //IOSystem *IOSystem::IO_instance = 0;
@@ -39,7 +38,7 @@ void Engine::Run()
 		renderSystem->Draw();
 
 		// check if stop the game
-		stop = platformUpdate(deltaTime);
+		stop = platformUpdate();
 
 		// Save current time for next frame
 		previousTime = currentTime;

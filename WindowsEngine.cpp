@@ -34,12 +34,13 @@ WindowsEngine::WindowsEngine(
 #endif
 
 	InitWindow(hInstance);
+
 	renderSystem = new WindowsRenderSystem(width, height, hWnd);
 }
 
-PC_IOSystem *PC_IOSystem::IO_instance = 0;
 WindowsEngine::~WindowsEngine()
 {
+	delete renderSystem;
 }
 
 // --------------------------------------------------------
@@ -235,7 +236,7 @@ LRESULT WindowsEngine::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-bool WindowsEngine::platformUpdate(float deltaTime)
+bool WindowsEngine::platformUpdate()
 {
 	if (GetAsyncKeyState(VK_ESCAPE)) {
 		PostQuitMessage(0);

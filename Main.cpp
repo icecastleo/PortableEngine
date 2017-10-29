@@ -1,8 +1,7 @@
 
-#include <crtdbg.h>  
-
 #if defined(_PC)  
 
+#include <crtdbg.h>  
 #include "WindowsEngine.h"
 #include <Windows.h>
 
@@ -34,17 +33,24 @@ int WINAPI WinMain(
 
 
 #elif defined(_PS4)  
-// PS4 Resource Manager or Material Manager
-int main() {
 
-#if defined(DEBUG) | defined(_DEBUG)
-	// Enable memory leak detection as a quick and dirty
-	// way of determining if we forgot to clean something up
-	//  - You may want to use something more advanced, like Visual Leak Detector
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(1430);
-#endif
+#include <stdlib.h> 
+#include <time.h>
+#include "PS4_Engine.h"
 
+int main(int argc, const char *argv[])
+{
+	srand((unsigned)time(0));
+
+	//
+	// Define window size and set up a window to render to it
+	//
+	uint32_t targetWidth = 1920;
+	uint32_t targetHeight = 1080;
+
+	PS4_Engine engine = PS4_Engine(targetWidth,	targetHeight);			  
+
+	engine.Run();
 #else  
 
 int main() {

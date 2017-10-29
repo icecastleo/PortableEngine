@@ -1,5 +1,6 @@
 #pragma once
 #include "IOSystem.h"
+#include "Vertex.h"
 #include <fstream>
 #include "WindowsRenderSystem.h"
 
