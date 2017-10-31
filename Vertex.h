@@ -2,6 +2,8 @@
 
 #include <DirectXMath.h>
 
+//#include "glm\glm.hpp"
+
 // --------------------------------------------------------
 // A custom vertex definition
 //
