@@ -31,14 +31,14 @@ void Collider::CreateBoundingVolumes(std::vector<Vertex> &vertPosArray,	float &b
 		// covered by the bounding volume
 
 		//Get the smallest vertex 
-		minVertex.x = min(minVertex.x, vertPosArray[i].Position.x);    // Find smallest x value in model
-		minVertex.y = min(minVertex.y, vertPosArray[i].Position.y);    // Find smallest y value in model
-		minVertex.z = min(minVertex.z, vertPosArray[i].Position.z);    // Find smallest z value in model
+		minVertex.x = glm::min(minVertex.x, vertPosArray[i].Position.x);    // Find smallest x value in model
+		minVertex.y = glm::min(minVertex.y, vertPosArray[i].Position.y);    // Find smallest y value in model
+		minVertex.z = glm::min(minVertex.z, vertPosArray[i].Position.z);    // Find smallest z value in model
 
 																	   //Get the largest vertex 
-		maxVertex.x = max(maxVertex.x, vertPosArray[i].Position.x);    // Find largest x value in model
-		maxVertex.y = max(maxVertex.y, vertPosArray[i].Position.y);    // Find largest y value in model
-		maxVertex.z = max(maxVertex.z, vertPosArray[i].Position.z);    // Find largest z value in model
+		maxVertex.x = glm::max(maxVertex.x, vertPosArray[i].Position.x);    // Find largest x value in model
+		maxVertex.y = glm::max(maxVertex.y, vertPosArray[i].Position.y);    // Find largest y value in model
+		maxVertex.z = glm::max(maxVertex.z, vertPosArray[i].Position.z);    // Find largest z value in model
 	}
 
 	// Compute distance between maxVertex and minVertex

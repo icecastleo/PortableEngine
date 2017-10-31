@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include <iostream>
 
-using namespace DirectX;
+//using namespace DirectX;
 
 //---------------------------------------------------------
 //Default Constructor
@@ -42,8 +42,12 @@ void Camera::SetWidthHeight(unsigned int _width, unsigned int _height)
 void Camera::Init()
 {
 	//position = XMFLOAT4(0, 0, -5, 0);
-	position = XMFLOAT4(0, 8, -15, 0);
-	direction = XMFLOAT4(0, -0.3f, 1, 0);
+	//position = XMFLOAT4(0, 8, -15, 0);
+	//direction = XMFLOAT4(0, -0.3f, 1, 0);
+
+	position = glm::vec4(0, 8, -15, 0);
+	direction = glm::vec4(0, -0.3f, 1, 0);
+
 	rotationX = 0.0f;
 	rotationY = 100.0f;
 	CreateMatrices(position, direction);
@@ -55,7 +59,7 @@ void Camera::Init()
 //Create the base matrices for the camera
 //Base code from Game.cpp - Chris Cascioli
 //---------------------------------------------------------
-void Camera::CreateMatrices(XMFLOAT4 position, XMFLOAT4 direction)
+void Camera::CreateMatrices(glm::vec4 position, glm::vec4 direction)
 {
 	// Create the View matrix
 	// - In an actual game, recreate this matrix every time the camera
@@ -82,6 +86,23 @@ void Camera::CreateMatrices(XMFLOAT4 position, XMFLOAT4 direction)
 		0.1f,						// Near clip plane distance
 		100.0f);					// Far clip plane distance
 	XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
+
+
+
+	glm::vec4 pos = position;
+	glm::vec4 dir = direction;
+	glm::vec4 up = glm::vec4(0, 1, 0, 0);
+
+
+
+
+
+
+
+
+
+
+
 }
 
 //---------------------------------------------------------

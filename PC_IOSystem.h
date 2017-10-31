@@ -5,7 +5,7 @@
 #include "WindowsRenderSystem.h"
 
 //#include <d3d11.h>
-//#include <DirectXMath.h>
+
 
 class PC_IOSystem :
 	public IOSystem
@@ -13,7 +13,7 @@ class PC_IOSystem :
 	static PC_IOSystem * IO_instance;
 	vector<Vertex> vertexCollection;
 	//vector<size_t> indexCollection;
-	vector<UINT> indexCollection;
+	vector<unsigned int> indexCollection;
 
 	int indCount;
 
@@ -26,7 +26,7 @@ public:
 	bool hasNormalMap;
 	vector<Vertex> getVertexFromObj() ;
 	//vector<size_t> getindixFromObj();
-	vector<UINT> getindixFromObj() ;
+	vector<unsigned int> getindixFromObj() ;
 	int getindCount() ;
 
 	void loadTexture2d(wchar_t*) override;
