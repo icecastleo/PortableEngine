@@ -22,7 +22,7 @@ public:
 	PC_IOSystem();
 	~PC_IOSystem();
 
-	void loadObj(wchar_t* ) override;
+	void loadObj(char* ) override;
 	bool hasNormalMap;
 	vector<Vertex> getVertexFromObj() ;
 	//vector<size_t> getindixFromObj();

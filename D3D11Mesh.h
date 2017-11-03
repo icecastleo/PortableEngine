@@ -1,13 +1,10 @@
-//Darren Farr GGP
 #pragma once
 #include "Mesh.h"
-
 
 class D3D11Mesh : public Mesh
 {
 
 public:
-	D3D11Mesh();
 	D3D11Mesh(wchar_t* objName,  ID3D11Device*, bool);
 	~D3D11Mesh();
 

@@ -11,19 +11,19 @@ PC_IOSystem::PC_IOSystem()
 
 PC_IOSystem::~PC_IOSystem()
 {
+
 }
 
-void PC_IOSystem::loadObj(wchar_t* objFile)
+void PC_IOSystem::loadObj(char* path)
 {
-	wstring path = L"Assets/Models/" + (wstring)objFile + L".obj";
-
 	// File input object
-	ifstream obj(path);
-	//-------------------------------------------------------------------
-
+	FILE *pFile;
+	
 	// Check for successful open
-	if (!obj.is_open())
+	if (fopen_s(&pFile, path, "r") != 0) {
+		perror("Error opening file");
 		return;
+	}
 
 	// Variables used while reading the file
 	vector<XMFLOAT3> positions;     // Positions from the file
@@ -35,11 +35,10 @@ void PC_IOSystem::loadObj(wchar_t* objFile)
 	unsigned int vertCounter = 0;        // Count of vertices/indices
 	char chars[100];                     // String for line reading
 
-										 // Still have data left?
-	while (obj.good())
+	while (!feof(pFile))				// Still have data left?
 	{
-		// Get the line (100 characters should be more than enough)
-		obj.getline(chars, 100);
+		if (fgets(chars, 100, pFile) == NULL) 
+			break;
 
 		// Check the type of line
 		if (chars[0] == 'v' && chars[1] == 'n')
@@ -173,7 +172,7 @@ void PC_IOSystem::loadObj(wchar_t* objFile)
 	}
 
 	// Close the file and create the actual buffers
-	obj.close();
+	fclose(pFile);
 	// - At this point, "verts" is a vector of Vertex structs, and can be used
 	//    directly to create a vertex buffer:  &verts[0] is the address of the first vert
 	//
@@ -187,7 +186,6 @@ void PC_IOSystem::loadObj(wchar_t* objFile)
 
 	vertexCollection = verts;
 	indexCollection = indices;
-	
 }
 
 vector<Vertex> PC_IOSystem::getVertexFromObj() {

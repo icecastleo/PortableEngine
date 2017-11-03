@@ -16,9 +16,9 @@ class IOSystem
 
 public:
 	IOSystem();
-	~IOSystem();
+	virtual ~IOSystem();
 
-	virtual void loadObj(wchar_t* ) = 0;
+	virtual void loadObj(char* ) = 0;
 	virtual void loadTexture2d(wchar_t*) = 0;
 	virtual void loadCubemap(wchar_t*) = 0;
 
