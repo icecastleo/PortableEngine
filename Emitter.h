@@ -1,6 +1,6 @@
 #pragma once
 #include <d3d11.h>
-#include <DirectXMath.h>
+//#include <DirectXMath.h>
 
 #include "Camera.h"
 #include "SimpleShader.h"
@@ -8,18 +8,28 @@
 
 struct Particle
 {
-	DirectX::XMFLOAT3 Position;
+	/*DirectX::XMFLOAT3 Position;
 	DirectX::XMFLOAT4 Color;
-	DirectX::XMFLOAT3 StartVelocity;
+	DirectX::XMFLOAT3 StartVelocity;*/
+
+	glm::vec3 Position;
+	glm::vec4 Color;
+	glm::vec3 StartVelocity;
+
+
 	float Size;
 	float Age;
 };
 
 struct ParticleVertex
 {
-	DirectX::XMFLOAT3 Position;
+	/*DirectX::XMFLOAT3 Position;
 	DirectX::XMFLOAT2 UV;
-	DirectX::XMFLOAT4 Color;
+	DirectX::XMFLOAT4 Color;*/
+
+	glm::vec3 Position;
+	glm::vec2 UV;
+	glm::vec4 Color;
 	float Size;
 };
 
@@ -32,11 +42,16 @@ public:
 		float lifetime,
 		float startSize,
 		float endSize,
-		DirectX::XMFLOAT4 startColor,
+		/*DirectX::XMFLOAT4 startColor,
 		DirectX::XMFLOAT4 endColor,
 		DirectX::XMFLOAT3 startVelocity,
 		DirectX::XMFLOAT3 emitterPosition,
-		DirectX::XMFLOAT3 emitterAcceleration,
+		DirectX::XMFLOAT3 emitterAcceleration,*/
+		glm::vec4 startColor,
+		glm::vec4 endColor,
+		glm::vec3 startVelocity,
+		glm::vec3 emitterPosition,
+		glm::vec3 emitterAcceleration,
 		ID3D11Device* device,
 		D3D11Material* material
 	);
@@ -65,11 +80,17 @@ private:
 	int livingParticleCount;
 	float lifetime;
 
-	DirectX::XMFLOAT3 emitterAcceleration;
+	/*DirectX::XMFLOAT3 emitterAcceleration;
 	DirectX::XMFLOAT3 emitterPosition;
 	DirectX::XMFLOAT3 startVelocity;
 	DirectX::XMFLOAT4 startColor;
-	DirectX::XMFLOAT4 endColor;
+	DirectX::XMFLOAT4 endColor;*/
+
+	glm::vec3 emitterAcceleration;
+	glm::vec3 emitterPosition;
+	glm::vec3 startVelocity;
+	glm::vec4 startColor;
+	glm::vec4 endColor;
 	float startSize;
 	float endSize;
 

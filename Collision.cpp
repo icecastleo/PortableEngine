@@ -5,15 +5,15 @@ Collision::Collision()
 }
 
 bool Collision::BoundingSphereCollision(float firstObjBoundingSphere,
-	XMFLOAT4X4& firstObjWorldSpace,
+	glm::mat4& firstObjWorldSpace,
 	float secondObjBoundingSphere,
-	XMFLOAT4X4& secondObjWorldSpace)
+	glm::mat4& secondObjWorldSpace)
 {
 	float objectsDistance = 0.0f;
 
-	objectsDistance = sqrt((firstObjWorldSpace._14 - secondObjWorldSpace._14) * (firstObjWorldSpace._14 - secondObjWorldSpace._14) +
-		(firstObjWorldSpace._24 - secondObjWorldSpace._24) * (firstObjWorldSpace._24 - secondObjWorldSpace._24) +
-		(firstObjWorldSpace._34 - secondObjWorldSpace._34) * (firstObjWorldSpace._34 - secondObjWorldSpace._34));
+	objectsDistance = sqrt((firstObjWorldSpace[3][0] - secondObjWorldSpace[3][0]) * (firstObjWorldSpace[3][0] - secondObjWorldSpace[3][0]) +
+		(firstObjWorldSpace[3][1] - secondObjWorldSpace[3][1]) * (firstObjWorldSpace[3][1] - secondObjWorldSpace[3][1]) +
+		(firstObjWorldSpace[3][2] - secondObjWorldSpace[3][2]) * (firstObjWorldSpace[3][2] - secondObjWorldSpace[3][2]));
 
 
 	//If the distance between the two objects is less than the sum of their bounding spheres...

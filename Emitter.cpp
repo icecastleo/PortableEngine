@@ -1,4 +1,5 @@
 #include "Emitter.h"
+//#include "glm\gtc\quaternion.hpp"
 
 using namespace DirectX;
 
@@ -8,11 +9,16 @@ Emitter::Emitter(
 	float lifetime,
 	float startSize,
 	float endSize,
-	DirectX::XMFLOAT4 startColor,
-	DirectX::XMFLOAT4 endColor,
-	DirectX::XMFLOAT3 startVelocity,
-	DirectX::XMFLOAT3 emitterPosition,
-	DirectX::XMFLOAT3 emitterAcceleration,
+	//DirectX::XMFLOAT4 startColor,
+	//DirectX::XMFLOAT4 endColor,
+	//DirectX::XMFLOAT3 startVelocity,
+	//DirectX::XMFLOAT3 emitterPosition,
+	//DirectX::XMFLOAT3 emitterAcceleration,
+	glm::vec4 startColor,
+	glm::vec4 endColor,
+	glm::vec3 startVelocity,
+	glm::vec3 emitterPosition,
+	glm::vec3 emitterAcceleration,
 	ID3D11Device* device,
 	D3D11Material* material
 )
@@ -47,10 +53,15 @@ Emitter::Emitter(
 	localParticleVertices = new ParticleVertex[4 * maxParticles];
 	for (int i = 0; i < maxParticles * 4; i += 4)
 	{
-		localParticleVertices[i + 0].UV = XMFLOAT2(0, 0);
+		/*localParticleVertices[i + 0].UV = XMFLOAT2(0, 0);
 		localParticleVertices[i + 1].UV = XMFLOAT2(1, 0);
 		localParticleVertices[i + 2].UV = XMFLOAT2(1, 1);
-		localParticleVertices[i + 3].UV = XMFLOAT2(0, 1);
+		localParticleVertices[i + 3].UV = XMFLOAT2(0, 1);*/
+
+		localParticleVertices[i + 0].UV = glm::vec2(0, 0);
+		localParticleVertices[i + 1].UV = glm::vec2(1, 0);
+		localParticleVertices[i + 2].UV = glm::vec2(1, 1);
+		localParticleVertices[i + 3].UV = glm::vec2(0, 1);
 	}
 
 
@@ -167,27 +178,35 @@ void Emitter::UpdateSingleParticle(float dt, int index)
 	float agePercent = particles[index].Age / lifetime;
 
 	// Interpolate the color
-	XMStoreFloat4(
+	/*XMStoreFloat4(
 		&particles[index].Color,
 		XMVectorLerp(
 			XMLoadFloat4(&startColor),
 			XMLoadFloat4(&endColor),
-			agePercent));
+			agePercent));*/
+
+	particles[index].Color = glm::mix(startColor, endColor, agePercent);
 
 	// Lerp size
 	particles[index].Size = startSize + agePercent * (endSize - startSize);
 
 
 	// Adjust the position
-	XMVECTOR startPos = XMLoadFloat3(&emitterPosition);
+	/*XMVECTOR startPos = XMLoadFloat3(&emitterPosition);
 	XMVECTOR startVel = XMLoadFloat3(&particles[index].StartVelocity);
-	XMVECTOR accel = XMLoadFloat3(&emitterAcceleration);
+	XMVECTOR accel = XMLoadFloat3(&emitterAcceleration);*/
+
+	glm::vec3 startPos = emitterPosition;
+	glm::vec3 startVel = particles[index].StartVelocity;
+	glm::vec3 accel = emitterAcceleration;
 	float t = particles[index].Age;
 
 	// Use constant acceleration function
-	XMStoreFloat3(
+	/*XMStoreFloat3(
 		&particles[index].Position,
-		accel * t * t / 2.0f + startVel * t + startPos);
+		accel * t * t / 2.0f + startVel * t + startPos);*/
+	particles[index].Position = accel * t * t / 2.0f + startVel * t + startPos;
+
 }
 
 void Emitter::SpawnParticle()
@@ -303,7 +322,8 @@ void Emitter::Draw(ID3D11DeviceContext* context, Camera* camera)
 
 void Emitter::SetEmitterPosition(float x, float y, float z)
 {
-	emitterPosition = XMFLOAT3(x, y, z);
+	//emitterPosition = XMFLOAT3(x, y, z);
+	emitterPosition = glm::vec3(x, y, z);
 }
 
 D3D11Material* Emitter::GetMaterial()

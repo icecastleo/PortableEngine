@@ -1,7 +1,7 @@
 #include "GaussianBlur.h"
 #include <iostream>
 
-using namespace DirectX;
+//using namespace DirectX;
 
 const float GaussianBlur::DefaultBlurAmount = 1.0f;
 const unsigned int sampleCount = 9;
@@ -115,8 +115,11 @@ void GaussianBlur::InitializeSampleOffsets()
 	mHorizontalSampleOffsets.resize(sampleCount);
 	mVerticalSampleOffsets.resize(sampleCount);
 
-	mHorizontalSampleOffsets[0] = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
-	mVerticalSampleOffsets[0] = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+	/*mHorizontalSampleOffsets[0] = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+	mVerticalSampleOffsets[0] = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);*/
+
+	mHorizontalSampleOffsets[0] = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	mVerticalSampleOffsets[0] = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	for (UINT i = 0; i < sampleCount / 2; i++)
 	{
@@ -124,11 +127,16 @@ void GaussianBlur::InitializeSampleOffsets()
 		float horizontalOffset = horizontalPixelSize * sampleOffset;
 		float verticalOffset = verticalPixelSize * sampleOffset;
 
-		mHorizontalSampleOffsets[i * 2 + 1] = XMFLOAT4(horizontalOffset, 0.0f, 0.0f, 0.0f);
+		/*mHorizontalSampleOffsets[i * 2 + 1] = XMFLOAT4(horizontalOffset, 0.0f, 0.0f, 0.0f);
 		mHorizontalSampleOffsets[i * 2 + 2] = XMFLOAT4(-horizontalOffset, 0.0f, 0.0f, 0.0f);
 
 		mVerticalSampleOffsets[i * 2 + 1] = XMFLOAT4(0.0f, verticalOffset, 0.0f, 0.0f);
-		mVerticalSampleOffsets[i * 2 + 2] = XMFLOAT4(0.0f, -verticalOffset, 0.0f, 0.0f);
+		mVerticalSampleOffsets[i * 2 + 2] = XMFLOAT4(0.0f, -verticalOffset, 0.0f, 0.0f);*/
+		mHorizontalSampleOffsets[i * 2 + 1] = glm::vec4(horizontalOffset, 0.0f, 0.0f, 0.0f);
+		mHorizontalSampleOffsets[i * 2 + 2] = glm::vec4(-horizontalOffset, 0.0f, 0.0f, 0.0f);
+
+		mVerticalSampleOffsets[i * 2 + 1] = glm::vec4(0.0f, verticalOffset, 0.0f, 0.0f);
+		mVerticalSampleOffsets[i * 2 + 2] = glm::vec4(0.0f, -verticalOffset, 0.0f, 0.0f);
 	}
 }
 
@@ -136,14 +144,17 @@ void GaussianBlur::InitializeSampleWeights()
 {
 	mSampleWeights.resize(sampleCount);
 
-	mSampleWeights[0] = XMFLOAT4(GetWeight(0), 0.0f, 0.0f, 0.0f);
+	//mSampleWeights[0] = XMFLOAT4(GetWeight(0), 0.0f, 0.0f, 0.0f);
+	mSampleWeights[0] = glm::vec4(GetWeight(0), 0.0f, 0.0f, 0.0f);
 
 	float totalWeight = mSampleWeights[0].x;
 	for (UINT i = 0; i < sampleCount / 2; i++)
 	{
 		float weight = GetWeight((float)i + 1);
-		mSampleWeights[i * 2 + 1] = XMFLOAT4(weight, 0.0f, 0.0f, 0.0f);
-		mSampleWeights[i * 2 + 2] = XMFLOAT4(weight, 0.0f, 0.0f, 0.0f);
+		/*mSampleWeights[i * 2 + 1] = XMFLOAT4(weight, 0.0f, 0.0f, 0.0f);
+		mSampleWeights[i * 2 + 2] = XMFLOAT4(weight, 0.0f, 0.0f, 0.0f);*/
+		mSampleWeights[i * 2 + 1] = glm::vec4(weight, 0.0f, 0.0f, 0.0f);
+		mSampleWeights[i * 2 + 2] = glm::vec4(weight, 0.0f, 0.0f, 0.0f);
 		totalWeight += weight * 2;
 	}
 
@@ -151,7 +162,8 @@ void GaussianBlur::InitializeSampleWeights()
 	for (UINT i = 0; i < mSampleWeights.size(); i++)
 	{
 		//mSampleWeights[i] /= totalWeight;
-		mSampleWeights[i] = XMFLOAT4(mSampleWeights[i].x / totalWeight, 0.0f, 0.0f, 0.0f);
+		//mSampleWeights[i] = XMFLOAT4(mSampleWeights[i].x / totalWeight, 0.0f, 0.0f, 0.0f);
+		mSampleWeights[i] = glm::vec4(mSampleWeights[i].x / totalWeight, 0.0f, 0.0f, 0.0f);
 	}
 }
 
@@ -178,9 +190,11 @@ void GaussianBlur::Draw(ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetV
 
 	mGaussianBlurPS->SetShaderResourceView("InputTexture", inputSRV);
 	mGaussianBlurPS->SetData("SampleOffsets", 
-		&mHorizontalSampleOffsets[0], sizeof(XMFLOAT4) * sampleCount);
+		//&mHorizontalSampleOffsets[0], sizeof(XMFLOAT4) * sampleCount);
+	    &mHorizontalSampleOffsets[0], sizeof(glm::vec4) * sampleCount);
 	mGaussianBlurPS->SetData("SampleWeights",
-		&mSampleWeights[0], sizeof(XMFLOAT4) * sampleCount);
+		//&mSampleWeights[0], sizeof(XMFLOAT4) * sampleCount);
+	    &mSampleWeights[0], sizeof(glm::vec4) * sampleCount);
 	mGaussianBlurPS->CopyAllBufferData();
 	mGaussianBlurPS->SetShader();
 
@@ -206,9 +220,11 @@ void GaussianBlur::Draw(ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetV
 	mGaussianBlurPS->SetShaderResourceView("InputTexture", mHorizontalBlurSRV);
 
 	mGaussianBlurPS->SetData("SampleOffsets",
-		&mVerticalSampleOffsets[0], sizeof(XMFLOAT4) * sampleCount);
+		//&mVerticalSampleOffsets[0], sizeof(XMFLOAT4) * sampleCount);
+	    &mVerticalSampleOffsets[0], sizeof(glm::vec4) * sampleCount);
 	mGaussianBlurPS->SetData("SampleWeights",
-		&mSampleWeights[0], sizeof(XMFLOAT4) * sampleCount);
+		//&mSampleWeights[0], sizeof(XMFLOAT4) * sampleCount);
+	    &mSampleWeights[0], sizeof(glm::vec4) * sampleCount);
 	mGaussianBlurPS->CopyAllBufferData();
 	mGaussianBlurPS->SetShader();
 

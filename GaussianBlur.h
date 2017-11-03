@@ -1,7 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
-#include <DirectXMath.h>
+//#include <DirectXMath.h>
 #include <vector>
 #include "SimpleShader.h"
 
@@ -49,8 +49,11 @@ private:
 	ID3D11ShaderResourceView* mHorizontalBlurSRV;
 	//ID3D11ShaderResourceView *mVerticalBlurSRV;
 
-	std::vector<DirectX::XMFLOAT4> mHorizontalSampleOffsets;
+	/*std::vector<DirectX::XMFLOAT4> mHorizontalSampleOffsets;
 	std::vector<DirectX::XMFLOAT4> mVerticalSampleOffsets;
-	std::vector<DirectX::XMFLOAT4> mSampleWeights;
+	std::vector<DirectX::XMFLOAT4> mSampleWeights;*/
+	std::vector<glm::vec4> mHorizontalSampleOffsets;
+	std::vector<glm::vec4> mVerticalSampleOffsets;
+	std::vector<glm::vec4> mSampleWeights;
 };
 

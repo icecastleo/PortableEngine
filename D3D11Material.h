@@ -1,7 +1,7 @@
 //Darren Farr
 #pragma once
 
-#include <DirectXMath.h>
+//#include <DirectXMath.h>
 #include "SimpleShader.h"
 #include "WICTextureLoader.h"
 #include "DDSTextureLoader.h"
@@ -15,8 +15,11 @@ public:
 	D3D11Material::D3D11Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*, int);
 	~D3D11Material();
 
-	void PrepareMaterial(DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, SimpleVertexShader*);
-	void PrepareSkybox(DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, SimpleVertexShader*, SimplePixelShader*);
+	/*void PrepareMaterial(DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, SimpleVertexShader*);
+	void PrepareSkybox(DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4, SimpleVertexShader*, SimplePixelShader*);*/
+
+	void PrepareMaterial(glm::mat4, glm::mat4, glm::mat4, SimpleVertexShader*);
+	void PrepareSkybox(glm::mat4, glm::mat4, SimpleVertexShader*, SimplePixelShader*);
 
 	void SetTexture(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
 	void SetNormalMap(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);

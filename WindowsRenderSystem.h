@@ -5,7 +5,7 @@
 #include "RenderSystem.h"
 #include "D3D11.h"
 #include "SimpleShader.h"
-#include <DirectXMath.h>
+//#include <DirectXMath.h>
 #include "SceneManager.h"
 #include "SceneBuilder.h"
 #include "Renderer.h"
@@ -90,7 +90,7 @@ private:
 	Renderer Render;
 	Camera Cam;
 
-	Player *player;
+	//Player *player;
 	//void SetNextAsteroid();
 	//std::vector<Asteroid*> asteroids;
 	Asteroid* curAsteroid;
