@@ -1,6 +1,6 @@
 #include "Bloom.h"
 
-using namespace DirectX;
+//using namespace DirectX;
 
 const BloomSettings Bloom::DefaultBloomSettings = { 0.50f, 1.2f, 1.0f, 1.0f, 1.0f, 1.0f };
 

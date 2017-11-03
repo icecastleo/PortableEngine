@@ -1611,9 +1611,12 @@ void SimpleComputeShader::DispatchByGroups(unsigned int groupsX, unsigned int gr
 void SimpleComputeShader::DispatchByThreads(unsigned int threadsX, unsigned int threadsY, unsigned int threadsZ)
 {
 	deviceContext->Dispatch(
-		max((unsigned int)ceil((float)threadsX / this->threadsX), 1),
+		/*max((unsigned int)ceil((float)threadsX / this->threadsX), 1),
 		max((unsigned int)ceil((float)threadsY / this->threadsY), 1),
-		max((unsigned int)ceil((float)threadsZ / this->threadsZ), 1));
+		max((unsigned int)ceil((float)threadsZ / this->threadsZ), 1));*/
+	    glm::max((int)((unsigned int)ceil((float)threadsX / this->threadsX)), 1),
+		glm::max((int)((unsigned int)ceil((float)threadsY / this->threadsY)), 1),
+		glm::max((int)((unsigned int)ceil((float)threadsZ / this->threadsZ)), 1));
 }
 
 // --------------------------------------------------------

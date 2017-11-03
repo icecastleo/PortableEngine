@@ -473,7 +473,7 @@ void Renderer::Resized(ID3D11DepthStencilView* depthStencilView, ID3D11RenderTar
 //---------------------------------------------------------
 void Renderer::DrawScore()
 {
-	text->DrawLiveText(score, scorePos);
+	//text->DrawLiveText(score, scorePos);
 }
 
 //---------------------------------------------------------
@@ -487,7 +487,7 @@ void Renderer::SetScore(int _score)
 //---------------------------------------------------------
 //Set Score screen position
 //---------------------------------------------------------
-void Renderer::SetScorePos(DirectX::XMFLOAT2 _pos)
+void Renderer::SetScorePos(glm::vec2 _pos)
 {
 	scorePos = _pos;
 }

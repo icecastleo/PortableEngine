@@ -71,7 +71,7 @@ void Text2D::DrawMyText()
 	spriteBatch->Begin();
 
 	//loop through the different items to draw
-	if (textList.size() > 0)
+	/*if (textList.size() > 0)
 	{
 		for (unsigned int t = 0; t < textList.size(); t++)
 		{
@@ -80,7 +80,7 @@ void Text2D::DrawMyText()
 				textList.at(t).text,
 				textList.at(t).position);
 		}
-	}
+	}*/
 	//end drawing
 	spriteBatch->End();
 }
@@ -88,21 +88,21 @@ void Text2D::DrawMyText()
 //---------------------------------------------------------
 //Draw the list of text objects
 //---------------------------------------------------------
-void Text2D::DrawLiveText(const wchar_t* text, DirectX::XMFLOAT2 pos)
+void Text2D::DrawLiveText(const wchar_t* text, glm::vec2 pos)
 {
 	//Begin the sprite batch drawing
 	spriteBatch->Begin();
 
-	spriteFontArial->DrawString(
+	/*spriteFontArial->DrawString(
 		spriteBatch,
 		text,
-		pos);
+		pos);*/
 
 	//end drawing
 	spriteBatch->End();
 }
 
-void Text2D::DrawLiveText(int score, DirectX::XMFLOAT2 pos)
+void Text2D::DrawLiveText(int score, glm::vec2 pos)
 {
 	std::wstring s = std::to_wstring(score);
 	wchar_t* wc = const_cast<wchar_t*>(s.c_str());
@@ -131,7 +131,7 @@ void Text2D::DrawLiveText(int score, DirectX::XMFLOAT2 pos)
 //---------------------------------------------------------
 //Add a text object to be drawn
 //---------------------------------------------------------
-void Text2D::AddText(const wchar_t* _text, DirectX::XMFLOAT2 _pos)
+void Text2D::AddText(const wchar_t* _text, glm::vec2 _pos)
 {
 	textObject temp;
 	temp.text = _text;

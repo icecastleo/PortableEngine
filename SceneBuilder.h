@@ -2,7 +2,7 @@
 #pragma once
 #include "SimpleShader.h"
 #include "Entity.h"
-#include <DirectXMath.h>
+//#include <DirectXMath.h>
 #include "D3D11Mesh.h"
 #include "D3D11Material.h"
 #include <vector>

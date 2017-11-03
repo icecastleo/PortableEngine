@@ -21,8 +21,11 @@ Collider::~Collider()
 
 void Collider::CreateBoundingVolumes(std::vector<Vertex> &vertPosArray,	float &boundingSphere)
 {
-	XMFLOAT3 minVertex = XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX);
-	XMFLOAT3 maxVertex = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	/*XMFLOAT3 minVertex = XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX);
+	XMFLOAT3 maxVertex = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);*/
+
+	glm::vec3 minVertex = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
+	glm::vec3 maxVertex = glm::vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
 	for (UINT i = 0; i < vertPosArray.size(); i++)
 	{
@@ -48,7 +51,8 @@ void Collider::CreateBoundingVolumes(std::vector<Vertex> &vertPosArray,	float &b
 
 	// Compute bounding sphere (distance between min and max bounding box vertices)
 	// boundingSphere = sqrt(distX*distX + distY*distY + distZ*distZ) / 2.0f;
-	boundingSphere = XMVectorGetX(XMVector3Length(XMVectorSet(distX, distY, distZ, 0.0f)));
+	//boundingSphere = XMVectorGetX(XMVector3Length(XMVectorSet(distX, distY, distZ, 0.0f)));
+	boundingSphere = glm::length(glm::vec3(distX, distY, distZ));
 }
 
 float Collider::GetBoudingSphere()

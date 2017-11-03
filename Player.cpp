@@ -20,7 +20,7 @@ Player::~Player()
 
 void Player::Update(float deltaTime)
 {
-	if ((GetAsyncKeyState(VK_LEFT) & 0x8000))
+	/*if ((GetAsyncKeyState(VK_LEFT) & 0x8000))
 	{
 		holdTimer += deltaTime;
 		if (holdTimer <= 0.2f) {
@@ -50,12 +50,12 @@ void Player::Update(float deltaTime)
 		holdTimer = 0;
 		XMFLOAT3 pos(0.0f, 0.0f, 0.0f);
 		playerEntity->SetPosition(pos);
-	}
+	}*/
 }
 
 void Player::Move(float x, float y, float z, float deltaTime)
 {
-	XMVECTOR moveX = XMVectorZero();
+	/*XMVECTOR moveX = XMVectorZero();
 	XMVECTOR moveY = XMVectorZero();
 	XMVECTOR moveZ = XMVectorZero();
 	float moveAmount = 5.0f * deltaTime;
@@ -78,7 +78,7 @@ void Player::Move(float x, float y, float z, float deltaTime)
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, pos);
 
-	playerEntity->SetPosition(position);
+	playerEntity->SetPosition(position);*/
 }
 
 Collider* Player::GetCollider()

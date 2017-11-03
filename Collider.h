@@ -6,7 +6,7 @@
 #include "Vertex.h"
 #include "D3D11Mesh.h"
 
-using namespace DirectX;
+//using namespace DirectX;
 
 class Collider
 {

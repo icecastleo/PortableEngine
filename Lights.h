@@ -1,7 +1,7 @@
 #pragma once
 
 //#include <DirectXMath.h>
-//#include "glm\glm.hpp"
+#include "glm\glm.hpp"
 
 
 struct GlobalLight

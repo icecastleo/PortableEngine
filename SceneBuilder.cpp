@@ -143,7 +143,8 @@ void SceneBuilder::BuildLights()
 {
 	//global ambient light
 	ambient = new GlobalLight();
-	ambient->AmbientColor = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	//ambient->AmbientColor = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	ambient->AmbientColor = glm::vec4(0.4f, 0.4f, 0.4f, 1.0f);
 
 	//Directional Lights
 	//-----------------------------------------------------------
@@ -151,34 +152,49 @@ void SceneBuilder::BuildLights()
 	//This light is for a no light place holder to be used if a dir light was used before
 	//and you don't need one in the current scene.
 	dirLight = new DirectionalLight();
-	dirLight->DiffuseColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	dirLight->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	/*dirLight->DiffuseColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	dirLight->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
+	dirLight->DiffuseColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	dirLight->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	dirLight2 = new DirectionalLight();
-	dirLight2->DiffuseColor = XMFLOAT4(.3f, .3f, .3f, 1);
-	dirLight2->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	/*dirLight2->DiffuseColor = XMFLOAT4(.3f, .3f, .3f, 1);
+	dirLight2->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
+	dirLight2->DiffuseColor = glm::vec4(.3f, .3f, .3f, 1);
+	dirLight2->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	dirLight3 = new DirectionalLight();
-	dirLight3->DiffuseColor = XMFLOAT4(.6f, .6f, .6f, 1.0f);
-	dirLight3->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	/*dirLight3->DiffuseColor = XMFLOAT4(.6f, .6f, .6f, 1.0f);
+	dirLight3->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
+	dirLight3->DiffuseColor = glm::vec4(.6f, .6f, .6f, 1.0f);
+	dirLight3->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	dirLight4 = new DirectionalLight();
-	dirLight4->DiffuseColor = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	dirLight4->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	/*dirLight4->DiffuseColor = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	dirLight4->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
+	dirLight4->DiffuseColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	dirLight4->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	//Point Lights
 	//-----------------------------------------------------------
 	pointLight = new PointLight();
-	pointLight->DiffuseColor = XMFLOAT4(0.6f, 1.0f, 1.0f, 1.0f);
-	pointLight->Position = XMFLOAT3(20.0f, 20.0f, 20.0f);
+	/*pointLight->DiffuseColor = XMFLOAT4(0.6f, 1.0f, 1.0f, 1.0f);
+	pointLight->Position = XMFLOAT3(20.0f, 20.0f, 20.0f);*/
+	pointLight->DiffuseColor = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
+	pointLight->Position = glm::vec3(20.0f, 20.0f, 20.0f);
 
 	//Spot Lights
 	//-----------------------------------------------------------
 	spotLight = new SpotLight();
-	spotLight->DiffuseColor = XMFLOAT4(0.8f, 0.3f, 0.0f, 1);
+	/*spotLight->DiffuseColor = XMFLOAT4(0.8f, 0.3f, 0.0f, 1);
 	spotLight->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	spotLight->phi = 0.0f;
 	spotLight->Position = XMFLOAT3(0.0f, 15.0f, 0.0f);
+	spotLight->theta = 90.0f;*/
+	spotLight->DiffuseColor = glm::vec4(0.8f, 0.3f, 0.0f, 1);
+	spotLight->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
+	spotLight->phi = 0.0f;
+	spotLight->Position = glm::vec3(0.0f, 15.0f, 0.0f);
 	spotLight->theta = 90.0f;
 }
 
@@ -207,7 +223,7 @@ void SceneBuilder::BuildMeshes()
 void SceneBuilder::BuildEntities()
 {
 	//Entity template (mesh name, material name, position, rotation, scale)
-	playerEnt = new Entity(playerMesh, playerMat, XMFLOAT3(0.0f, -1.5f, +0.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+	playerEnt = new Entity(playerMesh, playerMat, glm::vec3(0.0f, -1.5f, +0.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+2.0f, +2.0f, +2.0f));
 }
 
 void SceneBuilder::BuildParticles()
@@ -218,11 +234,11 @@ void SceneBuilder::BuildParticles()
 		0.5f,							// Particle lifetime
 		0.25f,							// Start size
 		2.0f,							// End size
-		XMFLOAT4(1, 0.1f, 0.1f, 0.2f),	// Start color
-		XMFLOAT4(1, 1.0f, 1.0f, 0),		// End color
-		XMFLOAT3(10, 10, 0),			// Start velocity
-		XMFLOAT3(0, 0, 0),				// Start position
-		XMFLOAT3(10, 10, 0),			// Start acceleration
+		glm::vec4(1, 0.1f, 0.1f, 0.2f),	// Start color
+		glm::vec4(1, 1.0f, 1.0f, 0),		// End color
+		glm::vec3(10, 10, 0),			// Start velocity
+		glm::vec3(0, 0, 0),				// Start position
+		glm::vec3(10, 10, 0),			// Start acceleration
 		device,
 		particelMat);
 }
@@ -237,10 +253,10 @@ void SceneBuilder::SetupScenes()
 	scene1 = new Scene();
 	scene1->name = "Menu";
 
-	Entity *background = new Entity(quadMesh, menuMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f));
+	Entity *background = new Entity(quadMesh, menuMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+20.0f, +20.0f, +1.0f));
 	scene1->entities.push_back(background);
 
-	Entity *title = new Entity(quadMesh, titleMat, XMFLOAT3(+0.0f, +5.0f, +0.0f), XMFLOAT3(+0.2f, +0.0f, +0.0f), XMFLOAT3(+13.0f, +1.0f, +1.0f));
+	Entity *title = new Entity(quadMesh, titleMat, glm::vec3(+0.0f, +5.0f, +0.0f), glm::vec3(+0.2f, +0.0f, +0.0f), glm::vec3(+13.0f, +1.0f, +1.0f));
 	scene1->entities.push_back(title);
 
 	//Lights
@@ -248,7 +264,7 @@ void SceneBuilder::SetupScenes()
 	scene1->directionalLights.push_back(dirLight4);
 
 	//Text
-	scene1->textList.push_back(textObject{ L"press ENTER to start!", DirectX::XMFLOAT2(500, 550) });
+	scene1->textList.push_back(textObject{ L"press ENTER to start!", glm::vec2(500, 550) });
 	
 	//Sound
 	//scene1->musicFileName = "";
@@ -261,38 +277,38 @@ void SceneBuilder::SetupScenes()
 	scene2->name = "MainGame";
 	
 	for (int i = 0; i < 12; i++) {
-		Entity *entity = new Entity(asteroidMesh, asteroidMat, XMFLOAT3(2.0f, 1.5f, -10.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+2.0f, +2.0f, +2.0f));
+		Entity *entity = new Entity(asteroidMesh, asteroidMat, glm::vec3(2.0f, 1.5f, -10.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+2.0f, +2.0f, +2.0f));
 		entity->dirtyUpdate = new Asteroid(entity);
 		scene2->entities.push_back(entity);
 	}
 
 	//scene2->entities.push_back(playerEnt);
 
-	Entity *sun = new Entity(sphereMesh, sunMat, XMFLOAT3(30, -10, 40), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	Entity *sun = new Entity(sphereMesh, sunMat, glm::vec3(30, -10, 40), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+10.0f, +10.0f, +10.0f));
 	sun->dirtyUpdate = new Planet(sun, 0.002f);
 	scene2->entities.push_back(sun);
 
-	Entity *venus = new Entity(sphereMesh, venusMat, XMFLOAT3(-60, -10, 30), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+100.0f, +100.0f, +100.0f));
+	Entity *venus = new Entity(sphereMesh, venusMat, glm::vec3(-60, -10, 30), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+100.0f, +100.0f, +100.0f));
 	venus->dirtyUpdate = new Planet(venus, 0.0001f);
 	scene2->entities.push_back(venus);
 
-	Entity *earth = new Entity(sphereMesh, earthMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.5f, +0.5f, +0.5f));
+	Entity *earth = new Entity(sphereMesh, earthMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.5f, +0.5f, +0.5f));
 	earth->dirtyUpdate = new Planet(earth, 0.004f);
 	scene2->entities.push_back(earth);
 
-	Entity *moon = new Entity(sphereMesh, moonMat, XMFLOAT3(1.0f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
+	Entity *moon = new Entity(sphereMesh, moonMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.3f, +0.3f, +0.3f));
 	moon->dirtyUpdate = new Planet(moon, 0.006f);
 	scene2->entities.push_back(moon);
 
-	Entity *p1 = new Entity(sphereMesh, p1Mat, XMFLOAT3(0, 0, 1.5f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.7f, +0.7f, +0.7f));
+	Entity *p1 = new Entity(sphereMesh, p1Mat, glm::vec3(0, 0, 1.5f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.7f, +0.7f, +0.7f));
 	p1->dirtyUpdate = new Planet(p1, 0.01f);
 	scene2->entities.push_back(p1);
 
-	Entity *p2 = new Entity(sphereMesh, p2Mat, XMFLOAT3(-1.5f, 0, 0), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.3f, +0.3f, +0.3f));
+	Entity *p2 = new Entity(sphereMesh, p2Mat, glm::vec3(-1.5f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.3f, +0.3f, +0.3f));
 	p2->dirtyUpdate = new Planet(p2, -0.008f);
 	scene2->entities.push_back(p2);
 
-	Entity *p3 = new Entity(sphereMesh, p3Mat, XMFLOAT3(-1.5f, 0, -1), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+0.6f, +0.6f, +0.6f));
+	Entity *p3 = new Entity(sphereMesh, p3Mat, glm::vec3(-1.5f, 0, -1), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.6f, +0.6f, +0.6f));
 	p3->dirtyUpdate = new Planet(p3, 0.003f);
 	scene2->entities.push_back(p3);
 
@@ -303,11 +319,11 @@ void SceneBuilder::SetupScenes()
 	moon->SetParent(earth);
 
 	// color lines
-	scene2->entities.push_back(new Entity(quadMesh, lane2Mat, XMFLOAT3(-2.8f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f)));
-	scene2->entities.push_back(new Entity(quadMesh, laneMat, XMFLOAT3(1.5f, -1.2f, 8.0f), XMFLOAT3(+1.6f, -0.1f, +0.0f), XMFLOAT3(+1.0f, +14.0f, +1.0f)));
+	scene2->entities.push_back(new Entity(quadMesh, lane2Mat, glm::vec3(-2.8f, -1.2f, 8.0f), glm::vec3(+1.6f, -0.1f, +0.0f), glm::vec3(+1.0f, +14.0f, +1.0f)));
+	scene2->entities.push_back(new Entity(quadMesh, laneMat, glm::vec3(1.5f, -1.2f, 8.0f), glm::vec3(+1.6f, -0.1f, +0.0f), glm::vec3(+1.0f, +14.0f, +1.0f)));
 
 	//Background
-	scene2->skybox = new Entity(skyboxMesh, backgroundMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+10.0f, +10.0f, +10.0f));
+	scene2->skybox = new Entity(skyboxMesh, backgroundMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+10.0f, +10.0f, +10.0f));
 
 	//Lights
 	scene2->globalLights.push_back(ambient);
@@ -321,7 +337,7 @@ void SceneBuilder::SetupScenes()
 	scene2->Particles = emitter;
 
 	//2D Text
-	scene2->textList.push_back(textObject{ L"Score: ", DirectX::XMFLOAT2(500, 10) });
+	scene2->textList.push_back(textObject{ L"Score: ", glm::vec2(500, 10) });
 
 	//End of Scene 2 -----------------------------------------------------------------------------
 
@@ -331,15 +347,15 @@ void SceneBuilder::SetupScenes()
 	scene3->name = "Results";
 
 	//Background
-	scene3->entities.push_back(new Entity(quadMesh, creditsMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f)));
+	scene3->entities.push_back(new Entity(quadMesh, creditsMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+20.0f, +20.0f, +1.0f)));
 
 	//Lights
 	scene3->globalLights.push_back(ambient);
 	scene3->directionalLights.push_back(dirLight4);
 
 	//2D Text
-	scene3->textList.push_back(textObject{ L"Results", DirectX::XMFLOAT2(580, 300) });
-	scene3->textList.push_back(textObject{ L"You Scored: ", DirectX::XMFLOAT2(530, 350) });
+	scene3->textList.push_back(textObject{ L"Results", glm::vec2(580, 300) });
+	scene3->textList.push_back(textObject{ L"You Scored: ", glm::vec2(530, 350) });
 
 	//End of Scene 3 -----------------------------------------------------------------------------
 
@@ -349,27 +365,27 @@ void SceneBuilder::SetupScenes()
 	scene4->name = "Credits";
 
 	//Background
-	scene4->entities.push_back(new Entity(quadMesh, creditsMat, XMFLOAT3(0.0f, 0.0f, 5.0f), XMFLOAT3(+0.0f, +0.0f, +0.0f), XMFLOAT3(+20.0f, +20.0f, +1.0f)));
+	scene4->entities.push_back(new Entity(quadMesh, creditsMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+20.0f, +20.0f, +1.0f)));
 
 	//Lights
 	scene4->globalLights.push_back(ambient);
 	scene4->directionalLights.push_back(dirLight4);
 
 	//2D Text
-	scene4->textList.push_back(textObject{ L"Credits", DirectX::XMFLOAT2(600, 10) });
+	scene4->textList.push_back(textObject{ L"Credits", glm::vec2(600, 10) });
 
-	scene4->textList.push_back(textObject{ L"Designers & Developers", DirectX::XMFLOAT2(500, 50) });
-	scene4->textList.push_back(textObject{ L"Shih-Kuang Chu", DirectX::XMFLOAT2(550, 90) });
-	scene4->textList.push_back(textObject{ L"Darren Farr", DirectX::XMFLOAT2(580, 130) });
-	scene4->textList.push_back(textObject{ L"Rahul Madhyan", DirectX::XMFLOAT2(560, 170) });
-	scene4->textList.push_back(textObject{ L"Pengfei Zhang", DirectX::XMFLOAT2(562, 210) });
+	scene4->textList.push_back(textObject{ L"Designers & Developers", glm::vec2(500, 50) });
+	scene4->textList.push_back(textObject{ L"Shih-Kuang Chu", glm::vec2(550, 90) });
+	scene4->textList.push_back(textObject{ L"Darren Farr", glm::vec2(580, 130) });
+	scene4->textList.push_back(textObject{ L"Rahul Madhyan", glm::vec2(560, 170) });
+	scene4->textList.push_back(textObject{ L"Pengfei Zhang", glm::vec2(562, 210) });
 
-	scene4->textList.push_back(textObject{ L"Models provided by Chris Cascioli", DirectX::XMFLOAT2(430, 300) });
-	scene4->textList.push_back(textObject{ L"Textures by Google Search", DirectX::XMFLOAT2(450, 350) });
+	scene4->textList.push_back(textObject{ L"Models provided by Chris Cascioli", glm::vec2(430, 300) });
+	scene4->textList.push_back(textObject{ L"Textures by Google Search", glm::vec2(450, 350) });
 
-	scene4->textList.push_back(textObject{ L"Sound from FreeMusicArchive.org", DirectX::XMFLOAT2(430, 400) });
-	scene4->textList.push_back(textObject{ L"Bloody Revenge", DirectX::XMFLOAT2(580, 450) });
-	scene4->textList.push_back(textObject{ L"Hypnagogic", DirectX::XMFLOAT2(580, 500) });
+	scene4->textList.push_back(textObject{ L"Sound from FreeMusicArchive.org", glm::vec2(430, 400) });
+	scene4->textList.push_back(textObject{ L"Bloody Revenge", glm::vec2(580, 450) });
+	scene4->textList.push_back(textObject{ L"Hypnagogic", glm::vec2(580, 500) });
 
 	//End of Scene 4 -----------------------------------------------------------------------------
 
@@ -384,7 +400,7 @@ void SceneBuilder::SetupScenes()
 //---------------------------------------------------------
 //Create Entities found in the scene
 //---------------------------------------------------------
-/*Entity* SceneBuilder::CreateEntity(Mesh* mesh, D3D11Material* mat, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scale)
+/*Entity* SceneBuilder::CreateEntity(Mesh* mesh, D3D11Material* mat, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
 {
 	Entity* ent = new Entity(mesh, mat, pos, rot, scale);
 
