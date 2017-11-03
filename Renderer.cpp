@@ -140,7 +140,7 @@ void Renderer::Draw()
 
 			vertexBuffer = currentScene->opaque.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(currentScene->opaque.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+			context->IASetIndexBuffer(currentScene->opaque.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R16_UINT, 0);
 
 			// Finally do the actual drawing
 			//  - Do this ONCE PER OBJECT you intend to draw
@@ -166,7 +166,7 @@ void Renderer::Draw()
 
 			vertexBuffer = currentScene->opaqueNorm.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+			context->IASetIndexBuffer(currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
 				currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
@@ -183,7 +183,7 @@ void Renderer::Draw()
 		indexBuffer = currentScene->skybox->GetMesh()->GetIndexBuffer();
 
 		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 		currentScene->skybox->GetMat()->PrepareSkybox(Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), skyVS, skyPS);
 
@@ -236,7 +236,7 @@ void Renderer::Draw()
 
 			vertexBuffer = currentScene->transparentNorm.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(currentScene->transparentNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+			context->IASetIndexBuffer(currentScene->transparentNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
 				currentScene->transparentNorm.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
@@ -257,7 +257,7 @@ void Renderer::Draw()
 
 			vertexBuffer = currentScene->transparent.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(currentScene->transparent.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+			context->IASetIndexBuffer(currentScene->transparent.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
 				currentScene->transparent.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)

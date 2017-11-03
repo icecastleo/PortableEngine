@@ -275,7 +275,7 @@ void Emitter::Draw(ID3D11DeviceContext* context, Camera* camera)
 	UINT stride = sizeof(ParticleVertex);
 	UINT offset = 0;
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 	vs->SetMatrix4x4("view", camera->GetViewMatrix());
 	vs->SetMatrix4x4("projection", camera->GetProjectionMatrix());

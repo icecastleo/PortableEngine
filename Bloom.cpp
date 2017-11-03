@@ -122,7 +122,7 @@ void Bloom::Draw(ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetView * o
 
 	ID3D11Buffer* nothing = 0;
 	mContext->IASetVertexBuffers(0, 1, &nothing, &stride, &offset);
-	mContext->IASetIndexBuffer(0, DXGI_FORMAT_R32_UINT, 0);
+	mContext->IASetIndexBuffer(0, DXGI_FORMAT_R16_UINT, 0);
 
 	// Actually draw exactly 3 vertices
 	mContext->Draw(3, 0);
@@ -152,7 +152,7 @@ void Bloom::Draw(ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetView * o
 	mCombinePS->SetShader();
 
 	mContext->IASetVertexBuffers(0, 1, &nothing, &stride, &offset);
-	mContext->IASetIndexBuffer(0, DXGI_FORMAT_R32_UINT, 0);
+	mContext->IASetIndexBuffer(0, DXGI_FORMAT_R16_UINT, 0);
 
 	// Actually draw exactly 3 vertices
 	mContext->Draw(3, 0);

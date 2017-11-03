@@ -10,30 +10,23 @@ public:
 
 	ID3D11Buffer* GetVertexBuffer();
 	ID3D11Buffer* GetIndexBuffer();
-	int GetIndexCount();
+	size_t GetIndexCount();
 
 	std::vector<Vertex> GetVertexCollection();
-	//std::vector<size_t> GetIndexCollection();
-	std::vector<UINT> GetIndexCollection();
+	std::vector<uint16_t> GetIndexCollection();
 
-	void CalculateTangents(Vertex*, int, unsigned int*, int);
+	void CalculateTangents(Vertex*, uint16_t, uint16_t*, uint16_t);
 
 private:
 	
-
 	ID3D11Buffer* vertBuffer;
 	ID3D11Buffer* indBuffer;
-	int indCount;
+	uint16_t indCount;
 
 	bool hasNormalMap;
 
 	std::vector<Vertex> vertexCollection;
-	//std::vector<size_t> indexCollection;
-	std::vector<UINT> indexCollection;
+	std::vector<uint16_t> indexCollection;
 	
-
-	//void CreateGeometry(Vertex*, int, size_t *, ID3D11Device*);
-	void CreateGeometry(Vertex*, int, unsigned int *, ID3D11Device*);
-
-	
+	void CreateGeometry(Vertex*, uint16_t, uint16_t*, ID3D11Device*);
 };

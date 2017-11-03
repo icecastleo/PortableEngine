@@ -1,33 +1,31 @@
 #pragma once
+#include "Vertex.h"
 #include <vector>
 
 using namespace std;
 class IOSystem
 {
-	/*static IOSystem * IO_instance;
+	//static IOSystem * IO_instance;
 
-
+protected:
 	vector<Vertex> vertexCollection;
-	vector<UINT> indexCollection;
+	vector<uint16_t> indexCollection;
 
-	int indCount;*/
-
-
+	uint16_t indCount;
 
 public:
 	IOSystem();
 	virtual ~IOSystem();
 
-	virtual void loadObj(char* ) = 0;
+	void loadObj(char* );
 	virtual void loadTexture2d(wchar_t*) = 0;
 	virtual void loadCubemap(wchar_t*) = 0;
 
 	//static IOSystem *instance();
 
-	//virtual vector<Vertex> getVertexFromObj() = 0;
-	//////vector<size_t> getindixFromObj();
-	//virtual vector<UINT> getindixFromObj() = 0;
-	//virtual int getindCount() = 0;
-
+	virtual vector<Vertex> getVertexFromObj();
+	////vector<size_t> getindixFromObj();
+	virtual vector<uint16_t> getIndicesFromObj();
+	virtual uint16_t getIndCount();
 };
 

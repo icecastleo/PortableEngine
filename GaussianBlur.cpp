@@ -186,7 +186,7 @@ void GaussianBlur::Draw(ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetV
 
 	ID3D11Buffer* nothing = 0;
 	mContext->IASetVertexBuffers(0, 1, &nothing, &stride, &offset);
-	mContext->IASetIndexBuffer(0, DXGI_FORMAT_R32_UINT, 0);
+	mContext->IASetIndexBuffer(0, DXGI_FORMAT_R16_UINT, 0);
 
 	 //Actually draw exactly 3 vertices
 	mContext->Draw(3, 0);
@@ -213,7 +213,7 @@ void GaussianBlur::Draw(ID3D11ShaderResourceView * inputSRV, ID3D11RenderTargetV
 	mGaussianBlurPS->SetShader();
 
 	mContext->IASetVertexBuffers(0, 1, &nothing, &stride, &offset);
-	mContext->IASetIndexBuffer(0, DXGI_FORMAT_R32_UINT, 0);
+	mContext->IASetIndexBuffer(0, DXGI_FORMAT_R16_UINT, 0);
 
 	// Actually draw exactly 3 vertices
 	mContext->Draw(3, 0);

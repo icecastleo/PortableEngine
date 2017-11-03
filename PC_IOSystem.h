@@ -2,8 +2,7 @@
 #include "IOSystem.h"
 #include "Vertex.h"
 #include <fstream>
-#include "WindowsRenderSystem.h"
-
+//#include "WindowsRenderSystem.h"
 //#include <d3d11.h>
 //#include <DirectXMath.h>
 
@@ -11,23 +10,19 @@ class PC_IOSystem :
 	public IOSystem
 {
 	static PC_IOSystem * IO_instance;
-	vector<Vertex> vertexCollection;
-	//vector<size_t> indexCollection;
-	vector<UINT> indexCollection;
+	//vector<Vertex> vertexCollection;
+	////vector<size_t> indexCollection;
+	//vector<UINT> indexCollection;
 
-	int indCount;
+	//int indCount;
 
 	
 public:
 	PC_IOSystem();
 	~PC_IOSystem();
 
-	void loadObj(char* ) override;
+	//void loadObj(char* ) override;
 	bool hasNormalMap;
-	vector<Vertex> getVertexFromObj() ;
-	//vector<size_t> getindixFromObj();
-	vector<UINT> getindixFromObj() ;
-	int getindCount() ;
 
 	void loadTexture2d(wchar_t*) override;
 	void loadCubemap(wchar_t*) override;

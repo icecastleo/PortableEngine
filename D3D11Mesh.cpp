@@ -28,9 +28,9 @@ D3D11Mesh::D3D11Mesh(wchar_t* objName, ID3D11Device *device, bool normalmap)
 	vertBuffer = 0;
 	indBuffer = 0;
 
-	indCount = PC_IOSystem::instance()->getindCount();
+	indCount = PC_IOSystem::instance()->getIndCount();
 	vertexCollection = PC_IOSystem::instance()->getVertexFromObj();
-	indexCollection = PC_IOSystem::instance()->getindixFromObj();
+	indexCollection = PC_IOSystem::instance()->getIndicesFromObj();
 
 	CreateGeometry(&vertexCollection[0], indCount, &indexCollection[0], device);
 }
@@ -47,10 +47,7 @@ D3D11Mesh::~D3D11Mesh()
 	// Release any (and all!) DirectX objects
 	if (vertBuffer) { vertBuffer->Release(); }
 	if (indBuffer) { indBuffer->Release(); }
-
 }
-
-
 
 
 // --------------------------------------------------------
@@ -58,7 +55,7 @@ D3D11Mesh::~D3D11Mesh()
 //Copied from Game.cpp - Chris Cascioli
 //Modified for use here
 // --------------------------------------------------------
-void D3D11Mesh::CreateGeometry(Vertex* verts, int numVerts, unsigned int *ind, ID3D11Device *device)
+void D3D11Mesh::CreateGeometry(Vertex* verts, uint16_t numVerts, uint16_t *ind, ID3D11Device *device)
 //void Mesh::CreateGeometry(Vertex* verts, int numVerts, size_t *ind, ID3D11Device *device)
 {
 	//If the model has a normal map, calculate the tangents
@@ -66,7 +63,6 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, int numVerts, unsigned int *ind, I
 	{
 		CalculateTangents(verts, numVerts, ind, numVerts);
 	}
-
 
 	// Create the VERTEX BUFFER description -----------------------------------
 	// - The description is created on the stack because we only need
@@ -86,8 +82,7 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, int numVerts, unsigned int *ind, I
 
 	// Actually create the buffer with the initial data
 	// - Once we do this, we'll NEVER CHANGE THE BUFFER AGAIN
-
-	device->CreateBuffer(&vbd, &initialVertexData, &vertBuffer);
+	HRESULT result = device->CreateBuffer(&vbd, &initialVertexData, &vertBuffer);
 
 
 	// Create the INDEX BUFFER description ------------------------------------
@@ -95,7 +90,7 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, int numVerts, unsigned int *ind, I
 	//    it to create the buffer.  The description is then useless.
 	D3D11_BUFFER_DESC ibd = {};
 	ibd.Usage = D3D11_USAGE_IMMUTABLE;
-	ibd.ByteWidth = sizeof(int) * indCount;         // number of indices in the buffer
+	ibd.ByteWidth = sizeof(uint16_t) * numVerts;         // number of indices in the buffer
 	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER; // Tells DirectX this is an index buffer
 	ibd.CPUAccessFlags = 0;
 	ibd.MiscFlags = 0;
@@ -108,24 +103,23 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, int numVerts, unsigned int *ind, I
 
 	// Actually create the buffer with the initial data
 	// - Once we do this, we'll NEVER CHANGE THE BUFFER AGAIN
-	device->CreateBuffer(&ibd, &initialIndexData, &indBuffer);
-
+	result = device->CreateBuffer(&ibd, &initialIndexData, &indBuffer);
 }
 
 // --------------------------------------------------------
 //Calculate the tangents of the vertices in a mesh
 // --------------------------------------------------------
 //void Mesh::CalculateTangents(Vertex* verts, int numVerts, size_t* indices, int numIndices)
-void D3D11Mesh::CalculateTangents(Vertex* verts, int numVerts, unsigned int* indices, int numIndices)
+void D3D11Mesh::CalculateTangents(Vertex* verts, uint16_t numVerts, uint16_t* indices, uint16_t numIndices)
 {
 	// Reset tangents
-	for (int i = 0; i < numVerts; i++)
+	for (size_t i = 0; i < numVerts; i++)
 	{
 		verts[i].Tangent = XMFLOAT3(0, 0, 0);
 	}
 
 	// Calculate tangents one whole triangle at a time
-	for (int i = 0; i < numVerts;)
+	for (size_t i = 0; i < numVerts;)
 	{
 		// Grab indices and vertices of first triangle
 		size_t i1 = indices[i++];
@@ -207,7 +201,7 @@ ID3D11Buffer* D3D11Mesh::GetIndexBuffer()
 // --------------------------------------------------------
 //Returns the number of indices for this mesh.
 // --------------------------------------------------------
-int D3D11Mesh::GetIndexCount()
+size_t D3D11Mesh::GetIndexCount()
 {
 	return indCount;
 }
@@ -216,8 +210,7 @@ std::vector<Vertex> D3D11Mesh::GetVertexCollection()
 {
 	return vertexCollection;
 }
-std::vector<UINT> D3D11Mesh::GetIndexCollection()
-//std::vector<size_t> Mesh::GetIndexCollection()
+std::vector<uint16_t> D3D11Mesh::GetIndexCollection()
 {
 	return indexCollection;
 }
