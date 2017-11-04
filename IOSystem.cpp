@@ -26,9 +26,9 @@ void IOSystem::loadObj(char *path)
 	}
 
 	// Variables used while reading the file
-	vector<XMFLOAT3> positions;     // Positions from the file
-	vector<XMFLOAT3> normals;       // Normals from the file
-	vector<XMFLOAT2> uvs;           // UVs from the file
+	vector<glm::vec3> positions;     // Positions from the file
+	vector<glm::vec3> normals;       // Normals from the file
+	vector<glm::vec2> uvs;           // UVs from the file
 	vector<Vertex> verts;           // Verts we're assembling
 	vector<uint16_t> indices;       // Indices of these verts
 	uint16_t vertCounter = 0;       // Count of vertices/indices
@@ -43,7 +43,7 @@ void IOSystem::loadObj(char *path)
 		if (chars[0] == 'v' && chars[1] == 'n')
 		{
 			// Read the 3 numbers directly into an XMFLOAT3
-			XMFLOAT3 norm;
+			glm::vec3 norm;
 			sscanf_s(
 				chars,
 				"vn %f %f %f",
@@ -55,7 +55,7 @@ void IOSystem::loadObj(char *path)
 		else if (chars[0] == 'v' && chars[1] == 't')
 		{
 			// Read the 2 numbers directly into an XMFLOAT2
-			XMFLOAT2 uv;
+			glm::vec2 uv;
 			sscanf_s(
 				chars,
 				"vt %f %f",
@@ -67,7 +67,7 @@ void IOSystem::loadObj(char *path)
 		else if (chars[0] == 'v')
 		{
 			// Read the 3 numbers directly into an XMFLOAT3
-			XMFLOAT3 pos;
+			glm::vec3 pos;
 			sscanf_s(
 				chars,
 				"v %f %f %f",

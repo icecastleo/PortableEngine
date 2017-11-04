@@ -23,8 +23,7 @@ public:
 
 	//void loadObj(char* ) override;
 	bool hasNormalMap;
-	vector<Vertex> getVertexFromObj() ;
-	//vector<size_t> getindixFromObj();
+
 	vector<unsigned int> getindixFromObj() ;
 	int getindCount() ;
 

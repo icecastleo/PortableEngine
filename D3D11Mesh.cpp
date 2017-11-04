@@ -2,8 +2,6 @@
 #include "D3D11Mesh.h"
 #include "PC_IOSystem.h"
 
-using namespace DirectX;
-
 D3D11Mesh::D3D11Mesh(wchar_t* objName, ID3D11Device *device, bool normalmap)
 {
 	wstring path = L"Assets/Models/" + (wstring)objName + L".obj";
