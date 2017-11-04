@@ -2,7 +2,7 @@
 #pragma once
 
 //#include <DirectXMath.h>
-#include "D3D11Mesh.h"
+#include "Mesh.h"
 #include "D3D11Material.h"
 #include <vector>
 #include "Transform.h"
@@ -16,7 +16,7 @@ public:
 	Entity();
 	virtual ~Entity();
 	//Entity(D3D11Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
-	Entity(D3D11Mesh*, D3D11Material*, glm::vec3, glm::vec3, glm::vec3);
+	Entity(Mesh*, D3D11Material*, glm::vec3, glm::vec3, glm::vec3);
 
 	virtual void Update(float deltaTime);
 
@@ -36,7 +36,7 @@ public:
 	void SetRotation(glm::vec3);
 	void SetScale(glm::vec3);
 
-	D3D11Mesh* GetMesh();
+	Mesh* GetMesh();
 	D3D11Material* GetMat();
 
 	Entity* parent;
@@ -49,7 +49,7 @@ public:
 private:
 	void SetWorldMat();
 	
-	D3D11Mesh* mesh;
+	Mesh* mesh;
 	D3D11Material* mat;
 
 	Transform transform;

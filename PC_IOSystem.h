@@ -9,32 +9,24 @@
 class PC_IOSystem :
 	public IOSystem
 {
-	static PC_IOSystem * IO_instance;
-	vector<Vertex> vertexCollection;
-	//vector<size_t> indexCollection;
-	vector<unsigned int> indexCollection;
+	//static PC_IOSystem * IO_instance;
 
-	//int indCount;
-
-	
 public:
-	PC_IOSystem();
+	PC_IOSystem(ID3D11Device *device);
 	~PC_IOSystem();
 
-	//void loadObj(char* ) override;
-	bool hasNormalMap;
-
-	vector<unsigned int> getindixFromObj() ;
-	int getindCount() ;
-
+	Mesh* loadMesh(wchar_t *) override;
 	void loadTexture2d(wchar_t*) override;
 	void loadCubemap(wchar_t*) override;
 
-	static PC_IOSystem *instance()
-	{
-		if (!IO_instance)
-			IO_instance = new PC_IOSystem;
-		return IO_instance;
-	}
+	//static PC_IOSystem *instance()
+	//{
+	//	if (!IO_instance)
+	//		IO_instance = new PC_IOSystem;
+	//	return IO_instance;
+	//}
+
+private:
+	ID3D11Device *device;
 };
 

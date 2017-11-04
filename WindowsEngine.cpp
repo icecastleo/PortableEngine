@@ -36,10 +36,12 @@ WindowsEngine::WindowsEngine(
 	InitWindow(hInstance);
 
 	renderSystem = new WindowsRenderSystem(width, height, hWnd);
+	ioSystem = new PC_IOSystem(device);
 }
 
 WindowsEngine::~WindowsEngine()
 {
+	delete ioSystem;
 	delete renderSystem;
 }
 

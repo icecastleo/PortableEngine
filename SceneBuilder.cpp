@@ -2,6 +2,7 @@
 #include "SceneBuilder.h"
 #include "Asteroid.h"
 #include "Planet.h"
+#include "Engine.h"
 
 using namespace DirectX;
 
@@ -200,18 +201,24 @@ void SceneBuilder::BuildLights()
 //---------------------------------------------------------
 void SceneBuilder::BuildMeshes()
 {
+	cubeMesh = Engine::ioSystem->loadMesh(L"cube");
+	skyboxMesh = Engine::ioSystem->loadMesh(L"cube");
+	quadMesh = Engine::ioSystem->loadMesh(L"quad");
+	sphereMesh = Engine::ioSystem->loadMesh(L"sphere");
+	playerMesh = Engine::ioSystem->loadMesh(L"sphere");
+	asteroidMesh = Engine::ioSystem->loadMesh(L"sphereTest");
 
-	cubeMesh = new D3D11Mesh(L"cube", device, false);
+	//cubeMesh = new D3D11Mesh(L"cube", device);
 
-	skyboxMesh = new D3D11Mesh(L"cube", device, true);
+	//skyboxMesh = new D3D11Mesh(L"cube", device);
 
-	quadMesh = new D3D11Mesh(L"quad", device, false);
+	//quadMesh = new D3D11Mesh(L"quad", device);
 
-	sphereMesh = new D3D11Mesh(L"sphere", device, false);
+	//sphereMesh = new D3D11Mesh(L"sphere", device);
 
-	playerMesh = new D3D11Mesh(L"sphere", device, false);
+	//playerMesh = new D3D11Mesh(L"sphere", device);
 
-	asteroidMesh = new D3D11Mesh(L"sphereTest", device, true);
+	//asteroidMesh = new D3D11Mesh(L"sphereTest", device);
 }
 
 //---------------------------------------------------------

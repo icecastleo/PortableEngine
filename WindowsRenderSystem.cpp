@@ -15,7 +15,7 @@ using namespace DirectX;
 //
 // hInstance - the application's OS-level handle (unique ID)
 // --------------------------------------------------------
-WindowsRenderSystem::WindowsRenderSystem(unsigned int windowWidth, unsigned int windowHeight,	HWND hWnd)					
+WindowsRenderSystem::WindowsRenderSystem(unsigned int windowWidth, unsigned int windowHeight, HWND hWnd)					
 {
 	this->width = windowWidth;
 	this->height = windowHeight;

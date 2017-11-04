@@ -2,23 +2,17 @@
 
 using ms = std::chrono::duration<float, std::milli>;
 
+IOSystem *Engine::ioSystem = 0;
+
 Engine::Engine()
 {
-//#if _PC
-//	renderSystem = new WindowsRenderSystem();
-//#endif
-//
-//#if _PS4
-//	// PS4 Resource Manager or Material Manager
-//#endif
+
 }
 
 Engine::~Engine()
 {
 	
 }
-
-//IOSystem *IOSystem::IO_instance = 0;
 
 void Engine::Run()
 {
