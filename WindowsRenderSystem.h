@@ -5,14 +5,13 @@
 #include "RenderSystem.h"
 #include "D3D11.h"
 #include "SimpleShader.h"
-#include <DirectXMath.h>
+//#include <DirectXMath.h>
 #include "SceneManager.h"
 #include "SceneBuilder.h"
 #include "Renderer.h"
 #include "Camera.h"
 #include "Player.h"
 #include "Asteroid.h"
-#include "Collision.h"
 #include "MusicPlayer.h"
 #include <vector>
 #include "Tex2Dt.h"
@@ -90,7 +89,7 @@ private:
 	Renderer Render;
 	Camera Cam;
 
-	Player *player;
+	//Player *player;
 	//void SetNextAsteroid();
 	//std::vector<Asteroid*> asteroids;
 	Asteroid* curAsteroid;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
-#include <DirectXMath.h>    //will change
+//#include <DirectXMath.h>    //will change
 #include "Vertex.h"
 #include "IOSystem.h"
 #include <fstream>

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "SimpleShader.h"
-#include "Vertex.h"
-#include <DirectXMath.h>
-#include <vector>
-#include "Entity.h"
+//#include "SimpleShader.h"
+//#include "Vertex.h"
+//#include <DirectXMath.h>
+//#include <vector>
+//#include "Entity.h"
 #include "Camera.h"
 #include "Scene.h"
-#include "Lights.h"
-#include "GaussianBlur.h"
+//#include "Lights.h"
+//#include "GaussianBlur.h"
 #include "Bloom.h"
 #include "Tex2Dt.h"
 
@@ -29,7 +29,8 @@ public:
 
 	void Setup2D();
 	void SetScore(int);
-	void Renderer::SetScorePos(DirectX::XMFLOAT2);
+	//void Renderer::SetScorePos(DirectX::XMFLOAT2);
+	void Renderer::SetScorePos(glm::vec2);
 
 private:
 	void setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
@@ -57,8 +58,10 @@ private:
 	ID3D11Buffer* indexBuffer;
 
 	// The matrices to go from model space to screen space
-	DirectX::XMFLOAT4X4 viewMatrix;
-	DirectX::XMFLOAT4X4 projectionMatrix;
+	/*DirectX::XMFLOAT4X4 viewMatrix;
+	DirectX::XMFLOAT4X4 projectionMatrix;*/
+	glm::mat4 viewMatrix;
+	glm::mat4 projectionMatrix;
 
 	Camera* Cam;
 	ID3D11Device* mDevice;
@@ -69,7 +72,8 @@ private:
 
 	unsigned int mWidth, mHeight;
 	int score;
-	DirectX::XMFLOAT2 scorePos;
+	//DirectX::XMFLOAT2 scorePos;
+	glm::vec2 scorePos;
 
 	//These may need to be moved
 	//-----------------------------------

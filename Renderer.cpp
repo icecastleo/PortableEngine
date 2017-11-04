@@ -197,23 +197,6 @@ void Renderer::Draw()
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------
-	//Draw particles if there are any
-	if (currentScene->Particles != nullptr)
-	{
-		// Particle states
-		float blend[4] = { 1,1,1,1 };
-		context->OMSetBlendState(currentScene->Particles->GetMaterial()->GetParticleBlendState(), blend, 0xffffffff);  // Additive blending
-		context->OMSetDepthStencilState(currentScene->Particles->GetMaterial()->GetParticleDepthState(), 0);			// No depth WRITING
-
-		currentScene->Particles->SetShaders(particleVS, particlePS);															// Draw the emitter
-		currentScene->Particles->Draw(context, Cam);
-
-		// Reset to default states for next frame
-		context->RSSetState(0);
-		context->OMSetDepthStencilState(0, 0);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------------------------------------
 	//Change render states based on blending/transperancy
 	//Turn off back face culling
 	context->RSSetState(rsNoCull);
@@ -473,7 +456,7 @@ void Renderer::Resized(ID3D11DepthStencilView* depthStencilView, ID3D11RenderTar
 //---------------------------------------------------------
 void Renderer::DrawScore()
 {
-	text->DrawLiveText(score, scorePos);
+	//text->DrawLiveText(score, scorePos);
 }
 
 //---------------------------------------------------------
@@ -487,7 +470,7 @@ void Renderer::SetScore(int _score)
 //---------------------------------------------------------
 //Set Score screen position
 //---------------------------------------------------------
-void Renderer::SetScorePos(DirectX::XMFLOAT2 _pos)
+void Renderer::SetScorePos(glm::vec2 _pos)
 {
 	scorePos = _pos;
 }

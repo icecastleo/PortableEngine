@@ -239,7 +239,7 @@ void WindowsRenderSystem::Init()
 	text->Init(context, device);
 
 	//Start with scene 1
-	SceneNumber = 1;
+	SceneNumber = 2;
 	setScene();
 
 	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);

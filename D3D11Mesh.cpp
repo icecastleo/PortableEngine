@@ -115,7 +115,7 @@ void D3D11Mesh::CalculateTangents(Vertex* verts, uint16_t numVerts, uint16_t* in
 	// Reset tangents
 	for (size_t i = 0; i < numVerts; i++)
 	{
-		verts[i].Tangent = XMFLOAT3(0, 0, 0);
+		verts[i].Tangent = glm::vec3(0, 0, 0);
 	}
 
 	// Calculate tangents one whole triangle at a time
@@ -170,15 +170,22 @@ void D3D11Mesh::CalculateTangents(Vertex* verts, uint16_t numVerts, uint16_t* in
 	for (int i = 0; i < numVerts; i++)
 	{
 		// Grab the two vectors
-		XMVECTOR normal = XMLoadFloat3(&verts[i].Normal);
-		XMVECTOR tangent = XMLoadFloat3(&verts[i].Tangent);
+		//XMVECTOR normal = XMLoadFloat3(&verts[i].Normal);
+		//XMVECTOR tangent = XMLoadFloat3(&verts[i].Tangent);
+
+		glm::vec3 normal = verts[i].Normal;
+		glm::vec3 tangent = verts[i].Tangent;
 
 		// Use Gram-Schmidt orthogonalize
-		tangent = XMVector3Normalize(
-			tangent - normal * XMVector3Dot(normal, tangent));
+		//tangent = XMVector3Normalize(tangent - normal * XMVector3Dot(normal, tangent));
+
+		tangent = glm::normalize(
+			tangent - normal * glm::dot(normal, tangent)); 
 
 		// Store the tangent
-		XMStoreFloat3(&verts[i].Tangent, tangent);
+		//XMStoreFloat3(&verts[i].Tangent, tangent);
+		verts[i].Tangent = tangent;
+
 	}
 }
 

@@ -1,5 +1,6 @@
 #include "Entity.h"
-
+#include "glm\gtc\matrix_transform.hpp"
+#include "glm\gtx\euler_angles.hpp"
 using namespace DirectX;
 
 // --------------------------------------------------------
@@ -22,7 +23,7 @@ Entity::~Entity()
 //Override constructor using the Identity Matrix 
 //for world matrix
 // --------------------------------------------------------
-Entity::Entity(D3D11Mesh* _mesh, D3D11Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _rot, XMFLOAT3 _scale)
+Entity::Entity(D3D11Mesh* _mesh, D3D11Material* _mat, glm::vec3 _pos, glm::vec3 _rot, glm::vec3 _scale)
 {
 	mesh = _mesh;
 	mat = _mat;
@@ -31,9 +32,11 @@ Entity::Entity(D3D11Mesh* _mesh, D3D11Material* _mat, XMFLOAT3 _pos, XMFLOAT3 _r
 	transform.scale = _scale;
 	parent = nullptr;
 
-	XMStoreFloat4x4(&localMat, DirectX::XMMatrixIdentity());
-	XMStoreFloat4x4(&worldMat, DirectX::XMMatrixIdentity());
+	//XMStoreFloat4x4(&localMat, DirectX::XMMatrixIdentity());
+	//XMStoreFloat4x4(&worldMat, DirectX::XMMatrixIdentity());
 
+	localMat = glm::mat4(1);
+	worldMat = glm::mat4(1);
 	//SetWorldMat();
 }
 
@@ -70,7 +73,7 @@ void Entity::SetParent(Entity * e)
 // --------------------------------------------------------
 void Entity::SetWorldMat()
 {
-	XMMATRIX local = DirectX::XMMatrixMultiply(
+	/*XMMATRIX local = DirectX::XMMatrixMultiply(
 		DirectX::XMMatrixMultiply(
 			DirectX::XMMatrixScaling(transform.scale.x, transform.scale.y, transform.scale.z),
 			DirectX::XMMatrixRotationRollPitchYaw(transform.rotation.x, transform.rotation.y, transform.rotation.z)
@@ -81,10 +84,18 @@ void Entity::SetWorldMat()
 	XMStoreFloat4x4(
 		&localMat,
 		DirectX::XMMatrixTranspose(local)
-	);
+	);*/
+
+	glm::mat4 local = glm::mat4(1.0f);
+	glm::mat4 myTranslationMatrix = glm::translate(local, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+	glm::mat4 myRotationMatrix = glm::yawPitchRoll(transform.rotation.y, transform.rotation.x, transform.rotation.z);
+	glm::mat4 myScaleMatrix = glm::scale(local, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
+	local = myTranslationMatrix * myRotationMatrix * myScaleMatrix;
+	localMat = glm::transpose(local);
+
 
 	if (parent != nullptr) {
-		XMMATRIX world = DirectX::XMMatrixMultiply(
+		/*XMMATRIX world = DirectX::XMMatrixMultiply(
 			local,
 			DirectX::XMMatrixTranspose(
 				XMLoadFloat4x4(&parent->GetWorldMat())
@@ -93,7 +104,18 @@ void Entity::SetWorldMat()
 		XMStoreFloat4x4(
 			&worldMat,
 			DirectX::XMMatrixTranspose(world)
-		);
+		);*/
+
+
+		glm::mat4 world =  glm::transpose(parent->GetWorldMat()) * local ;
+		//worldMat = world;
+
+
+		//worldMat = world;
+		worldMat = glm::transpose(world);
+
+
+
 	}
 	else
 	{
@@ -104,7 +126,7 @@ void Entity::SetWorldMat()
 // --------------------------------------------------------
 //Set the position of the entity
 // --------------------------------------------------------
-void Entity::SetPosition(XMFLOAT3 newPos)
+void Entity::SetPosition(glm::vec3 newPos)
 {
 	transform.position = newPos;
 }
@@ -112,7 +134,7 @@ void Entity::SetPosition(XMFLOAT3 newPos)
 // --------------------------------------------------------
 //Set the rotation of the entity
 // --------------------------------------------------------
-void Entity::SetRotation(XMFLOAT3 newRot)
+void Entity::SetRotation(glm::vec3 newRot)
 {
 	transform.rotation = newRot;
 }
@@ -120,7 +142,7 @@ void Entity::SetRotation(XMFLOAT3 newRot)
 // --------------------------------------------------------
 //Set the scale of the entity
 // --------------------------------------------------------
-void Entity::SetScale(XMFLOAT3 newScale)
+void Entity::SetScale(glm::vec3 newScale)
 {
 	transform.scale = newScale;
 }
@@ -128,7 +150,7 @@ void Entity::SetScale(XMFLOAT3 newScale)
 // --------------------------------------------------------
 //Return the entities world matrix
 // --------------------------------------------------------
-XMFLOAT4X4 Entity::GetWorldMat()
+glm::mat4 Entity::GetWorldMat()
 {
 	return worldMat;
 }
@@ -136,7 +158,7 @@ XMFLOAT4X4 Entity::GetWorldMat()
 // --------------------------------------------------------
 //Return the entities position
 // --------------------------------------------------------
-XMFLOAT3 Entity::GetPosition()
+glm::vec3 Entity::GetPosition()
 {
 	return transform.position;
 }
@@ -144,7 +166,7 @@ XMFLOAT3 Entity::GetPosition()
 // --------------------------------------------------------
 //Return the entities rotation
 // --------------------------------------------------------
-XMFLOAT3 Entity::GetRotation()
+glm::vec3 Entity::GetRotation()
 {
 	return transform.rotation;
 }
@@ -152,7 +174,7 @@ XMFLOAT3 Entity::GetRotation()
 // --------------------------------------------------------
 //Return the entities scale
 // --------------------------------------------------------
-XMFLOAT3 Entity::GetScale()
+glm::vec3 Entity::GetScale()
 {
 	return transform.scale;
 }

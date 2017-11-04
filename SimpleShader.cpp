@@ -393,7 +393,7 @@ bool ISimpleShader::SetFloat2(std::string name, const float data[2])
 // --------------------------------------------------------
 // Sets a FLOAT2 variable by name in the local data buffer
 // --------------------------------------------------------
-bool ISimpleShader::SetFloat2(std::string name, const DirectX::XMFLOAT2 data)
+bool ISimpleShader::SetFloat2(std::string name, const glm::vec2 data)
 {
 	return this->SetData(name, &data, sizeof(float) * 2);
 }
@@ -409,7 +409,7 @@ bool ISimpleShader::SetFloat3(std::string name, const float data[3])
 // --------------------------------------------------------
 // Sets a FLOAT3 variable by name in the local data buffer
 // --------------------------------------------------------
-bool ISimpleShader::SetFloat3(std::string name, const DirectX::XMFLOAT3 data)
+bool ISimpleShader::SetFloat3(std::string name, const glm::vec3 data)
 {
 	return this->SetData(name, &data, sizeof(float) * 3);
 }
@@ -425,7 +425,7 @@ bool ISimpleShader::SetFloat4(std::string name, const float data[4])
 // --------------------------------------------------------
 // Sets a FLOAT4 variable by name in the local data buffer
 // --------------------------------------------------------
-bool ISimpleShader::SetFloat4(std::string name, const DirectX::XMFLOAT4 data)
+bool ISimpleShader::SetFloat4(std::string name, const glm::vec4 data)
 {
 	return this->SetData(name, &data, sizeof(float) * 4);
 }
@@ -441,7 +441,7 @@ bool ISimpleShader::SetMatrix4x4(std::string name, const float data[16])
 // --------------------------------------------------------
 // Sets a MATRIX (4x4) variable by name in the local data buffer
 // --------------------------------------------------------
-bool ISimpleShader::SetMatrix4x4(std::string name, const DirectX::XMFLOAT4X4 data)
+bool ISimpleShader::SetMatrix4x4(std::string name, const glm::mat4 data)
 {
 	return this->SetData(name, &data, sizeof(float) * 16);
 }
@@ -1611,9 +1611,12 @@ void SimpleComputeShader::DispatchByGroups(unsigned int groupsX, unsigned int gr
 void SimpleComputeShader::DispatchByThreads(unsigned int threadsX, unsigned int threadsY, unsigned int threadsZ)
 {
 	deviceContext->Dispatch(
-		max((unsigned int)ceil((float)threadsX / this->threadsX), 1),
+		/*max((unsigned int)ceil((float)threadsX / this->threadsX), 1),
 		max((unsigned int)ceil((float)threadsY / this->threadsY), 1),
-		max((unsigned int)ceil((float)threadsZ / this->threadsZ), 1));
+		max((unsigned int)ceil((float)threadsZ / this->threadsZ), 1));*/
+	    glm::max((int)((unsigned int)ceil((float)threadsX / this->threadsX)), 1),
+		glm::max((int)((unsigned int)ceil((float)threadsY / this->threadsY)), 1),
+		glm::max((int)((unsigned int)ceil((float)threadsZ / this->threadsZ)), 1));
 }
 
 // --------------------------------------------------------

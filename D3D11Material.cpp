@@ -188,7 +188,7 @@ void D3D11Material::SetNormalMap(ID3D11Device* device, ID3D11DeviceContext* cont
 //---------------------------------------------------------
 //Prepare the material for drawing
 //---------------------------------------------------------
-void D3D11Material::PrepareMaterial(DirectX::XMFLOAT4X4 world, DirectX::XMFLOAT4X4 view, DirectX::XMFLOAT4X4 projection, SimpleVertexShader* vertexShader)
+void D3D11Material::PrepareMaterial(glm::mat4 world, glm::mat4 view, glm::mat4 projection, SimpleVertexShader* vertexShader)
 {
 	// Send data to shader variables
 	//  - Do this ONCE PER OBJECT you're drawing
@@ -211,7 +211,7 @@ void D3D11Material::PrepareMaterial(DirectX::XMFLOAT4X4 world, DirectX::XMFLOAT4
 	vertexShader->SetShader();
 }
 
-void D3D11Material::PrepareSkybox(DirectX::XMFLOAT4X4 view, DirectX::XMFLOAT4X4 projection, SimpleVertexShader* skyVS, SimplePixelShader* skyPS)
+void D3D11Material::PrepareSkybox(glm::mat4 view, glm::mat4 projection, SimpleVertexShader* skyVS, SimplePixelShader* skyPS)
 {
 	skyVS->SetMatrix4x4("view", view);
 	skyVS->SetMatrix4x4("projection", projection);

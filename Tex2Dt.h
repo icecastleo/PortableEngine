@@ -1,7 +1,8 @@
 #pragma once
 #include "SpriteBatch.h"
 #include "SpriteFont.h"
-#include <DirectXMath.h>
+//#include <DirectXMath.h>
+//#include <D3D11.h>
 #include "Text.h"
 #include <vector>
 #include <string>
@@ -20,10 +21,13 @@ public:
 	void SetText(const wchar_t*);
 	void SetupFont();
 	void DrawMyText();
-	void DrawLiveText(const wchar_t*, DirectX::XMFLOAT2);
-	void DrawLiveText(int, DirectX::XMFLOAT2);
+	/*void DrawLiveText(const wchar_t*, DirectX::XMFLOAT2);
+	void DrawLiveText(int, DirectX::XMFLOAT2);*/
+	void DrawLiveText(const wchar_t*, glm::vec2);
+	void DrawLiveText(int, glm::vec2);
 
-	void AddText(const wchar_t*, DirectX::XMFLOAT2);
+	//void AddText(const wchar_t*, DirectX::XMFLOAT2);
+	void AddText(const wchar_t*, glm::vec2);
 	void ClearText();
 	void AdjustPosition(unsigned int, unsigned int);
 

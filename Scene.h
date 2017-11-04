@@ -3,7 +3,6 @@
 #include "Lights.h"
 #include "Text.h"
 #include "Entity.h"
-#include "Emitter.h"
 
 class Scene
 {
@@ -27,7 +26,6 @@ public:
 	std::vector<textObject> textList;
 
 	Entity* skybox = nullptr;
-	Emitter* Particles = nullptr;
 
 	char *musicFileName = 0;
 

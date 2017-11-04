@@ -1,7 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
-#include <DirectXMath.h>
+//#include <DirectXMath.h>
 #include "SimpleShader.h"
 #include "GaussianBlur.h"
 
