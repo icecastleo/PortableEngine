@@ -8,7 +8,6 @@
 #include <vector>
 #include "Lights.h"
 #include "Scene.h"
-#include "Emitter.h"
 
 //---------------------------------------------------------
 //Scene Manager class
@@ -25,7 +24,6 @@ public:
 	void BuildLights();
 	void BuildMeshes();
 	void BuildEntities();
-	void BuildParticles();
 
 	//Entity* CreateEntity(Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
@@ -90,7 +88,4 @@ private:
 	SpotLight* spotLight;
 
 	//Entity* asteroidList[12];
-
-	//Particles Emitter
-	Emitter *emitter;
 };

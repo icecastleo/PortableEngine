@@ -7,15 +7,12 @@ Asteroid::Asteroid()
 
 Asteroid::~Asteroid()
 {
-	if(asterCollider)
-		delete asterCollider;
+
 }
 
 Asteroid::Asteroid(Entity * entity)
 {
 	this->entity = entity;
-
-	asterCollider = new Collider(entity->GetMesh());
 	active = false;
 }
 
@@ -99,11 +96,6 @@ void Asteroid::Move(float x, float y, float z,float deltaTime)
 	position = glm::vec3(pos);
 
 	entity->SetPosition(position);
-}
-
-Collider* Asteroid::GetCollider()
-{
-	return asterCollider;
 }
 
 // --------------------------------------------------------

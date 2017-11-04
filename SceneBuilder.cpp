@@ -55,8 +55,6 @@ SceneBuilder::~SceneBuilder()
 	//for (Entity *e : asteroidList) {
 	//	delete e;
 	//}
-
-	delete emitter;
 }
 
 //---------------------------------------------------------
@@ -70,7 +68,6 @@ void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 	BuildMaterials();
 	BuildLights();
 	BuildMeshes();
-	BuildParticles();
 	SetupScenes();
 }
 
@@ -226,23 +223,6 @@ void SceneBuilder::BuildEntities()
 	playerEnt = new Entity(playerMesh, playerMat, glm::vec3(0.0f, -1.5f, +0.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+2.0f, +2.0f, +2.0f));
 }
 
-void SceneBuilder::BuildParticles()
-{
-	emitter = new Emitter(
-		200,							// Max particles
-		200,							// Particles per second
-		0.5f,							// Particle lifetime
-		0.25f,							// Start size
-		2.0f,							// End size
-		glm::vec4(1, 0.1f, 0.1f, 0.2f),	// Start color
-		glm::vec4(1, 1.0f, 1.0f, 0),		// End color
-		glm::vec3(10, 10, 0),			// Start velocity
-		glm::vec3(0, 0, 0),				// Start position
-		glm::vec3(10, 10, 0),			// Start acceleration
-		device,
-		particelMat);
-}
-
 //---------------------------------------------------------
 //Setup the 3 built in scenes here
 //---------------------------------------------------------
@@ -332,9 +312,6 @@ void SceneBuilder::SetupScenes()
 
 	//Sound
 	scene2->musicFileName = "04_-_Bloody_Revenge.mp3";
-
-	//Particles
-	scene2->Particles = emitter;
 
 	//2D Text
 	scene2->textList.push_back(textObject{ L"Score: ", glm::vec2(500, 10) });

@@ -9,13 +9,12 @@ Player::Player()
 
 Player::Player(Entity* playerEnt) : playerEntity(playerEnt)
 {
-	playerCollider = new Collider(playerEntity->GetMesh());
+
 }
 
 Player::~Player()
 {
-	if(playerCollider != NULL)
-		delete playerCollider;
+
 }
 
 void Player::Update(float deltaTime)
@@ -79,9 +78,4 @@ void Player::Move(float x, float y, float z, float deltaTime)
 	XMStoreFloat3(&position, pos);
 
 	playerEntity->SetPosition(position);*/
-}
-
-Collider* Player::GetCollider()
-{
-	return playerCollider;
 }
