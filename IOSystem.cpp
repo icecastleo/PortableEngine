@@ -1,9 +1,6 @@
 #include "IOSystem.h"
 #include "PC_IOSystem.h"
-#include <DirectXMath.h>
 #include <cstdint>
-
-using namespace DirectX;
 
 IOSystem::IOSystem()
 {
