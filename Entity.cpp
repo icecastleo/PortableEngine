@@ -1,5 +1,6 @@
 #include "Entity.h"
 #include "glm\gtc\matrix_transform.hpp"
+#include "glm\gtx\euler_angles.hpp"
 using namespace DirectX;
 
 // --------------------------------------------------------
@@ -87,13 +88,10 @@ void Entity::SetWorldMat()
 
 	glm::mat4 local = glm::mat4(1.0f);
 	glm::mat4 myTranslationMatrix = glm::translate(local, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
-	glm::mat4 myRotationMatrix = glm::rotate(local, transform.rotation.x, glm::vec3(1, 0, 0));
-	myRotationMatrix = glm::rotate(myRotationMatrix, transform.rotation.y, glm::vec3(0, 1, 0));
-	myRotationMatrix = glm::rotate(myRotationMatrix, transform.rotation.z, glm::vec3(0, 0, 1));
+	glm::mat4 myRotationMatrix = glm::yawPitchRoll(transform.rotation.y, transform.rotation.x, transform.rotation.z);
 	glm::mat4 myScaleMatrix = glm::scale(local, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
 	local = myTranslationMatrix * myRotationMatrix * myScaleMatrix;
-	localMat = local;
-
+	localMat = glm::transpose(local);
 
 
 	if (parent != nullptr) {
@@ -109,8 +107,12 @@ void Entity::SetWorldMat()
 		);*/
 
 
-		glm::mat4 world = parent->GetWorldMat() * local;
-		worldMat = world;
+		glm::mat4 world =  glm::transpose(parent->GetWorldMat()) * local ;
+		//worldMat = world;
+
+
+		//worldMat = world;
+		worldMat = glm::transpose(world);
 
 
 

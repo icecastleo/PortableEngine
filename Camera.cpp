@@ -88,20 +88,21 @@ void Camera::CreateMatrices(glm::vec4 position, glm::vec4 direction)
 	//	100.0f);					// Far clip plane distance
 	//XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
 
-
-
 	glm::vec4 pos = position;
 	glm::vec4 dir = direction;
 	glm::vec4 up = glm::vec4(0, 1, 0, 0);
 
-	glm::mat4 V = glm::lookAtLH(glm::vec3(pos), glm::vec3(dir), glm::vec3(up));
-	viewMatrix = V;
+	glm::mat4 V = glm::lookAtLH(glm::vec3(pos), glm::vec3(dir+pos), glm::vec3(up));
+	viewMatrix = glm::transpose(V);
 
 	float FoV = 0.25f * 3.1415926535f;
-	glm::mat4 P = glm::perspectiveLH(glm::radians(FoV), (float)width / height, 0.1f, 100.0f);
+	//glm::mat4 P = glm::perspectiveLH(FoV, (float)width / height, 0.1f, 100.0f);
+	glm::mat4 P = glm::perspectiveFovLH(FoV, (float)width ,(float)height, 0.1f, 100.0f);
 
-	projectionMatrix = P;
+	/*P = glm::scale(P, glm::vec3(1.0f, 1.0f, 0.5f));
+	P = glm::translate(P, glm::vec3(0.0f, 0.0f, 0.5f));*/
 
+	projectionMatrix = glm::transpose(P);
 }
 
 //---------------------------------------------------------
@@ -175,7 +176,7 @@ void Camera::Update(POINT mouse, float deltaTime)
 		//XMStoreFloat4x4(&viewMatrix, XMMatrixTranspose(V)); // Transpose for HLSL!
 
 		glm::mat4 V = glm::lookAtLH(glm::vec3(pos), glm::vec3(fwd), glm::vec3(up));
-		viewMatrix = V;
+		viewMatrix = glm::transpose(V);
 
 		//XMVECTOR moveDir = XMVectorZero();
 
@@ -279,7 +280,7 @@ void Camera::Resize(unsigned int width, unsigned int height)
 	float FoV = 0.25f * 3.1415926535f;
 	glm::mat4 P = glm::perspectiveLH(glm::radians(FoV), (float)width / height, 0.1f, 100.0f);
 
-	projectionMatrix = P;
+	projectionMatrix = glm::transpose(P);
 
 }
 
