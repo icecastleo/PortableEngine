@@ -280,6 +280,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="WindowsCamera.cpp" />
     <ClCompile Include="WindowsRenderSystem.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="IOSystem.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="WindowsCamera.h" />
     <ClInclude Include="WindowsRenderSystem.h" />
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="IOSystem.h" />

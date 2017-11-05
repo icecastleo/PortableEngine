@@ -4,6 +4,7 @@
 #include "WindowsRenderSystem.h"
 #include <time.h> 
 #include <iostream>
+#include "WindowsCamera.h"
 // For the DirectX Math library
 using namespace DirectX;
 
@@ -41,8 +42,8 @@ WindowsRenderSystem::WindowsRenderSystem(unsigned int windowWidth, unsigned int 
 
 	SceneManager SceneManag();
 	Renderer Render();
-	Camera Cam(width, height);
-
+	//Camera Cam(width, height);
+	Cam = new WindowsCamera();
 	Init();
 }
 
@@ -100,6 +101,8 @@ WindowsRenderSystem::~WindowsRenderSystem()
 	delete particlePS;
 
 	//delete player;
+
+	delete Cam;
 }
 
 // --------------------------------------------------------
@@ -221,8 +224,9 @@ HRESULT WindowsRenderSystem::InitDirectX()
 // --------------------------------------------------------
 void WindowsRenderSystem::Init()
 {
-	Cam.SetWidthHeight(width, height);
-	Cam.Init();
+	
+	Cam->SetWidthHeight(width, height);
+	Cam->Init();
 
 	LoadShaders();
 
@@ -242,7 +246,7 @@ void WindowsRenderSystem::Init()
 	SceneNumber = 2;
 	setScene();
 
-	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
+	Render.Init(Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
 
 	//player = new Player(SceneBuild.GetPlayerEntity());
 
@@ -356,7 +360,7 @@ void WindowsRenderSystem::setScene()
 void WindowsRenderSystem::OnResize()
 {
 	// Probably move 
-	Cam.Resize(width, height);
+	Cam->Resize(width, height);
 	Render.Resized(depthStencilView, backBufferRTV, width, height);
 	text->AdjustPosition(width, height);
 
@@ -470,7 +474,8 @@ void WindowsRenderSystem::Update(float deltaTime)
 	//	a->Update(deltaTime);
 	//}
 
-	Cam.Update(prevMousePos, deltaTime);
+	//Cam.Update(prevMousePos, deltaTime);
+	Cam->Update(deltaTime);
 
 	for each (Entity* ent in currentScene->entities)
 	{

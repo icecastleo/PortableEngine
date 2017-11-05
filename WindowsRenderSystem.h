@@ -87,7 +87,7 @@ private:
 	SceneBuilder SceneBuild;
 	SceneManager SceneManag;
 	Renderer Render;
-	Camera Cam;
+	//Camera Cam;
 
 	//Player *player;
 	//void SetNextAsteroid();

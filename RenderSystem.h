@@ -1,6 +1,11 @@
 #pragma once
+#include "Camera.h"
+
 class RenderSystem
 {
+
+protected:
+	Camera * Cam;
 public:
 	RenderSystem();
 	virtual ~RenderSystem();

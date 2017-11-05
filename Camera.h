@@ -4,7 +4,7 @@
 //#include <DirectXMath.h>
 #include "glm\glm.hpp"
 
-#include <Windows.h>
+//#include <Windows.h>
 
 
 class Camera
@@ -17,8 +17,9 @@ public:
 	void Init();
 
 	void SetWidthHeight(unsigned int, unsigned int);
-	void Update(POINT, float);
-	void MouseDown(bool);
+	//void Update(POINT, float);
+	virtual void Update(float);
+	//void MouseDown(bool);
 
 	void Resize(unsigned int, unsigned int);
 
@@ -29,20 +30,12 @@ public:
 	glm::vec4 GetPositon();
 	glm::vec4 GetDirection();
 
-/*
-	DirectX::XMFLOAT4X4 GetViewMatrix();
-	DirectX::XMFLOAT4X4 GetProjectionMatrix();
-	DirectX::XMFLOAT4 GetPositon();
-	DirectX::XMFLOAT4 GetDirection();*/
+	void SetPosition(glm::vec4);
+	void SetDir(glm::vec4);
 
-private:
-	/*void CreateMatrices(DirectX::XMFLOAT4, DirectX::XMFLOAT4);
-
-	DirectX::XMFLOAT4X4 viewMatrix;
-	DirectX::XMFLOAT4X4 projectionMatrix;
-
-	DirectX::XMFLOAT4 position;
-	DirectX::XMFLOAT4 direction;*/
+	
+protected:
+	
 
 	void CreateMatrices(glm::vec4, glm::vec4);
 
@@ -53,15 +46,13 @@ private:
 	glm::vec4 direction;
 
 
+	bool debugMode;
 
 	float rotationX;
 	float rotationY;
+	
 
 	unsigned int width;
 	unsigned int height;
 
-	bool mouseDown;
-	bool debugMode;
-
-	POINT lastMouse, mouse;
 };
