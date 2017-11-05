@@ -17,8 +17,8 @@ D3D11Mesh::D3D11Mesh(char* path, ID3D11Device *device)
 D3D11Mesh::~D3D11Mesh()
 {
 	// Release any (and all!) DirectX objects
-	if (vertBuffer) { vertBuffer->Release(); }
-	if (indBuffer) { indBuffer->Release(); }
+	if (vertBuffer) { reinterpret_cast<ID3D11Buffer*>(vertBuffer)->Release(); }
+	if (indBuffer) { reinterpret_cast<ID3D11Buffer*>(indBuffer)->Release(); }
 }
 
 
@@ -28,7 +28,6 @@ D3D11Mesh::~D3D11Mesh()
 //Modified for use here
 // --------------------------------------------------------
 void D3D11Mesh::CreateGeometry(Vertex* verts, uint16_t numVerts, uint16_t *ind, ID3D11Device *device)
-//void Mesh::CreateGeometry(Vertex* verts, int numVerts, size_t *ind, ID3D11Device *device)
 {
 	// Create the VERTEX BUFFER description -----------------------------------
 	// - The description is created on the stack because we only need
@@ -48,8 +47,9 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, uint16_t numVerts, uint16_t *ind, 
 
 	// Actually create the buffer with the initial data
 	// - Once we do this, we'll NEVER CHANGE THE BUFFER AGAIN
-	HRESULT result = device->CreateBuffer(&vbd, &initialVertexData, &vertBuffer);
-
+	ID3D11Buffer *temp = 0;
+	HRESULT result = device->CreateBuffer(&vbd, &initialVertexData, &temp);
+	vertBuffer = temp;
 
 	// Create the INDEX BUFFER description ------------------------------------
 	// - The description is created on the stack because we only need
@@ -69,7 +69,9 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, uint16_t numVerts, uint16_t *ind, 
 
 	// Actually create the buffer with the initial data
 	// - Once we do this, we'll NEVER CHANGE THE BUFFER AGAIN
-	result = device->CreateBuffer(&ibd, &initialIndexData, &indBuffer);
+	temp = 0;
+	result = device->CreateBuffer(&ibd, &initialIndexData, &temp);
+	indBuffer = temp;
 }
 
 // --------------------------------------------------------

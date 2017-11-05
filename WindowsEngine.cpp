@@ -36,7 +36,19 @@ WindowsEngine::WindowsEngine(
 	InitWindow(hInstance);
 
 	renderSystem = new WindowsRenderSystem(width, height, hWnd);
-	ioSystem = new PC_IOSystem(device);
+
+	WindowsRenderSystem *windowsRender = new WindowsRenderSystem(width, height, hWnd);
+	renderSystem = windowsRender;
+
+	ioSystem = new PC_IOSystem(windowsRender->GetDevice());
+
+	SceneBuild.Init(windowsRender->GetDevice(), windowsRender->GetContext());
+	SceneManag.AddScene(SceneBuild.GetScene(1));
+	SceneManag.AddScene(SceneBuild.GetScene(2));
+	SceneManag.AddScene(SceneBuild.GetScene(3));
+	SceneManag.AddScene(SceneBuild.GetScene(4));
+
+	windowsRender->SetScene(SceneManag.GetScene(2));
 }
 
 WindowsEngine::~WindowsEngine()

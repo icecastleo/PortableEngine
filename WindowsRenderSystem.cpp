@@ -37,9 +37,6 @@ WindowsRenderSystem::WindowsRenderSystem(unsigned int windowWidth, unsigned int 
 	pixelShaderBlend = 0;
 	pixelShaderNormalMapBlend = 0;
 
-	//SceneBuilder SceneBuild();
-
-	SceneManager SceneManag();
 	Renderer Render();
 	Camera Cam(width, height);
 
@@ -215,6 +212,16 @@ HRESULT WindowsRenderSystem::InitDirectX()
 	return S_OK;
 }
 
+ID3D11Device * WindowsRenderSystem::GetDevice()
+{
+	return device;
+}
+
+ID3D11DeviceContext * WindowsRenderSystem::GetContext()
+{
+	return context;
+}
+
 // --------------------------------------------------------
 // Called once per program, after DirectX and the window
 // are initialized but before the game loop.
@@ -229,18 +236,17 @@ void WindowsRenderSystem::Init()
 	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS,
 		pixelShaderBlend, pixelShaderNormalMapBlend, particleVS, particlePS);
 
-	SceneBuild.Init(device, context);
-	SceneManag.AddScene(SceneBuild.GetScene(1));
-	SceneManag.AddScene(SceneBuild.GetScene(2));
-	SceneManag.AddScene(SceneBuild.GetScene(3));
-	SceneManag.AddScene(SceneBuild.GetScene(4));
+	//SceneBuild.Init(device, context);
+	//SceneManag.AddScene(SceneBuild.GetScene(1));
+	//SceneManag.AddScene(SceneBuild.GetScene(2));
+	//SceneManag.AddScene(SceneBuild.GetScene(3));
+	//SceneManag.AddScene(SceneBuild.GetScene(4));
 
-	text = new Text2D(width, height);
-	text->Init(context, device);
+	//text = new Text2D(width, height);
+	//text->Init(context, device);
 
 	//Start with scene 1
-	SceneNumber = 2;
-	setScene();
+	//SceneNumber = 2;
 
 	Render.Init(&Cam, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
 
@@ -308,30 +314,31 @@ void WindowsRenderSystem::LoadShaders()
 		particlePS->LoadShaderFile(L"ParticlePS.cso");
 }
 
-void WindowsRenderSystem::setScene()
+void WindowsRenderSystem::SetScene(Scene *scene)
 {
-	//Tell the game which scene it should be rendering, uses 1 based indexing
-	Render.SetScene(SceneManag.GetScene(SceneNumber));
+	this->scene = scene;
 
-	//Setup text to draw
-	text->ClearText();
-	if (SceneManag.GetScene(SceneNumber)->textList.size() > 0)
-	{
-		Scene* temp = SceneManag.GetScene(SceneNumber);
-		for (unsigned int i = 0; i < temp->textList.size(); i++)
-		{
-			text->AddText(temp->textList.at(i).text, temp->textList.at(i).position);
-		}
-	}
+	Render.SetScene(scene);
+
+	////Setup text to draw
+	//text->ClearText();
+	//if (SceneManag.GetScene(SceneNumber)->textList.size() > 0)
+	//{
+	//	Scene* temp = SceneManag.GetScene(SceneNumber);
+	//	for (unsigned int i = 0; i < temp->textList.size(); i++)
+	//	{
+	//		text->AddText(temp->textList.at(i).text, temp->textList.at(i).position);
+	//	}
+	//}
 
 	musicPlayer.stop();
 
-	if (SceneManag.GetScene(SceneNumber)->musicFileName) {
-		musicPlayer.setSound(SceneManag.GetScene(SceneNumber)->musicFileName);
+	if (scene->musicFileName) {
+		musicPlayer.setSound(scene->musicFileName);
 		musicPlayer.play();
 	}
 
-	if (SceneNumber == 2)
+	/*if (SceneNumber == 2)
 	{
 		score = 0;
 		Render.SetScorePos({ 590.0f, 10.0f });
@@ -339,7 +346,7 @@ void WindowsRenderSystem::setScene()
 	else if (SceneNumber == 3)
 	{
 		Render.SetScorePos({ 700.0f, 350.0f });
-	}
+	}*/
 }
 
 //void WindowsRenderSystem::SetNextAsteroid()
@@ -436,7 +443,7 @@ void WindowsRenderSystem::Update(float deltaTime)
 		//	setScene();
 		//}
 
-		static float updateTemp = 0;
+		/*static float updateTemp = 0;
 
 		updateTemp += deltaTime;
 
@@ -444,16 +451,16 @@ void WindowsRenderSystem::Update(float deltaTime)
 			updateTemp -= 0.5f;
 			SceneNumber = (SceneNumber % SceneManag.GetNumOfScenes()) + 1;
 			setScene();
-		}
+		}*/
 	}
 
 	musicPlayer.update();
 
-	Scene *currentScene = SceneManag.GetScene(SceneNumber);
+	//Scene *currentScene = SceneManag.GetScene(SceneNumber);
 
-	if (SceneNumber == 2) {
-		timer += deltaTime;
-	}
+	//if (SceneNumber == 2) {
+	//	timer += deltaTime;
+	//}
 
 	//Temp code
 	//----------------------------------------------------------------------------------------
@@ -472,7 +479,7 @@ void WindowsRenderSystem::Update(float deltaTime)
 
 	Cam.Update(prevMousePos, deltaTime);
 
-	for each (Entity* ent in currentScene->entities)
+	for each (Entity* ent in scene->entities)
 	{
 		ent->Update(deltaTime);
 	}

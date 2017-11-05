@@ -16,11 +16,7 @@ public:
 	std::vector<Vertex> GetVertexCollection();
 	std::vector<uint16_t> GetIndexCollection();
 
-	void CalculateTangents(Vertex*, uint16_t, uint16_t*, uint16_t);
-
-private:
-	void loadVertices(char *path);
-
+protected:
 	void* vertBuffer;
 	void* indBuffer;
 	uint16_t indCount;
@@ -29,5 +25,9 @@ private:
 
 	std::vector<Vertex> vertexCollection;
 	std::vector<uint16_t> indexCollection;
+
+private:
+	void loadVertices(char *path);
+	void CalculateTangents(Vertex*, uint16_t, uint16_t*, uint16_t);
 };
 

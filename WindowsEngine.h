@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include <string>
 #include <Windows.h>
+#include "SceneBuilder.h"
+#include "SceneManager.h"
 
 class WindowsEngine :
 	public Engine
@@ -59,5 +61,8 @@ private:
 	void OnMouseUp(WPARAM buttonState, int x, int y);
 	void OnMouseMove(WPARAM buttonState, int x, int y);
 	void OnMouseWheel(float wheelDelta, int x, int y);
+
+	SceneBuilder SceneBuild;
+	SceneManager SceneManag;
 };
 
