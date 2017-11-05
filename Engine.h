@@ -1,15 +1,6 @@
 #pragma once
 
 #include <chrono>
-
-#if _PC
-
-#endif
-
-#if _PS4
-// PS4 Resource Manager or Material Manager
-#endif
-
 #include "RenderSystem.h"
 #include "IOSystem.h"
 
@@ -25,6 +16,8 @@ public:
 
 	void Run();
 
+	// FIXME:
+	static IOSystem *ioSystem;
 
 #if _PC
 
@@ -37,8 +30,7 @@ protected:
 	float deltaTime;
 	float totalTime;
 
-	RenderSystem  *renderSystem;
-	//IOSystem *ioSystem;
+	RenderSystem *renderSystem;
 
 private:
 	// Timing related data

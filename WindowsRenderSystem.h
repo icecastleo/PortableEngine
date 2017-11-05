@@ -37,6 +37,11 @@ public:
 	void Draw();
 
 	HRESULT InitDirectX();
+
+	ID3D11Device* GetDevice();
+	ID3D11DeviceContext* GetContext();
+
+	void SetScene(Scene *scene);
 	
 private:
 	HWND		hWnd;			// The handle to the window itself
@@ -61,7 +66,6 @@ private:
 
 	// Initialization helper methods - feel free to customize, combine, etc.
 	void LoadShaders();
-	void setScene();
 
 	// Wrappers for DirectX shaders to provide simplified functionality
 	SimpleVertexShader* vertexShader;
@@ -80,12 +84,8 @@ private:
 
 	MusicPlayer musicPlayer;
 
-	Scene* menueScene;
-	Scene* gameScene;
-	Scene* endScene;
+	Scene *scene;
 
-	SceneBuilder SceneBuild;
-	SceneManager SceneManag;
 	Renderer Render;
 	//Camera Cam;
 

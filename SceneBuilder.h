@@ -43,12 +43,12 @@ private:
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
 
-	D3D11Mesh* cubeMesh;
-	D3D11Mesh* quadMesh;
-	D3D11Mesh* sphereMesh;
-	D3D11Mesh* playerMesh;
-	D3D11Mesh* asteroidMesh;
-	D3D11Mesh* skyboxMesh;
+	Mesh* cubeMesh;
+	Mesh* quadMesh;
+	Mesh* sphereMesh;
+	Mesh* playerMesh;
+	Mesh* asteroidMesh;
+	Mesh* skyboxMesh;
 
 	
 	D3D11Material* creditsMat;

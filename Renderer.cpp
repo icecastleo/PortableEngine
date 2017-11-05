@@ -138,9 +138,9 @@ void Renderer::Draw()
 			stride = sizeof(Vertex);
 			offset = 0;
 
-			vertexBuffer = currentScene->opaque.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
+			vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->opaque.at(i)->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(currentScene->opaque.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R16_UINT, 0);
+			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->opaque.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 			// Finally do the actual drawing
 			//  - Do this ONCE PER OBJECT you intend to draw
@@ -164,9 +164,9 @@ void Renderer::Draw()
 			stride = sizeof(Vertex);
 			offset = 0;
 
-			vertexBuffer = currentScene->opaqueNorm.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
+			vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->opaqueNorm.at(i)->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R16_UINT, 0);
+			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
 				currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
@@ -179,8 +179,8 @@ void Renderer::Draw()
 	//Draw the skybox if one is loaded
 	if (currentScene->skybox != NULL)
 	{
-		vertexBuffer = currentScene->skybox->GetMesh()->GetVertexBuffer();
-		indexBuffer = currentScene->skybox->GetMesh()->GetIndexBuffer();
+		vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->skybox->GetMesh()->GetVertexBuffer());
+		indexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->skybox->GetMesh()->GetIndexBuffer());
 
 		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
@@ -217,9 +217,9 @@ void Renderer::Draw()
 			stride = sizeof(Vertex);
 			offset = 0;
 
-			vertexBuffer = currentScene->transparentNorm.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
+			vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->transparentNorm.at(i)->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(currentScene->transparentNorm.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R16_UINT, 0);
+			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->transparentNorm.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
 				currentScene->transparentNorm.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
@@ -238,9 +238,9 @@ void Renderer::Draw()
 			stride = sizeof(Vertex);
 			offset = 0;
 
-			vertexBuffer = currentScene->transparent.at(i)->GetMesh()->GetVertexBuffer(); //Store the vertex buffer address
+			vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->transparent.at(i)->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
 			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(currentScene->transparent.at(i)->GetMesh()->GetIndexBuffer(), DXGI_FORMAT_R16_UINT, 0);
+			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->transparent.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
 				currentScene->transparent.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
@@ -251,7 +251,7 @@ void Renderer::Draw()
 	}//end of transparent with normal maps draw calls
 
 	//Draw Text Here
-	text->DrawMyText();
+	//text->DrawMyText();
 
 	if (currentScene->name == "MainGame" || currentScene->name == "Results")
 	{
