@@ -11,6 +11,8 @@ IOSystem::~IOSystem()
 {
 }
 
+// FIXME: Duplicated code
+
 //Mesh * IOSystem::loadMesh(wchar_t * objName)
 //{
 //	wstring path = L"Assets/Models/" + (wstring)objName + L".obj";

@@ -55,10 +55,9 @@ void Camera::Init()
 	direction = glm::vec4(0, -0.3f, 1, 0);
 #endif	
 #if _PS4
-	position = glm::vec4(0.0f, 1.0f, 20.0f, 0);
-	direction = glm::vec4(-0.0f, -1.0f, -20.0f, 0);
+	position = glm::vec4(5.0f, 10.0f, 20.0f, 0);
+	direction = glm::vec4(-5.0f, -10.0f, -20.0f, 0);
 #endif
-
 
 	rotationX = 0.0f;
 	rotationY = 100.0f;
