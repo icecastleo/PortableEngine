@@ -51,25 +51,26 @@ private:
 	Mesh* skyboxMesh;
 
 	
-	D3D11Material* creditsMat;
-	D3D11Material* menuMat;
-	D3D11Material* playerMat;
-	D3D11Material* laneMat;
-	D3D11Material* asteroidMat;
-	D3D11Material* backgroundMat;
+	Material* creditsMat;
+	Material* menuMat;
+	//D3D11Material* playerMat;
+	Material* playerMat;
+	Material* laneMat;
+	Material* asteroidMat;
+	Material* backgroundMat;
 
-	D3D11Material* plutoMat;
-	D3D11Material* venusMat;
-	D3D11Material* sunMat;
-	D3D11Material* earthMat;
-	D3D11Material* moonMat;
-	D3D11Material* p1Mat;
-	D3D11Material* p2Mat;
-	D3D11Material* p3Mat;
-	D3D11Material* lane2Mat;
-	D3D11Material* titleMat;
+	Material* plutoMat;
+	Material* venusMat;
+	Material* sunMat;
+	Material* earthMat;
+	Material* moonMat;
+	Material* p1Mat;
+	Material* p2Mat;
+    Material* p3Mat;
+	Material* lane2Mat;
+	Material* titleMat;
 
-	D3D11Material* particelMat;
+	Material* particelMat;
 
 	Entity* playerEnt;
 

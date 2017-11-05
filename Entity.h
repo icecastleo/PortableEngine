@@ -15,8 +15,8 @@ class Entity
 public:
 	Entity();
 	virtual ~Entity();
-	//Entity(D3D11Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
-	Entity(Mesh*, D3D11Material*, glm::vec3, glm::vec3, glm::vec3);
+	
+	Entity(Mesh*, Material*, glm::vec3, glm::vec3, glm::vec3);
 
 	virtual void Update(float deltaTime);
 
@@ -37,7 +37,7 @@ public:
 	void SetScale(glm::vec3);
 
 	Mesh* GetMesh();
-	D3D11Material* GetMat();
+	Material* GetMat();
 
 	Entity* parent;
 	std::vector<Entity*> children;
@@ -50,7 +50,7 @@ private:
 	void SetWorldMat();
 	
 	Mesh* mesh;
-	D3D11Material* mat;
+	Material* mat;
 
 	Transform transform;
 	/*DirectX::XMFLOAT4X4 worldMat;

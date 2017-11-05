@@ -1,10 +1,11 @@
 #include "PC_IOSystem.h"
 #include "D3D11Mesh.h"
+#include "D3D11Material.h"
 
 //PC_IOSystem *PC_IOSystem::IO_instance = 0;
 
-PC_IOSystem::PC_IOSystem(ID3D11Device *device)
-	:device(device)
+PC_IOSystem::PC_IOSystem(ID3D11Device *device, ID3D11DeviceContext* context)
+	:device(device),context(context)
 {
 
 }
@@ -32,9 +33,25 @@ Mesh* PC_IOSystem::loadMesh(wchar_t *objName)
 	return ret;
 }
 
-void PC_IOSystem::loadTexture2d(wchar_t*) {
+Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath) {
+	
+
+	Material * ret = new D3D11Material(device, context, texturepath);
+	
+	return ret;
 
 }
+
+Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath, int type) {
+
+
+	Material * ret = new D3D11Material(device, context, texturepath, type);
+
+	return ret;
+
+}
+
+
 void PC_IOSystem::loadCubemap(wchar_t*) {
 
 }

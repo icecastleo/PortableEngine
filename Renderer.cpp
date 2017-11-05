@@ -132,7 +132,7 @@ void Renderer::Draw()
 	{
 		for (unsigned i = 0; i < currentScene->opaque.size(); i++)
 		{
-			currentScene->opaque.at(i)->GetMat()->PrepareMaterial(currentScene->opaque.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
+			static_cast<D3D11Material *>(currentScene->opaque.at(i)->GetMat())->PrepareMaterial(currentScene->opaque.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
 			SetPixelShaderUp(pixelShader, currentScene->opaque, i);
 
 			stride = sizeof(Vertex);
@@ -158,7 +158,7 @@ void Renderer::Draw()
 	{
 		for (unsigned i = 0; i < currentScene->opaqueNorm.size(); i++)
 		{
-			currentScene->opaqueNorm.at(i)->GetMat()->PrepareMaterial(currentScene->opaqueNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
+			static_cast<D3D11Material *>(currentScene->opaqueNorm.at(i)->GetMat())->PrepareMaterial(currentScene->opaqueNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
 			SetPixelShaderUp(pixelShaderNormalMap, currentScene->opaqueNorm, i);
 
 			stride = sizeof(Vertex);
@@ -185,10 +185,10 @@ void Renderer::Draw()
 		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-		currentScene->skybox->GetMat()->PrepareSkybox(Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), skyVS, skyPS);
+		static_cast<D3D11Material *>(currentScene->skybox->GetMat())->PrepareSkybox(Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), skyVS, skyPS);
 
-		context->RSSetState(currentScene->skybox->GetMat()->GetRast());
-		context->OMSetDepthStencilState(currentScene->skybox->GetMat()->GetDepthSD(), 0);
+		context->RSSetState(static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetRast());
+		context->OMSetDepthStencilState(static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetDepthSD(), 0);
 		context->DrawIndexed(currentScene->skybox->GetMesh()->GetIndexCount(), 0, 0);
 
 		// Reset the render states we've changed
@@ -211,7 +211,7 @@ void Renderer::Draw()
 	{
 		for (unsigned i = 0; i < currentScene->transparentNorm.size(); i++)
 		{
-			currentScene->transparentNorm.at(i)->GetMat()->PrepareMaterial(currentScene->transparentNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
+			static_cast<D3D11Material *>(currentScene->transparentNorm.at(i)->GetMat())->PrepareMaterial(currentScene->transparentNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
 			SetPixelShaderUp(pixelShaderNormalMapBlend, currentScene->transparentNorm, i);
 
 			stride = sizeof(Vertex);
@@ -232,7 +232,7 @@ void Renderer::Draw()
 	{
 		for (unsigned i = 0; i < currentScene->transparent.size(); i++)
 		{
-			currentScene->transparent.at(i)->GetMat()->PrepareMaterial(currentScene->transparent.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
+			static_cast<D3D11Material *>(currentScene->transparent.at(i)->GetMat())->PrepareMaterial(currentScene->transparent.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
 			SetPixelShaderUp(pixelShaderBlend, currentScene->transparent, i);
 
 			stride = sizeof(Vertex);
@@ -388,18 +388,18 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*>
 		);
 	}
 
-	pShader->SetSamplerState("basicSampler", list.at(i)->GetMat()->GetSampleState());
-	pShader->SetShaderResourceView("diffuseTexture", list.at(i)->GetMat()->GetSRV());
+	pShader->SetSamplerState("basicSampler", static_cast<D3D11Material *>(list.at(i)->GetMat())->GetSampleState());
+	pShader->SetShaderResourceView("diffuseTexture", static_cast<D3D11Material *>(list.at(i)->GetMat())->GetSRV());
 
 	//check for a normal map
 	if (list.at(i)->GetMat()->HasNormalMap())
 	{
-		pShader->SetShaderResourceView("NormalMap", list.at(i)->GetMat()->GetNormalSRV());
+		pShader->SetShaderResourceView("NormalMap", static_cast<D3D11Material *>(list.at(i)->GetMat())->GetNormalSRV());
 	}
 
 	if (currentScene->skybox != NULL)
 	{
-		pShader->SetShaderResourceView("Sky", currentScene->skybox->GetMat()->GetSkySRV());
+		pShader->SetShaderResourceView("Sky", static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetSkySRV());
 	}
 
 	pShader->CopyAllBufferData();

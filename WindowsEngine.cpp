@@ -40,7 +40,7 @@ WindowsEngine::WindowsEngine(
 	WindowsRenderSystem *windowsRender = new WindowsRenderSystem(width, height, hWnd);
 	renderSystem = windowsRender;
 
-	ioSystem = new PC_IOSystem(windowsRender->GetDevice());
+	ioSystem = new PC_IOSystem(windowsRender->GetDevice(), windowsRender->GetContext());
 
 	SceneBuild.Init(windowsRender->GetDevice(), windowsRender->GetContext());
 	SceneManag.AddScene(SceneBuild.GetScene(1));

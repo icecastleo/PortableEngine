@@ -3,7 +3,7 @@
 //---------------------------------------------------------
 //Default Constructor
 //---------------------------------------------------------
-D3D11Material::D3D11Material() {}
+
 
 //---------------------------------------------------------
 //Constructor override to create a material from a texture path
@@ -178,6 +178,8 @@ void D3D11Material::SetupParticle(ID3D11Device* device, ID3D11DeviceContext* con
 //---------------------------------------------------------
 //Set a normal map
 //---------------------------------------------------------
+
+
 void D3D11Material::SetNormalMap(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path)
 {
 	hasNormal = true;
@@ -226,10 +228,10 @@ void D3D11Material::PrepareSkybox(glm::mat4 view, glm::mat4 projection, SimpleVe
 //---------------------------------------------------------
 //Set whether or not the material uses transperancy
 //---------------------------------------------------------
-void D3D11Material::UseTransperancy(bool _usesTrans)
-{
-	usesTrans = _usesTrans;
-}
+//void D3D11Material::UseTransperancy(bool _usesTrans)
+//{
+//	usesTrans = _usesTrans;
+//}
 
 //---------------------------------------------------------
 //Return the SRV
@@ -282,19 +284,19 @@ ID3D11DepthStencilState* D3D11Material::GetDepthSD()
 //---------------------------------------------------------
 //Return if the material has a normal map or not
 //---------------------------------------------------------
-bool D3D11Material::HasNormalMap()
-{
-	return hasNormal;
-}
-
-//---------------------------------------------------------
-//Return if the material uses transperancy or not
-//---------------------------------------------------------
-bool D3D11Material::UseTransperancy()
-{
-	return usesTrans;
-
-}
+//bool D3D11Material::HasNormalMap()
+//{
+//	return hasNormal;
+//}
+//
+////---------------------------------------------------------
+////Return if the material uses transperancy or not
+////---------------------------------------------------------
+//bool D3D11Material::UseTransperancy()
+//{
+//	return usesTrans;
+//
+//}
 
 ID3D11DepthStencilState* D3D11Material::GetParticleDepthState()
 {
