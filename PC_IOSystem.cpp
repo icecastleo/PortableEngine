@@ -42,6 +42,16 @@ Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath) {
 
 }
 
+Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath, const wchar_t* normalpath) {
+
+
+	Material * ret = new D3D11Material(device, context, texturepath, normalpath);
+	
+
+	return ret;
+
+}
+
 Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath, int type) {
 
 
@@ -52,6 +62,4 @@ Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath, int type) {
 }
 
 
-void PC_IOSystem::loadCubemap(wchar_t*) {
 
-}

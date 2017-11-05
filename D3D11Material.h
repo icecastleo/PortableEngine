@@ -1,7 +1,6 @@
 //Darren Farr
 #pragma once
 #include "Material.h"
-//#include <DirectXMath.h>
 #include "SimpleShader.h"
 #include "WICTextureLoader.h"
 #include "DDSTextureLoader.h"
@@ -12,6 +11,7 @@ class D3D11Material : public Material
 public:
 	
 	D3D11Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
+	D3D11Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*, const wchar_t*);
 	D3D11Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*, int);
 	~D3D11Material();
 
@@ -21,8 +21,6 @@ public:
 	void SetTexture(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
 	void SetNormalMap(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
 	void SetupSkybox(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
-
-	//void UseTransperancy(bool);
 
 
 	void SetupParticle(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
@@ -35,9 +33,6 @@ public:
 	ID3D11ShaderResourceView* GetNormalSRV();
 	ID3D11SamplerState* GetSampleState();
 
-
-	//bool HasNormalMap();
-	//bool UseTransperancy();
 
 	ID3D11DepthStencilState* GetParticleDepthState();
 	ID3D11BlendState* GetParticleBlendState();
@@ -57,8 +52,6 @@ private:
 
 	ID3D11ShaderResourceView* normalSRV;
 
-	//bool hasNormal;
-	//bool usesTrans;
 
 	// Particle Texture
 	ID3D11ShaderResourceView* particleTexture;

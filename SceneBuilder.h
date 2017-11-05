@@ -2,7 +2,6 @@
 #pragma once
 #include "SimpleShader.h"
 #include "Entity.h"
-//#include <DirectXMath.h>
 #include "D3D11Mesh.h"
 #include "D3D11Material.h"
 #include <vector>
@@ -40,8 +39,8 @@ private:
 	Scene* scene3;
 	Scene* scene4;
 
-	ID3D11Device* device;
-	ID3D11DeviceContext* context;
+	//ID3D11Device* device;
+	//ID3D11DeviceContext* context;
 
 	Mesh* cubeMesh;
 	Mesh* quadMesh;
@@ -53,7 +52,6 @@ private:
 	
 	Material* creditsMat;
 	Material* menuMat;
-	//D3D11Material* playerMat;
 	Material* playerMat;
 	Material* laneMat;
 	Material* asteroidMat;
@@ -88,5 +86,4 @@ private:
 
 	SpotLight* spotLight;
 
-	//Entity* asteroidList[12];
 };

@@ -15,6 +15,14 @@ D3D11Material::D3D11Material(ID3D11Device* device, ID3D11DeviceContext* context,
 	usesTrans = false;
 }
 
+D3D11Material::D3D11Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path, const wchar_t* normalpath)
+{
+	SetTexture(device, context, path);
+	hasNormal = true;
+	usesTrans = false;
+	SetNormalMap(device, context, normalpath);
+}
+
 //---------------------------------------------------------
 //Constructor override to create a material for a skybox, particles, and other
 //Type 0 = skybox, 1 = particle, 

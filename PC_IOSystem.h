@@ -15,9 +15,9 @@ public:
 
 	Mesh* loadMesh(wchar_t *) override;
 	Material* loadTexture2d(const wchar_t*) override;
+	Material* loadTexture2d(const wchar_t*, const wchar_t*) override;
 	Material* loadTexture2d(const wchar_t*, int) override;
 	
-	void loadCubemap(wchar_t*) override;
 
 private:
 	ID3D11Device *device;

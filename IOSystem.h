@@ -20,10 +20,9 @@ public:
 
 	virtual Mesh* loadMesh(wchar_t* objName) = 0;
 	virtual Material* loadTexture2d(const wchar_t*) = 0;
+	virtual Material* loadTexture2d(const wchar_t*, const wchar_t*) = 0; //for normalmap
 	virtual Material* loadTexture2d(const wchar_t*, int) = 0;
 	
-	virtual void loadCubemap(wchar_t*) = 0;
-
-	//static IOSystem *instance();
+	
 };
 

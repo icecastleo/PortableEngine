@@ -28,7 +28,4 @@ bool Material::UseTransperancy() {
 	return usesTrans;
 }
 
-void Material::setNormalPath(const wchar_t* path) {
-	normalPath = path;
-}
 

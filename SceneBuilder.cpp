@@ -64,8 +64,8 @@ SceneBuilder::~SceneBuilder()
 void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 {
 	//asteroidList[12];
-	device = _device;
-	context = _context;
+	//device = _device;
+	//context = _context;
 	BuildMaterials();
 	BuildLights();
 	BuildMeshes();
@@ -84,9 +84,9 @@ void SceneBuilder::BuildMaterials()
 	playerMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/rock.jpg";
-	asteroidMat = Engine::ioSystem->loadTexture2d(path);
-	path = L"Assets/textures/rockNormals.jpg";
-	asteroidMat->setNormalPath(path);
+	asteroidMat = Engine::ioSystem->loadTexture2d(path, L"Assets/textures/rockNormals.jpg"); //normal map
+	//path = L"Assets/textures/rockNormals.jpg";
+	//asteroidMat->setNormalPath(path);
 
 	path = L"Assets/textures/title.png";
 	menuMat = Engine::ioSystem->loadTexture2d(path);
@@ -207,18 +207,6 @@ void SceneBuilder::BuildMeshes()
 	sphereMesh = Engine::ioSystem->loadMesh(L"sphere");
 	playerMesh = Engine::ioSystem->loadMesh(L"sphere");
 	asteroidMesh = Engine::ioSystem->loadMesh(L"sphereTest");
-
-	//cubeMesh = new D3D11Mesh(L"cube", device);
-
-	//skyboxMesh = new D3D11Mesh(L"cube", device);
-
-	//quadMesh = new D3D11Mesh(L"quad", device);
-
-	//sphereMesh = new D3D11Mesh(L"sphere", device);
-
-	//playerMesh = new D3D11Mesh(L"sphere", device);
-
-	//asteroidMesh = new D3D11Mesh(L"sphereTest", device);
 }
 
 //---------------------------------------------------------
