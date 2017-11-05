@@ -12,7 +12,7 @@ Camera::Camera()
 	width = 0;
 	height = 0;
 	//mouseDown = false;
-	debugMode = false;
+	//debugMode = false;
 	debugMode = true;
 }
 
@@ -24,7 +24,7 @@ Camera::Camera(unsigned int _width, unsigned int _height)
 	width = _width;
 	height = _height;
 	//mouseDown = false;
-	debugMode = false;
+	debugMode = true;
 }
 
 //---------------------------------------------------------

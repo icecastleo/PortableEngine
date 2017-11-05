@@ -73,18 +73,6 @@ void Entity::SetParent(Entity * e)
 // --------------------------------------------------------
 void Entity::SetWorldMat()
 {
-	/*XMMATRIX local = DirectX::XMMatrixMultiply(
-		DirectX::XMMatrixMultiply(
-			DirectX::XMMatrixScaling(transform.scale.x, transform.scale.y, transform.scale.z),
-			DirectX::XMMatrixRotationRollPitchYaw(transform.rotation.x, transform.rotation.y, transform.rotation.z)
-		),
-		DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z)
-	);
-
-	XMStoreFloat4x4(
-		&localMat,
-		DirectX::XMMatrixTranspose(local)
-	);*/
 
 	glm::mat4 local = glm::mat4(1.0f);
 	glm::mat4 myTranslationMatrix = glm::translate(local, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
@@ -95,23 +83,10 @@ void Entity::SetWorldMat()
 
 
 	if (parent != nullptr) {
-		/*XMMATRIX world = DirectX::XMMatrixMultiply(
-			local,
-			DirectX::XMMatrixTranspose(
-				XMLoadFloat4x4(&parent->GetWorldMat())
-			)
-		);
-		XMStoreFloat4x4(
-			&worldMat,
-			DirectX::XMMatrixTranspose(world)
-		);*/
-
+		
 
 		glm::mat4 world =  glm::transpose(parent->GetWorldMat()) * local ;
-		//worldMat = world;
-
-
-		//worldMat = world;
+		
 		worldMat = glm::transpose(world);
 
 
