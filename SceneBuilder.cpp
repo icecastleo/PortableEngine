@@ -64,8 +64,8 @@ SceneBuilder::~SceneBuilder()
 void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
 {
 	//asteroidList[12];
-	device = _device;
-	context = _context;
+	//device = _device;
+	//context = _context;
 	BuildMaterials();
 	BuildLights();
 	BuildMeshes();
@@ -81,56 +81,56 @@ void SceneBuilder::BuildMaterials()
 	const wchar_t* path;
 
 	path = L"Assets/textures/player.png";
-	playerMat = new D3D11Material(device, context, path);
+	playerMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/rock.jpg";
-	asteroidMat = new D3D11Material(device, context, path);
-	path = L"Assets/textures/rockNormals.jpg";
-	asteroidMat->SetNormalMap(device, context, path);
+	asteroidMat = Engine::ioSystem->loadTexture2d(path, L"Assets/textures/rockNormals.jpg"); //normal map
+	//path = L"Assets/textures/rockNormals.jpg";
+	//asteroidMat->setNormalPath(path);
 
 	path = L"Assets/textures/title.png";
-	menuMat = new D3D11Material(device, context, path);
+	menuMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/creditsTexture.jpg";
-	creditsMat = new D3D11Material(device, context, path);
+	creditsMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/spaceBackground.dds";
-	backgroundMat = new D3D11Material(device, context, path, 0);
+	backgroundMat = Engine::ioSystem->loadTexture2d(path,0);
 
 	path = L"Assets/textures/venus.jpg";
-	venusMat = new D3D11Material(device, context, path);
+	venusMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/sun.jpg";
-	sunMat = new D3D11Material(device, context, path);
+	sunMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/earth.png";
-	earthMat = new D3D11Material(device, context, path);
+	earthMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/moon.jpg";
-	moonMat = new D3D11Material(device, context, path);
+	moonMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/planet1.jpg";
-	p1Mat = new D3D11Material(device, context, path);
+	p1Mat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/planet2.png";
-	p2Mat = new D3D11Material(device, context, path);
+	p2Mat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/planet3.png";
-	p3Mat = new D3D11Material(device, context, path);
+	p3Mat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"Assets/textures/rainbow3.png";
-	laneMat = new D3D11Material(device, context, path);
+	laneMat = Engine::ioSystem->loadTexture2d(path);
 	laneMat->UseTransperancy(true);
 
 	path = L"Assets/textures/blueSpace3.png";
-	lane2Mat = new D3D11Material(device, context, path);
+	lane2Mat = Engine::ioSystem->loadTexture2d(path);
 	lane2Mat->UseTransperancy(true);
 
 	path = L"Assets/Textures/circleParticle.jpg"; 
-	particelMat = new D3D11Material(device, context, path, 1);
+	particelMat = Engine::ioSystem->loadTexture2d(path,1);
 
 	path = L"Assets/Textures/titleText.png";
-	titleMat = new D3D11Material(device, context, path);
+	titleMat = Engine::ioSystem->loadTexture2d(path);
 
 }
 
@@ -207,18 +207,6 @@ void SceneBuilder::BuildMeshes()
 	sphereMesh = Engine::ioSystem->loadMesh(L"sphere");
 	playerMesh = Engine::ioSystem->loadMesh(L"sphere");
 	asteroidMesh = Engine::ioSystem->loadMesh(L"sphereTest");
-
-	//cubeMesh = new D3D11Mesh(L"cube", device);
-
-	//skyboxMesh = new D3D11Mesh(L"cube", device);
-
-	//quadMesh = new D3D11Mesh(L"quad", device);
-
-	//sphereMesh = new D3D11Mesh(L"sphere", device);
-
-	//playerMesh = new D3D11Mesh(L"sphere", device);
-
-	//asteroidMesh = new D3D11Mesh(L"sphereTest", device);
 }
 
 //---------------------------------------------------------

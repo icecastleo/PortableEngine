@@ -23,7 +23,7 @@ Entity::~Entity()
 //Override constructor using the Identity Matrix 
 //for world matrix
 // --------------------------------------------------------
-Entity::Entity(Mesh* _mesh, D3D11Material* _mat, glm::vec3 _pos, glm::vec3 _rot, glm::vec3 _scale)
+Entity::Entity(Mesh* _mesh, Material* _mat, glm::vec3 _pos, glm::vec3 _rot, glm::vec3 _scale)
 {
 	mesh = _mesh;
 	mat = _mat;
@@ -163,7 +163,7 @@ Mesh* Entity::GetMesh()
 // --------------------------------------------------------
 //Return the entities material
 // --------------------------------------------------------
-D3D11Material* Entity::GetMat()
+Material* Entity::GetMat()
 {
 	return mat;
 }
