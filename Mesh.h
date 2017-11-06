@@ -11,20 +11,18 @@ public:
 
 	virtual void* GetVertexBuffer() = 0;
 	virtual void* GetIndexBuffer() = 0;
-	uint16_t GetIndexCount();
 
-	std::vector<Vertex> GetVertexCollection();
-	std::vector<uint16_t> GetIndexCollection();
+	std::vector<Vertex> GetVertices();
+	std::vector<uint16_t> GetIndices();
 
 protected:
 	void* vertBuffer;
 	void* indBuffer;
-	uint16_t indCount;
 
 	bool hasNormalMap;
 
-	std::vector<Vertex> vertexCollection;
-	std::vector<uint16_t> indexCollection;
+	std::vector<Vertex> verts;
+	std::vector<uint16_t> indices;
 
 private:
 	void loadVertices(char *path);

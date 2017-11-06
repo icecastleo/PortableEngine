@@ -13,5 +13,5 @@ public:
 	void* GetIndexBuffer();
 
 private:
-	void CreateGeometry(Vertex*, uint16_t, uint16_t*, ID3D11Device*);
+	void CreateGeometry(Vertex*, size_t, uint16_t*, size_t, ID3D11Device*);
 };
