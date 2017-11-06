@@ -46,7 +46,7 @@ struct GlobalLight
 cbuffer lightData : register(b0)
 {
 	GlobalLight ambient0;
-	float4 cameraPosition;
+	float3 cameraPosition;
 	DirectionalLight light0;
 	DirectionalLight light1;
 	PointLight lightP0;
@@ -80,8 +80,8 @@ float4 getPointLightColor(PointLight light, VertexToPixel input) {
 }
 
 // Specular highlight for point light
-float4 getBlinnSpecular(PointLight light, VertexToPixel input, float4 cameraPosition) {
-	float specular = saturate(dot(input.normal, normalize(light.Position - input.worldPos + cameraPosition.xyz - input.worldPos)));
+float4 getBlinnSpecular(PointLight light, VertexToPixel input, float3 cameraPosition) {
+	float specular = saturate(dot(input.normal, normalize(light.Position - input.worldPos + cameraPosition - input.worldPos)));
 	return pow(specular, 8) * light.DiffuseColor;
 }
 

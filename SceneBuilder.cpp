@@ -260,31 +260,31 @@ void SceneBuilder::SetupScenes()
 	//scene2->entities.push_back(playerEnt);
 
 	Entity *sun = new Entity(sphereMesh, sunMat, glm::vec3(30, -10, 40), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+10.0f, +10.0f, +10.0f));
-	sun->dirtyUpdate = new Planet(sun, 0.002f);
+	sun->dirtyUpdate = new Planet(sun, 0.1f);
 	scene2->entities.push_back(sun);
 
 	Entity *venus = new Entity(sphereMesh, venusMat, glm::vec3(-60, -10, 30), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+100.0f, +100.0f, +100.0f));
-	venus->dirtyUpdate = new Planet(venus, 0.0001f);
+	venus->dirtyUpdate = new Planet(venus, 0.005f);
 	scene2->entities.push_back(venus);
 
 	Entity *earth = new Entity(sphereMesh, earthMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.5f, +0.5f, +0.5f));
-	earth->dirtyUpdate = new Planet(earth, 0.004f);
+	earth->dirtyUpdate = new Planet(earth, 0.2f);
 	scene2->entities.push_back(earth);
 
 	Entity *moon = new Entity(sphereMesh, moonMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.3f, +0.3f, +0.3f));
-	moon->dirtyUpdate = new Planet(moon, 0.006f);
+	moon->dirtyUpdate = new Planet(moon, 0.3f);
 	scene2->entities.push_back(moon);
 
 	Entity *p1 = new Entity(sphereMesh, p1Mat, glm::vec3(0, 0, 1.5f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.7f, +0.7f, +0.7f));
-	p1->dirtyUpdate = new Planet(p1, 0.01f);
+	p1->dirtyUpdate = new Planet(p1, 0.5f);
 	scene2->entities.push_back(p1);
 
 	Entity *p2 = new Entity(sphereMesh, p2Mat, glm::vec3(-1.5f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.3f, +0.3f, +0.3f));
-	p2->dirtyUpdate = new Planet(p2, -0.008f);
+	p2->dirtyUpdate = new Planet(p2, -0.4f);
 	scene2->entities.push_back(p2);
 
 	Entity *p3 = new Entity(sphereMesh, p3Mat, glm::vec3(-1.5f, 0, -1), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.6f, +0.6f, +0.6f));
-	p3->dirtyUpdate = new Planet(p3, 0.003f);
+	p3->dirtyUpdate = new Planet(p3, 0.15f);
 	scene2->entities.push_back(p3);
 
 	p1->SetParent(sun);
@@ -294,8 +294,8 @@ void SceneBuilder::SetupScenes()
 	moon->SetParent(earth);
 
 	// color lines
-	scene2->entities.push_back(new Entity(quadMesh, lane2Mat, glm::vec3(-2.8f, -1.2f, 8.0f), glm::vec3(+1.6f, -0.1f, +0.0f), glm::vec3(+1.0f, +14.0f, +1.0f)));
-	scene2->entities.push_back(new Entity(quadMesh, laneMat, glm::vec3(1.5f, -1.2f, 8.0f), glm::vec3(+1.6f, -0.1f, +0.0f), glm::vec3(+1.0f, +14.0f, +1.0f)));
+	scene2->entities.push_back(new Entity(quadMesh, lane2Mat, glm::vec3(-3.0f, -1.2f, 8.0f), glm::vec3(+90.0, -0.0f, +0.0f), glm::vec3(+1.0f, +14.0f, +1.0f)));
+	scene2->entities.push_back(new Entity(quadMesh, laneMat, glm::vec3(3.0f, -1.2f, 8.0f), glm::vec3(+90.0f, -0.0f, +0.0f), glm::vec3(+1.0f, +14.0f, +1.0f)));
 
 	//Background
 	scene2->skybox = new Entity(skyboxMesh, backgroundMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+10.0f, +10.0f, +10.0f));

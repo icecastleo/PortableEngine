@@ -308,15 +308,11 @@ void Renderer::setWidthHeight(unsigned int width, unsigned int height, ID3D11Dep
 //---------------------------------------------------------
 void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*> list, int i)
 {
-	pShader->SetFloat4("cameraPosition", camera->GetPositon());
+	pShader->SetFloat3("cameraPosition", camera->GetPositon());
 
 	if (currentScene->spotLights.size() > 0) {
-		currentScene->spotLights.at(0)->Direction.x = camera->GetDirection().x;
-		currentScene->spotLights.at(0)->Direction.y = camera->GetDirection().y;
-		currentScene->spotLights.at(0)->Direction.z = camera->GetDirection().z;
-		currentScene->spotLights.at(0)->Position.x = camera->GetPositon().x;
-		currentScene->spotLights.at(0)->Position.y = camera->GetPositon().y;
-		currentScene->spotLights.at(0)->Position.z = camera->GetPositon().z;
+		currentScene->spotLights.at(0)->Position = camera->GetPositon();
+		currentScene->spotLights.at(0)->Direction = camera->GetDirection();
 	}
 
 	//loop through lights
