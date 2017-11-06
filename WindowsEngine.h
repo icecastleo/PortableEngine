@@ -10,10 +10,10 @@ class WindowsEngine :
 {
 public:
 	WindowsEngine(
+		uint16_t windowWidth,	// Width of the window's client area
+		uint16_t windowHeight,	// Height of the window's client area
 		HINSTANCE hInstance,		// The application's handle
 		char* titleBarText,			// Text for the window's title bar
-		unsigned int windowWidth,	// Width of the window's client area
-		unsigned int windowHeight,	// Height of the window's client area
 		bool debugTitleBarStats);	// Show extra stats (fps) in title bar?);
 
 	~WindowsEngine();
@@ -33,17 +33,13 @@ public:
 	LRESULT ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
-	 bool platformUpdate() override;
+	 bool Update() override;
 
 private:
 	HINSTANCE	hInstance;		// The handle to the application
 	HWND		hWnd;			// The handle to the window itself
 	std::string titleBarText;	// Custom text in window's title bar
 	bool		titleBarStats;	// Show extra stats in title bar?
-
-								// Size of the window's client area
-	unsigned int width;
-	unsigned int height;
 
 	int fpsFrameCount;
 

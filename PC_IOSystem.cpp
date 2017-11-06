@@ -34,7 +34,10 @@ Mesh* PC_IOSystem::loadMesh(wchar_t *objName)
 	size_t result;
 
 	// success
-	assert(wcstombs_s(&result, cPath, size, src, size) == 0);
+	if (wcstombs_s(&result, cPath, size, src, size) != 0) {
+		perror("Failed to convert wstring to c string \n");
+		return nullptr;
+	}
 
 	Mesh *ret = new D3D11Mesh(cPath, device);
 

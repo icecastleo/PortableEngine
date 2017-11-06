@@ -28,7 +28,7 @@ void Mesh::loadVertices(char * path)
 
 	// Check for successful open
 	if (fopen_s(&pFile, path, "r") != 0) {
-		perror("Error opening file");
+		perror("Error opening file \n");
 		return;
 	}
 

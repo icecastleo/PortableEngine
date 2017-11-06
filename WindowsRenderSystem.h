@@ -26,17 +26,12 @@ class WindowsRenderSystem
 {
 
 public:
-	WindowsRenderSystem(unsigned int windowWidth, unsigned int windowHeight, HWND hWnd);
+	WindowsRenderSystem(uint16_t width, uint16_t height, HWND hWnd);
 	~WindowsRenderSystem();
 
-	// Overridden setup and game loop methods, which
-	// will be called automatically
-	void Init();
-	void OnResize();
-	void Update(float deltaTime);
-	void Draw();
-
-	HRESULT InitDirectX();
+	void OnResize(uint16_t width, uint16_t height) override;
+	void Update(float deltaTime) override;
+	void Draw() override;
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetContext();
@@ -44,10 +39,14 @@ public:
 	void SetScene(Scene *scene);
 	
 private:
-	HWND		hWnd;			// The handle to the window itself
 
-	unsigned int width;			// Size of the window's client area
-	unsigned int height;
+	void Init(uint16_t width, uint16_t height);
+	HRESULT InitDirectX(uint16_t width, uint16_t height);
+
+	// Initialization helper methods - feel free to customize, combine, etc.
+	void LoadShaders();
+
+	HWND hWnd;					// The handle to the window itself
 
 	// DirectX related objects and variables
 	D3D_FEATURE_LEVEL		dxFeatureLevel;
@@ -62,11 +61,6 @@ private:
 	// determining how far the mouse moved in a single frame.
 	POINT prevMousePos;
 
-	int SceneNumber;
-
-	// Initialization helper methods - feel free to customize, combine, etc.
-	void LoadShaders();
-
 	// Wrappers for DirectX shaders to provide simplified functionality
 	SimpleVertexShader* vertexShader;
 	SimplePixelShader* pixelShader;
@@ -77,10 +71,6 @@ private:
 
 	SimplePixelShader* pixelShaderBlend;
 	SimplePixelShader* pixelShaderNormalMapBlend;
-
-	// Particle Shaders
-	SimpleVertexShader* particleVS;
-	SimplePixelShader* particlePS;
 
 	MusicPlayer musicPlayer;
 
@@ -94,8 +84,6 @@ private:
 	int asteroidIndex = 0;
 	float stayTime = 0;
 	float sceneChangeTime = 0;
-
-	int score;
 
 	Text2D* text;
 };

@@ -1,7 +1,9 @@
 #include "Entity.h"
 #include "glm\gtc\matrix_transform.hpp"
-#include "glm\gtx\euler_angles.hpp"
+#include "glm\gtx\quaternion.hpp"
+
 using namespace DirectX;
+using namespace glm;
 
 Entity::Entity() 
 {
@@ -57,16 +59,16 @@ void Entity::SetParent(Entity * e)
 // --------------------------------------------------------
 void Entity::SetWorldMat()
 {
-	glm::mat4 local = glm::mat4(1.0f);
-	glm::mat4 myTranslationMatrix = glm::translate(local, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
-	glm::mat4 myRotationMatrix = glm::yawPitchRoll(transform.rotation.y, transform.rotation.x, transform.rotation.z);
-	glm::mat4 myScaleMatrix = glm::scale(local, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
+	mat4 local = mat4(1.0f);
+	mat4 myTranslationMatrix = translate(local, transform.position);
+	mat4 myRotationMatrix = toMat4(quat(vec3(radians(transform.rotation))));
+	mat4 myScaleMatrix = scale(local, transform.scale);
 	local = myTranslationMatrix * myRotationMatrix * myScaleMatrix;
-	localMat = glm::transpose(local);
+	localMat = transpose(local);
 
 	if (parent != nullptr) {
-		glm::mat4 world =  glm::transpose(parent->GetWorldMat()) * local ;	
-		worldMat = glm::transpose(world);
+		mat4 world =  transpose(parent->GetWorldMat()) * local ;	
+		worldMat = transpose(world);
 	}
 	else
 	{

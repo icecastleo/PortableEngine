@@ -9,8 +9,6 @@ using namespace DirectX;
 Renderer::Renderer()
 {
 	// Initialize fields
-	vertexBuffer = 0;
-	indexBuffer = 0;
 	vertexShader = 0;
 	pixelShader = 0;
 
@@ -23,8 +21,6 @@ Renderer::Renderer()
 //---------------------------------------------------------
 Renderer::~Renderer() 
 {
-	//May be moved later
-	//-----------------------------
 	ppSRV->Release();
 	ppRTV->Release();
 	bsAlphaBlend->Release();
@@ -32,7 +28,6 @@ Renderer::~Renderer()
 
 	delete blur;
 	delete bloom;
-	//-----------------------------
 }
 
 //---------------------------------------------------------
@@ -41,7 +36,7 @@ Renderer::~Renderer()
 void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con, ID3D11RenderTargetView* tView, 
 	IDXGISwapChain* chain, ID3D11DepthStencilView* depthStencilView, Text2D* _text, unsigned int width, unsigned int height)
 {
-	Cam = _Cam;
+	camera = _Cam;
 	mDevice = device;
 	context = con;
 	backBufferRTV = tView;
@@ -52,21 +47,17 @@ void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con
 	setWidthHeight(width, height, depthStencilView);
 
 	blur = new GaussianBlur(mDevice, context);
-	blur->Init(mWidth, mHeight, depthStencilView);
+	blur->Init(width, height, depthStencilView);
 
 	bloom = new Bloom(mDevice, context);
-	bloom->Init(mWidth, mHeight, depthStencilView);
+	bloom->Init(width, height, depthStencilView);
 
 	CreateAdditionalRSStates();
 }
 
-//---------------------------------------------------------
-//Set Shaders
-//---------------------------------------------------------
 void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* _pixelShader,
 	SimpleVertexShader* _vertShaderNorm, SimplePixelShader* _pixShaderNorm, SimpleVertexShader* _skyVs,
-	SimplePixelShader* _skyPs, SimplePixelShader* _pixelShaderB, SimplePixelShader* _pixShaderNormB,
-	SimpleVertexShader* _particleVs, SimplePixelShader* _particlePs)
+	SimplePixelShader* _skyPs, SimplePixelShader* _pixelShaderB, SimplePixelShader* _pixShaderNormB)
 {
 	vertexShader = _vertexShader;
 	pixelShader = _pixelShader;
@@ -76,8 +67,6 @@ void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* 
 	skyPS = _skyPs;
 	pixelShaderBlend = _pixelShaderB;
 	pixelShaderNormalMapBlend = _pixShaderNormB;
-	particleVS = _particleVs;
-	particlePS = _particlePs;
 }
 
 //---------------------------------------------------------
@@ -114,7 +103,6 @@ void Renderer::Draw()
 	// Turn off our custom blend state
 	context->OMSetBlendState(nullptr, 0, 0xFFFFFFFF);
 
-
 	// Post process initial setup =================
 	// Start rendering somewhere else!
 	context->ClearRenderTargetView(ppRTV, color);
@@ -126,13 +114,17 @@ void Renderer::Draw()
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	
+	// Buffers to hold actual geometry data
+	ID3D11Buffer* vertexBuffer;
+	ID3D11Buffer* indexBuffer;
+
 	//Loop through the list of Entities and draw each one
 	//Draw opaque entities first then opaque with normals then transparent with normals and finally transparent objects
 	if (currentScene->opaque.size() > 0)
 	{
 		for (unsigned i = 0; i < currentScene->opaque.size(); i++)
 		{
-			static_cast<D3D11Material *>(currentScene->opaque.at(i)->GetMat())->PrepareMaterial(currentScene->opaque.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
+			static_cast<D3D11Material *>(currentScene->opaque.at(i)->GetMat())->PrepareMaterial(currentScene->opaque.at(i)->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vertexShader);
 			SetPixelShaderUp(pixelShader, currentScene->opaque, i);
 
 			stride = sizeof(Vertex);
@@ -158,7 +150,7 @@ void Renderer::Draw()
 	{
 		for (unsigned i = 0; i < currentScene->opaqueNorm.size(); i++)
 		{
-			static_cast<D3D11Material *>(currentScene->opaqueNorm.at(i)->GetMat())->PrepareMaterial(currentScene->opaqueNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
+			static_cast<D3D11Material *>(currentScene->opaqueNorm.at(i)->GetMat())->PrepareMaterial(currentScene->opaqueNorm.at(i)->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vertexShaderNormalMap);
 			SetPixelShaderUp(pixelShaderNormalMap, currentScene->opaqueNorm, i);
 
 			stride = sizeof(Vertex);
@@ -185,7 +177,7 @@ void Renderer::Draw()
 		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-		static_cast<D3D11Material *>(currentScene->skybox->GetMat())->PrepareSkybox(Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), skyVS, skyPS);
+		static_cast<D3D11Material *>(currentScene->skybox->GetMat())->PrepareSkybox(camera->GetViewMatrix(), camera->GetProjectionMatrix(), skyVS, skyPS);
 
 		context->RSSetState(static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetRast());
 		context->OMSetDepthStencilState(static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetDepthSD(), 0);
@@ -211,7 +203,7 @@ void Renderer::Draw()
 	{
 		for (unsigned i = 0; i < currentScene->transparentNorm.size(); i++)
 		{
-			static_cast<D3D11Material *>(currentScene->transparentNorm.at(i)->GetMat())->PrepareMaterial(currentScene->transparentNorm.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShaderNormalMap);
+			static_cast<D3D11Material *>(currentScene->transparentNorm.at(i)->GetMat())->PrepareMaterial(currentScene->transparentNorm.at(i)->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vertexShaderNormalMap);
 			SetPixelShaderUp(pixelShaderNormalMapBlend, currentScene->transparentNorm, i);
 
 			stride = sizeof(Vertex);
@@ -232,7 +224,7 @@ void Renderer::Draw()
 	{
 		for (unsigned i = 0; i < currentScene->transparent.size(); i++)
 		{
-			static_cast<D3D11Material *>(currentScene->transparent.at(i)->GetMat())->PrepareMaterial(currentScene->transparent.at(i)->GetWorldMat(), Cam->GetViewMatrix(), Cam->GetProjectionMatrix(), vertexShader);
+			static_cast<D3D11Material *>(currentScene->transparent.at(i)->GetMat())->PrepareMaterial(currentScene->transparent.at(i)->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vertexShader);
 			SetPixelShaderUp(pixelShaderBlend, currentScene->transparent, i);
 
 			stride = sizeof(Vertex);
@@ -250,20 +242,13 @@ void Renderer::Draw()
 		
 	}//end of transparent with normal maps draw calls
 
-	//Draw Text Here
-	//text->DrawMyText();
-
-	if (currentScene->name == "MainGame" || currentScene->name == "Results")
-	{
-		DrawScore();
-	}
-
 	// Reset states to properly render next frame
 	context->RSSetState(0);
 	context->OMSetDepthStencilState(0, 0);
 	float factors[4] = { 1,1,1,1 };
 	context->OMSetBlendState(0, factors, 0xFFFFFFFF);
 
+	// Render post process to backBuffer
 	//blur->Draw(deltaTime, ppSRV, backBufferRTV);
 	bloom->Draw(ppSRV, backBufferRTV);
 
@@ -273,22 +258,17 @@ void Renderer::Draw()
 	swapChain->Present(0, 0);
 }
 
-//---------------------------------------------------------
-//Set the render width and height
-//---------------------------------------------------------
 void Renderer::setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView * depthStencilView)
 {
-	mWidth = width;
-	mHeight = height;
 	mDepthStencilView = depthStencilView;
 
 	if (ppRTV) { ppRTV->Release(); }
 	if (ppSRV) { ppSRV->Release(); }
 
-	// Create post process resources -----------------------------------------
+	// Create post process resources
 	D3D11_TEXTURE2D_DESC textureDesc = {};
-	textureDesc.Width = mWidth;
-	textureDesc.Height = mHeight;
+	textureDesc.Width = width;
+	textureDesc.Height = height;
 	textureDesc.ArraySize = 1;
 	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	textureDesc.CPUAccessFlags = 0;
@@ -328,15 +308,11 @@ void Renderer::setWidthHeight(unsigned int width, unsigned int height, ID3D11Dep
 //---------------------------------------------------------
 void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*> list, int i)
 {
-	pShader->SetFloat4("cameraPosition", Cam->GetPositon());
+	pShader->SetFloat3("cameraPosition", camera->GetPositon());
 
 	if (currentScene->spotLights.size() > 0) {
-		currentScene->spotLights.at(0)->Direction.x = Cam->GetDirection().x;
-		currentScene->spotLights.at(0)->Direction.y = Cam->GetDirection().y;
-		currentScene->spotLights.at(0)->Direction.z = Cam->GetDirection().z;
-		currentScene->spotLights.at(0)->Position.x = Cam->GetPositon().x;
-		currentScene->spotLights.at(0)->Position.y = Cam->GetPositon().y;
-		currentScene->spotLights.at(0)->Position.z = Cam->GetPositon().z;
+		currentScene->spotLights.at(0)->Position = camera->GetPositon();
+		currentScene->spotLights.at(0)->Direction = camera->GetDirection();
 	}
 
 	//loop through lights
@@ -449,36 +425,4 @@ void Renderer::Resized(ID3D11DepthStencilView* depthStencilView, ID3D11RenderTar
 
 	blur->Resize(width, height, depthStencilView);
 	bloom->Resize(width, height, depthStencilView);
-}
-
-//---------------------------------------------------------
-//Draw player score
-//---------------------------------------------------------
-void Renderer::DrawScore()
-{
-	//text->DrawLiveText(score, scorePos);
-}
-
-//---------------------------------------------------------
-//Set player score
-//---------------------------------------------------------
-void Renderer::SetScore(int _score)
-{
-	score = _score;
-}
-
-//---------------------------------------------------------
-//Set Score screen position
-//---------------------------------------------------------
-void Renderer::SetScorePos(glm::vec2 _pos)
-{
-	scorePos = _pos;
-}
-
-//---------------------------------------------------------
-//Sets up for 2d text drawing
-//---------------------------------------------------------
-void Renderer::Setup2D()
-{
-	
 }

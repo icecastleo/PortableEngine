@@ -1,87 +1,78 @@
-//Darren Farr
 #include "Camera.h"
 #include "glm\gtc\matrix_transform.hpp"
-#include <iostream>
+#include "glm\gtx\quaternion.hpp"
 
+using namespace glm;
 
-//---------------------------------------------------------
-//Default Constructor
-//---------------------------------------------------------
-Camera::Camera() 
+Camera::Camera()
 {
-	width = 0;
-	height = 0;
-	//debugMode = false;
-	debugMode = true;
-}
 
-//---------------------------------------------------------
-//Default Constructor
-//---------------------------------------------------------
-Camera::Camera(unsigned int _width, unsigned int _height)
-{
-	width = _width;
-	height = _height;
+#if defined(DEBUG) | defined(_DEBUG)
 	debugMode = true;
+#endif // DEBUG
+
 }
 
 Camera::~Camera() 
 {
 }
 
-//Set the width and height
-void Camera::SetWidthHeight(unsigned int _width, unsigned int _height)
-{
-	width = _width;
-	height = _height;
-}
-
-void Camera::SetPosition(glm::vec4 pos) {
-	position = pos;
-}
-
-void Camera::SetDir(glm::vec4 dir) {
-	direction = dir;
-}
-void Camera::Init()
+void Camera::Init(uint16_t width, uint16_t height)
 {
 	// FIXME:  
 #if _PC
-	position = glm::vec4(0, 8, -15, 0);
-	direction = glm::vec4(0, -0.3f, 1, 0);
+	position = vec3(0.f, 8.f, -15.f);
+	rotation = vec3(15.f, 0.f, 0.f);
 #endif	
 #if _PS4
 	position = glm::vec4(5.0f, 10.0f, 20.0f, 0);
-	direction = glm::vec4(-5.0f, -10.0f, -20.0f, 0);
 #endif
 
-	rotationX = 0.0f;
-	rotationY = 0.0f;
-	CreateMatrices(position, direction);
+	CreateMatrices(width, height);
 }
 
-//---------------------------------------------------------
-//Create the base matrices for the camera
-//Base code from Game.cpp - Chris Cascioli
-//---------------------------------------------------------
-void Camera::CreateMatrices(glm::vec4 position, glm::vec4 direction)
+// Create the base matrices for the camera
+void Camera::CreateMatrices(uint16_t width, uint16_t height)
 {
-	glm::vec4 pos = position;
-	glm::vec4 dir = direction;
-	glm::vec4 up = glm::vec4(0, 1, 0, 0);
-	glm::mat4 V = glm::lookAtLH(glm::vec3(pos), glm::vec3(dir+pos), glm::vec3(up));
-	viewMatrix = glm::transpose(V);
+	MakeViewMatrix();
+	MakeProjectionMatrix(width, height);
+}
 
-	float FoV = 0.25f * 3.1415926535f;
-	glm::mat4 P = glm::perspectiveFovLH(FoV, (float)width ,(float)height, 0.1f, 100.0f);
+void Camera::MakeViewMatrix()
+{
+	glm::mat4 identity = glm::mat4(1.0f);
+	glm::mat4 trans = glm::translate(identity, position);
+
+	mat3 rotationMatrix = toMat3(quat(radians(rotation)));
+
+	static vec3 defaultUp(0.f, 1.f, 0.f);
+	static vec3 defaultDir(0.f, 0.f, 1.f);
+
+	direction = rotationMatrix * defaultDir;
+	up = rotationMatrix * defaultUp;
+
+	glm::mat4 V = glm::lookAtLH(position, position + direction, up);
+	viewMatrix = glm::transpose(V);
+}
+
+void Camera::MakeProjectionMatrix(uint16_t width, uint16_t height)
+{
+	// Update our projection matrix since the window size changed
+	//XMMATRIX P = XMMatrixPerspectiveFovLH(
+	//	0.25f * 3.1415926535f,	// Field of View Angle
+	//	(float)width / height,	// Aspect ratio
+	//	0.1f,				  	// Near clip plane distance
+	//	100.0f);			  	// Far clip plane distance
+	//XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
+
+	float FoV = 60.f;
+	glm::mat4 P = glm::perspectiveFovLH(radians(FoV), (float)width, (float)height, 0.1f, 100.0f);
 	projectionMatrix = glm::transpose(P);
 }
 
-//---------------------------------------------------------
-//Camera Update, checks for commands to move camera
-//---------------------------------------------------------
-void Camera::Update(float deltaTime) {
-	
+void Camera::Update(float deltaTime) 
+{
+	MakeViewMatrix();
 }
 
 glm::mat4 Camera::GetViewMatrix()
@@ -94,39 +85,27 @@ glm::mat4 Camera::GetProjectionMatrix()
 	return projectionMatrix;
 }
 
-glm::vec4 Camera::GetPositon()
-{
-	return position;
-}
-
-glm::vec4 Camera::GetDirection()
+glm::vec3 Camera::GetDirection()
 {
 	return direction;
 }
 
-//---------------------------------------------------------
-//Resize the Screen
-//---------------------------------------------------------
-void Camera::Resize(unsigned int width, unsigned int height)
+glm::vec3 Camera::GetPositon()
 {
-	// Update our projection matrix since the window size changed
-	//XMMATRIX P = XMMatrixPerspectiveFovLH(
-	//	0.25f * 3.1415926535f,	// Field of View Angle
-	//	(float)width / height,	// Aspect ratio
-	//	0.1f,				  	// Near clip plane distance
-	//	100.0f);			  	// Far clip plane distance
-	//XMStoreFloat4x4(&projectionMatrix, XMMatrixTranspose(P)); // Transpose for HLSL!
-
-	float FoV = 0.25f * 3.1415926535f;
-	glm::mat4 P = glm::perspectiveLH(glm::radians(FoV), (float)width / height, 0.1f, 100.0f);
-
-	projectionMatrix = glm::transpose(P);
+	return position;
 }
 
-//---------------------------------------------------------
-//Toggle Camera debug mode
-//---------------------------------------------------------
-void Camera::SetDebugMode(bool mode)
+void Camera::SetPosition(glm::vec3 position)
 {
-	debugMode = mode;
+	this->position = position;
+}
+
+void Camera::SetRotation(glm::vec3 rotation)
+{
+	this->rotation = rotation;
+}
+
+void Camera::Resize(uint16_t width, uint16_t height)
+{
+	MakeProjectionMatrix(width, height);
 }
