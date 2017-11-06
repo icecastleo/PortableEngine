@@ -3,6 +3,8 @@
 #include "Vertex.h"
 #include <fstream>
 #include <d3d11.h>
+#include <map>
+#include "SimpleShader.h"
 
 
 class PC_IOSystem :
@@ -18,9 +20,18 @@ public:
 	Material* loadTexture2d(const wchar_t*, const wchar_t*) override;
 	Material* loadTexture2d(const wchar_t*, int) override;
 	
-
+	void loadVSShader(const wchar_t *);
+	void loadPSShader(const wchar_t *);
+   
+	SimpleVertexShader* getVertexShader(const wchar_t *);
+	SimplePixelShader* getPixelShader(const wchar_t *);
+    std::map<const wchar_t *, SimpleVertexShader*> VSmap;
+	std::map<const wchar_t *, SimplePixelShader*> PSmap;
 private:
 	ID3D11Device *device;
 	ID3D11DeviceContext* context;
+
+    
+	
 };
 

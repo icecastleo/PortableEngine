@@ -1,6 +1,9 @@
+
+
 #include "PC_IOSystem.h"
 #include "D3D11Mesh.h"
 #include "D3D11Material.h"
+
 
 //PC_IOSystem *PC_IOSystem::IO_instance = 0;
 
@@ -10,9 +13,16 @@ PC_IOSystem::PC_IOSystem(ID3D11Device *device, ID3D11DeviceContext* context)
 
 }
 
-
 PC_IOSystem::~PC_IOSystem()
 {
+	for (auto it = VSmap.cbegin(); it != VSmap.cend(); ++it)
+	{
+		delete VSmap.at(it->first);
+	}
+	for (auto it = PSmap.cbegin(); it != PSmap.cend(); ++it)
+	{
+		delete PSmap.at(it->first);
+	}
 }
 
 Mesh* PC_IOSystem::loadMesh(wchar_t *objName)
@@ -59,6 +69,37 @@ Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath, int type) {
 
 	return ret;
 
+}
+
+void PC_IOSystem::loadVSShader(const wchar_t * shaderName) {
+
+	wstring path = L"Assets/ShaderObjs/" + (wstring)shaderName + L".cso";
+	LPCWSTR cPath = path.c_str();
+	SimpleVertexShader* ret = new SimpleVertexShader(device, context);
+	if (!ret->LoadShaderFile(cPath))
+		ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
+	
+	VSmap.insert(std::pair<const wchar_t *, SimpleVertexShader*>(shaderName, ret));
+}
+
+void PC_IOSystem::loadPSShader(const wchar_t * shaderName) {
+	wstring path = L"Assets/ShaderObjs/" + (wstring)shaderName + L".cso";
+	LPCWSTR cPath = path.c_str();
+	SimplePixelShader* ret = new SimplePixelShader(device, context);
+	if (!ret->LoadShaderFile(cPath))
+		ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
+
+	PSmap.insert(std::pair<const wchar_t *, SimplePixelShader*>(shaderName, ret));
+
+}
+
+SimpleVertexShader* PC_IOSystem::getVertexShader(const wchar_t * vsName) {
+	return VSmap.at(vsName);
+}
+
+SimplePixelShader* PC_IOSystem::getPixelShader(const wchar_t * psName) {
+	
+	return PSmap.at(psName);
 }
 
 

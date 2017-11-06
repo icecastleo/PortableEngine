@@ -1,11 +1,11 @@
 //Darren Farr
 #pragma once
-#include "SimpleShader.h"
-#include "Entity.h"
-#include "D3D11Mesh.h"
-#include "D3D11Material.h"
-#include <vector>
-#include "Lights.h"
+//#include "SimpleShader.h"
+//#include "Entity.h"
+//#include "D3D11Mesh.h"
+//#include "D3D11Material.h"
+//#include <vector>
+//#include "Lights.h"
 #include "Scene.h"
 
 //---------------------------------------------------------

@@ -87,11 +87,7 @@ private:
 	Scene *scene;
 
 	Renderer Render;
-	//Camera Cam;
 
-	//Player *player;
-	//void SetNextAsteroid();
-	//std::vector<Asteroid*> asteroids;
 	Asteroid* curAsteroid;
 	int curIndex = 0;
 	float timer = 0.2f;

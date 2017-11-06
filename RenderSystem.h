@@ -6,6 +6,7 @@ class RenderSystem
 
 protected:
 	Camera * Cam;
+	
 public:
 	RenderSystem();
 	virtual ~RenderSystem();

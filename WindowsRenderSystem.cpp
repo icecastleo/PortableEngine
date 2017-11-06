@@ -5,6 +5,8 @@
 #include <time.h> 
 #include <iostream>
 #include "WindowsCamera.h"
+#include "Engine.h"
+#include "PC_IOSystem.h"
 // For the DirectX Math library
 using namespace DirectX;
 
@@ -79,7 +81,9 @@ WindowsRenderSystem::~WindowsRenderSystem()
 
 	// Delete our simple shader objects, which
 	// will clean up their own internal DirectX stuff
-	delete vertexShader;
+
+
+	/*delete vertexShader;
 	delete pixelShader;
 	delete vertexShaderNormalMap;
 	delete pixelShaderNormalMap;
@@ -87,6 +91,9 @@ WindowsRenderSystem::~WindowsRenderSystem()
 	delete skyPS;
 	delete pixelShaderBlend;
 	delete pixelShaderNormalMapBlend;
+    delete particleVS;
+	delete particlePS;*/
+
 
 	delete text;
 
@@ -94,8 +101,11 @@ WindowsRenderSystem::~WindowsRenderSystem()
 	//	delete a;
 	//}
 
-	delete particleVS;
-	delete particlePS;
+	
+
+
+
+
 
 	//delete player;
 
@@ -235,11 +245,11 @@ void WindowsRenderSystem::Init()
 	Cam->SetWidthHeight(width, height);
 	Cam->Init();
 
-	LoadShaders();
+	/*LoadShaders();
 
 	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS,
 		pixelShaderBlend, pixelShaderNormalMapBlend, particleVS, particlePS);
-
+*/
 	//SceneBuild.Init(device, context);
 	//SceneManag.AddScene(SceneBuild.GetScene(1));
 	//SceneManag.AddScene(SceneBuild.GetScene(2));
@@ -277,49 +287,56 @@ void WindowsRenderSystem::Init()
 // --------------------------------------------------------
 void WindowsRenderSystem::LoadShaders()
 {
-	vertexShader = new SimpleVertexShader(device, context);
-	if (!vertexShader->LoadShaderFile(L"Assets/ShaderObjs/VertexShader.cso"))
-		vertexShader->LoadShaderFile(L"VertexShader.cso");
+	const wchar_t * name;
+	name = L"VertexShader";
+	Engine::ioSystem->loadVSShader(name);
+	vertexShader = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
 
-	pixelShader = new SimplePixelShader(device, context);
-	if (!pixelShader->LoadShaderFile(L"Assets/ShaderObjs/PixelShader.cso"))
-		pixelShader->LoadShaderFile(L"PixelShader.cso");
+	name = L"PixelShader";
+	Engine::ioSystem->loadPSShader(name);
+	pixelShader = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
-	vertexShaderNormalMap = new SimpleVertexShader(device, context);
-	if (!vertexShaderNormalMap->LoadShaderFile(L"Assets/ShaderObjs/VertexShaderNormalMap.cso"))
-		vertexShaderNormalMap->LoadShaderFile(L"VertexShaderNormalMap.cso");
+	name = L"VertexShaderNormalMap";
+	Engine::ioSystem->loadVSShader(name);
+	vertexShaderNormalMap = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
 
-	pixelShaderNormalMap = new SimplePixelShader(device, context);
-	if (!pixelShaderNormalMap->LoadShaderFile(L"Assets/ShaderObjs/PixelShaderNormalMap.cso"))
-		pixelShaderNormalMap->LoadShaderFile(L"PixelShaderNormalMap.cso");
+	name = L"PixelShaderNormalMap";
+	Engine::ioSystem->loadPSShader(name);
+	pixelShaderNormalMap = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
-	skyVS = new SimpleVertexShader(device, context);
-	if (!skyVS->LoadShaderFile(L"Assets/ShaderObjs/SkyVS.cso"))
-		skyVS->LoadShaderFile(L"SkyVS.cso");
+	name = L"SkyVS";
+	Engine::ioSystem->loadVSShader(name);
+	skyVS = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
 
-	skyPS = new SimplePixelShader(device, context);
-	if (!skyPS->LoadShaderFile(L"Assets/ShaderObjs/SkyPS.cso"))
-		skyPS->LoadShaderFile(L"SkyPS.cso");
+	name = L"skyPS";
+	Engine::ioSystem->loadPSShader(name);
+	skyPS = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
-	pixelShaderBlend = new SimplePixelShader(device, context);
-	if (!pixelShaderBlend->LoadShaderFile(L"Assets/ShaderObjs/BlendPixelShader.cso"))
-		pixelShaderBlend->LoadShaderFile(L"BlendPixelShader.cso");
+	name = L"BlendPixelShader";
+	Engine::ioSystem->loadPSShader(name);
+	pixelShaderBlend = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
-	pixelShaderNormalMapBlend = new SimplePixelShader(device, context);
-	if (!pixelShaderNormalMapBlend->LoadShaderFile(L"Assets/ShaderObjs/PixelShaderNormalMapBlend.cso"))
-		pixelShaderNormalMapBlend->LoadShaderFile(L"PixelShaderNormalMapBlend.cso");
+	name = L"PixelShaderNormalMapBlend";
+	Engine::ioSystem->loadPSShader(name);
+	pixelShaderNormalMapBlend = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
-	particleVS = new SimpleVertexShader(device, context);
-	if (!particleVS->LoadShaderFile(L"Assets/ShaderObjs/ParticleVS.cso"))
-		particleVS->LoadShaderFile(L"ParticleVS.cso");
+	name = L"ParticleVS";
+	Engine::ioSystem->loadVSShader(name);
+	particleVS = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
 
-	particlePS = new SimplePixelShader(device, context);
-	if (!particlePS->LoadShaderFile(L"Assets/ShaderObjs/ParticlePS.cso"))
-		particlePS->LoadShaderFile(L"ParticlePS.cso");
+	name = L"ParticlePS";
+	Engine::ioSystem->loadPSShader(name);
+	particlePS = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
+
 }
 
 void WindowsRenderSystem::SetScene(Scene *scene)
 {
+	LoadShaders();
+
+	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS,
+		pixelShaderBlend, pixelShaderNormalMapBlend, particleVS, particlePS);
+
 	this->scene = scene;
 
 	Render.SetScene(scene);
