@@ -21,9 +21,11 @@ Material::~Material()
 void Material::UseTransperancy(bool  _usesTrans) {
 	usesTrans = _usesTrans;
 }
+
 bool Material::HasNormalMap() {
 	return hasNormal;
 }
+
 bool Material::UseTransperancy() {
 	return usesTrans;
 }

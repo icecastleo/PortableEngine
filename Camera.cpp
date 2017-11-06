@@ -11,7 +11,6 @@ Camera::Camera()
 {
 	width = 0;
 	height = 0;
-	//mouseDown = false;
 	//debugMode = false;
 	debugMode = true;
 }
@@ -23,17 +22,14 @@ Camera::Camera(unsigned int _width, unsigned int _height)
 {
 	width = _width;
 	height = _height;
-	//mouseDown = false;
 	debugMode = true;
 }
 
-//---------------------------------------------------------
-//Default Deconstructor
-//---------------------------------------------------------
-Camera::~Camera() {}
+Camera::~Camera() 
+{
+}
 
 //Set the width and height
-
 void Camera::SetWidthHeight(unsigned int _width, unsigned int _height)
 {
 	width = _width;
@@ -60,7 +56,7 @@ void Camera::Init()
 #endif
 
 	rotationX = 0.0f;
-	rotationY = 100.0f;
+	rotationY = 0.0f;
 	CreateMatrices(position, direction);
 }
 
@@ -82,48 +78,37 @@ void Camera::CreateMatrices(glm::vec4 position, glm::vec4 direction)
 }
 
 //---------------------------------------------------------
-//
-//---------------------------------------------------------
-//void Camera::MouseDown(bool down)
-//{ mouseDown = down; }
-
-//---------------------------------------------------------
 //Camera Update, checks for commands to move camera
 //---------------------------------------------------------
 void Camera::Update(float deltaTime) {
 	
 }
 
-//---------------------------------------------------------
-//Return the view matrix
-//---------------------------------------------------------
 glm::mat4 Camera::GetViewMatrix()
-{ return viewMatrix; }
+{
+	return viewMatrix;
+}
 
-//---------------------------------------------------------
-//Return the projection matrix
-//---------------------------------------------------------
 glm::mat4 Camera::GetProjectionMatrix()
-{ return projectionMatrix; }
+{
+	return projectionMatrix;
+}
 
-//---------------------------------------------------------
-//Return the Position
-//---------------------------------------------------------
 glm::vec4 Camera::GetPositon()
-{ return position; }
+{
+	return position;
+}
 
-//---------------------------------------------------------
-//Return the Direction
-//---------------------------------------------------------
 glm::vec4 Camera::GetDirection()
-{ return direction; }
+{
+	return direction;
+}
 
 //---------------------------------------------------------
 //Resize the Screen
 //---------------------------------------------------------
 void Camera::Resize(unsigned int width, unsigned int height)
 {
-
 	// Update our projection matrix since the window size changed
 	//XMMATRIX P = XMMatrixPerspectiveFovLH(
 	//	0.25f * 3.1415926535f,	// Field of View Angle
@@ -136,7 +121,6 @@ void Camera::Resize(unsigned int width, unsigned int height)
 	glm::mat4 P = glm::perspectiveLH(glm::radians(FoV), (float)width / height, 0.1f, 100.0f);
 
 	projectionMatrix = glm::transpose(P);
-
 }
 
 //---------------------------------------------------------

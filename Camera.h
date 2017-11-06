@@ -1,11 +1,6 @@
-//Darren Farr
 #pragma once
 
-//#include <DirectXMath.h>
 #include "glm\glm.hpp"
-
-//#include <Windows.h>
-
 
 class Camera
 {
@@ -19,7 +14,6 @@ public:
 	void SetWidthHeight(unsigned int, unsigned int);
 	//void Update(POINT, float);
 	virtual void Update(float);
-	//void MouseDown(bool);
 
 	void Resize(unsigned int, unsigned int);
 
@@ -33,10 +27,7 @@ public:
 	void SetPosition(glm::vec4);
 	void SetDir(glm::vec4);
 
-	
 protected:
-	
-
 	void CreateMatrices(glm::vec4, glm::vec4);
 
 	glm::mat4 viewMatrix;
@@ -45,14 +36,11 @@ protected:
 	glm::vec4 position;
 	glm::vec4 direction;
 
-
 	bool debugMode;
 
 	float rotationX;
 	float rotationY;
 	
-
 	unsigned int width;
 	unsigned int height;
-
 };

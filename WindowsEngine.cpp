@@ -35,8 +35,6 @@ WindowsEngine::WindowsEngine(
 
 	InitWindow(hInstance);
 
-	renderSystem = new WindowsRenderSystem(width, height, hWnd);
-
 	WindowsRenderSystem *windowsRender = new WindowsRenderSystem(width, height, hWnd);
 	renderSystem = windowsRender;
 

@@ -7,12 +7,10 @@ protected:
 	
 public:
 	Material();
-	~Material();
+	virtual ~Material();
 
 	void UseTransperancy(bool);
 	bool HasNormalMap();
 	bool UseTransperancy();
-
-	
 };
 

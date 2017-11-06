@@ -1,11 +1,6 @@
 #include "D3D11Material.h"
 
 //---------------------------------------------------------
-//Default Constructor
-//---------------------------------------------------------
-
-
-//---------------------------------------------------------
 //Constructor override to create a material from a texture path
 //---------------------------------------------------------
 D3D11Material::D3D11Material(ID3D11Device* device, ID3D11DeviceContext* context, const wchar_t* path)
@@ -71,7 +66,6 @@ D3D11Material::~D3D11Material()
 	}
 
 	delete sampleDes;
-
 }
 
 //---------------------------------------------------------
@@ -233,78 +227,35 @@ void D3D11Material::PrepareSkybox(glm::mat4 view, glm::mat4 projection, SimpleVe
 	skyPS->SetShader();
 }
 
-//---------------------------------------------------------
-//Set whether or not the material uses transperancy
-//---------------------------------------------------------
-//void D3D11Material::UseTransperancy(bool _usesTrans)
-//{
-//	usesTrans = _usesTrans;
-//}
-
-//---------------------------------------------------------
-//Return the SRV
-//---------------------------------------------------------
 ID3D11ShaderResourceView* D3D11Material::GetSRV()
 {
 	return SRV;
 }
 
-//---------------------------------------------------------
-//Return the SRV
-//---------------------------------------------------------
 ID3D11ShaderResourceView* D3D11Material::GetNormalSRV()
 {
 	return normalSRV;
 }
 
-//---------------------------------------------------------
-//Return the skybox SRV
-//---------------------------------------------------------
 ID3D11ShaderResourceView* D3D11Material::GetSkySRV()
 {
 	return skySRV;
 }
 
-//---------------------------------------------------------
-//Return the Sample State
-//---------------------------------------------------------
 ID3D11SamplerState* D3D11Material:: GetSampleState()
 {
 	return sampleState;
 }
 
-//---------------------------------------------------------
-//Return the Rasterrizer Desc
-//---------------------------------------------------------
 ID3D11RasterizerState* D3D11Material::GetRast()
 {
 	return rsSky;
 }
 
-//---------------------------------------------------------
-//Return the Rasterrizer Desc
-//---------------------------------------------------------
 ID3D11DepthStencilState* D3D11Material::GetDepthSD()
 {
 	return dsSky;
 }
-
-//---------------------------------------------------------
-//Return if the material has a normal map or not
-//---------------------------------------------------------
-//bool D3D11Material::HasNormalMap()
-//{
-//	return hasNormal;
-//}
-//
-////---------------------------------------------------------
-////Return if the material uses transperancy or not
-////---------------------------------------------------------
-//bool D3D11Material::UseTransperancy()
-//{
-//	return usesTrans;
-//
-//}
 
 ID3D11DepthStencilState* D3D11Material::GetParticleDepthState()
 {
