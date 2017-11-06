@@ -4,7 +4,8 @@ using ms = std::chrono::duration<float, std::milli>;
 
 IOSystem *Engine::ioSystem = 0;
 
-Engine::Engine()
+Engine::Engine(uint16_t windowsWidth, uint16_t windowsHeight)
+	:width(windowsWidth), height(windowsHeight)
 {
 
 }
@@ -32,7 +33,7 @@ void Engine::Run()
 		renderSystem->Draw();
 
 		// check if stop the game
-		stop = platformUpdate();
+		stop = Update();
 
 		// Save current time for next frame
 		previousTime = currentTime;

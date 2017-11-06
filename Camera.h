@@ -6,18 +6,14 @@ class Camera
 {
 public:
 	Camera();
-	Camera(unsigned int, unsigned int);
 	~Camera();
 
-	void Init();
+	void Init(uint16_t width, uint16_t height);
 
-	void SetWidthHeight(unsigned int, unsigned int);
 	//void Update(POINT, float);
 	virtual void Update(float);
 
-	void Resize(unsigned int, unsigned int);
-
-	void SetDebugMode(bool);
+	void Resize(uint16_t, uint16_t);
 
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetProjectionMatrix();
@@ -28,7 +24,7 @@ public:
 	void SetDir(glm::vec4);
 
 protected:
-	void CreateMatrices(glm::vec4, glm::vec4);
+	void CreateMatrices(glm::vec4, glm::vec4, uint16_t width, uint16_t height);
 
 	glm::mat4 viewMatrix;
 	glm::mat4 projectionMatrix;
@@ -40,7 +36,4 @@ protected:
 
 	float rotationX;
 	float rotationY;
-	
-	unsigned int width;
-	unsigned int height;
 };

@@ -23,20 +23,14 @@ public:
 	void Draw();
 
 	void SetShaders(SimpleVertexShader*, SimplePixelShader*, SimpleVertexShader*, SimplePixelShader*,
-		SimpleVertexShader*, SimplePixelShader*, SimplePixelShader*, SimplePixelShader*, SimpleVertexShader*, SimplePixelShader*);
+		SimpleVertexShader*, SimplePixelShader*, SimplePixelShader*, SimplePixelShader*);
 
 	void SetScene(Scene*);
-
-	void Setup2D();
-	void SetScore(int);
-	//void Renderer::SetScorePos(DirectX::XMFLOAT2);
-	void Renderer::SetScorePos(glm::vec2);
 
 private:
 	void setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
 	void SetPixelShaderUp(SimplePixelShader*, std::vector<Entity*>, int);
 	void CreateAdditionalRSStates();
-	void DrawScore();
 
 	SimpleVertexShader* vertexShader;
 	SimplePixelShader* pixelShader;
@@ -52,34 +46,21 @@ private:
 	SimpleVertexShader* particleVS;
 	SimplePixelShader* particlePS;
 
+	//// The matrices to go from model space to screen space
+	///*DirectX::XMFLOAT4X4 viewMatrix;
+	//DirectX::XMFLOAT4X4 projectionMatrix;*/
+	//glm::mat4 viewMatrix;
+	//glm::mat4 projectionMatrix;
 
-	// Buffers to hold actual geometry data
-	ID3D11Buffer* vertexBuffer;
-	ID3D11Buffer* indexBuffer;
-
-	// The matrices to go from model space to screen space
-	/*DirectX::XMFLOAT4X4 viewMatrix;
-	DirectX::XMFLOAT4X4 projectionMatrix;*/
-	glm::mat4 viewMatrix;
-	glm::mat4 projectionMatrix;
-
-	Camera* Cam;
+	Camera* camera;
 	ID3D11Device* mDevice;
 	ID3D11DeviceContext* context;
 	ID3D11RenderTargetView* backBufferRTV;
 	IDXGISwapChain* swapChain;
 	ID3D11DepthStencilView* mDepthStencilView;
 
-	unsigned int mWidth, mHeight;
-	int score;
-	//DirectX::XMFLOAT2 scorePos;
-	glm::vec2 scorePos;
-
-	//These may need to be moved
-	//-----------------------------------
 	ID3D11RenderTargetView* ppRTV;	
 	ID3D11ShaderResourceView* ppSRV;
-	//-----------------------------------
 
 	GaussianBlur *blur;
 	Bloom *bloom;

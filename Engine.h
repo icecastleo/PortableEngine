@@ -19,25 +19,26 @@ public:
 	// FIXME:
 	static IOSystem *ioSystem;
 
-#if _PC
-
-#endif
-
 protected:
-	Engine();
-	virtual bool platformUpdate() { return true; }
+	Engine(uint16_t windowsWidth, uint16_t windowsHeight);
 
+	// Size of the window's client area
+	uint16_t width;
+	uint16_t height;
+	
 	float deltaTime;
 	float totalTime;
 
+	// init by child
 	RenderSystem *renderSystem;
+
+	// return ture to stop the game loop
+	virtual bool Update() { return true; }
 
 private:
 	// Timing related data
 	std::chrono::steady_clock::time_point startTime;
 	std::chrono::steady_clock::time_point currentTime;
 	std::chrono::steady_clock::time_point previousTime;
-
-	//virtual void update(float deltaTime) {}
 };
 

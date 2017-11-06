@@ -9,11 +9,12 @@
 WindowsEngine* WindowsEngine::EngineInstance = 0;
 
 WindowsEngine::WindowsEngine(
+	uint16_t width,				// Width of the window's client area
+	uint16_t height,			// Height of the window's client area
 	HINSTANCE hInstance,		// The application's handle
 	char* titleBarText,			// Text for the window's title bar
-	unsigned int windowWidth,	// Width of the window's client area
-	unsigned int windowHeight,	// Height of the window's client area
 	bool debugTitleBarStats)	// Show extra stats (fps) in title bar?
+	:Engine(width, height)
 {
 	// Save a static reference to this object.
 	//  - Since the OS-level message function must be a non-member (global) function, 
@@ -24,8 +25,6 @@ WindowsEngine::WindowsEngine(
 	// Save params
 	this->hInstance = hInstance;
 	this->titleBarText = titleBarText;
-	this->width = windowWidth;
-	this->height = windowHeight;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	// Do we want a console window?  Probably only in debug mode
@@ -39,7 +38,7 @@ WindowsEngine::WindowsEngine(
 	renderSystem = windowsRender;
 
 	ioSystem = new PC_IOSystem(windowsRender->GetDevice(), windowsRender->GetContext());
-
+	
 	SceneBuild.Init(windowsRender->GetDevice(), windowsRender->GetContext());
 	SceneManag.AddScene(SceneBuild.GetScene(1));
 	SceneManag.AddScene(SceneBuild.GetScene(2));
@@ -51,8 +50,11 @@ WindowsEngine::WindowsEngine(
 
 WindowsEngine::~WindowsEngine()
 {
-	delete ioSystem;
-	delete renderSystem;
+	if(renderSystem)
+		delete renderSystem;
+
+	if (ioSystem)
+		delete ioSystem;
 }
 
 // --------------------------------------------------------
@@ -213,9 +215,8 @@ LRESULT WindowsEngine::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 		// If DX is initialized, resize 
 		// our required buffers
 	
-		// FIXME:
-		//if (device)
-		//	OnResize();
+		if (renderSystem)
+			renderSystem->OnResize(width, height);
 
 		return 0;
 
@@ -248,7 +249,7 @@ LRESULT WindowsEngine::ProcessMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-bool WindowsEngine::platformUpdate()
+bool WindowsEngine::Update()
 {
 	if (GetAsyncKeyState(VK_ESCAPE)) {
 		PostQuitMessage(0);

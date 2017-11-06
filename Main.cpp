@@ -23,10 +23,10 @@ int WINAPI WinMain(
 #endif
 
 	WindowsEngine engine = WindowsEngine(
-		hInstance,		   // The application's handle
-		"DirectX Game",	   // Text for the window's title bar
 		1280,			   // Width of the window's client area
 		720,			   // Height of the window's client area
+		hInstance,		   // The application's handle
+		"DirectX Game",	   // Text for the window's title bar
 		true);			   // Show extra stats (fps) in title bar?
 
 	engine.Run();
