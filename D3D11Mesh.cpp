@@ -4,7 +4,7 @@
 D3D11Mesh::D3D11Mesh(char* path, ID3D11Device *device)
 	:Mesh(path)
 {
-	CreateGeometry(&vertexCollection[0], indCount, &indexCollection[0], device);
+	CreateGeometry(&verts[0], verts.size(), &indices[0], indices.size(), device);
 }
 
 
@@ -27,14 +27,14 @@ D3D11Mesh::~D3D11Mesh()
 //Copied from Game.cpp - Chris Cascioli
 //Modified for use here
 // --------------------------------------------------------
-void D3D11Mesh::CreateGeometry(Vertex* verts, uint16_t numVerts, uint16_t *ind, ID3D11Device *device)
+void D3D11Mesh::CreateGeometry(Vertex* verts, size_t vertexCount, uint16_t *ind, size_t indexCount, ID3D11Device *device)
 {
 	// Create the VERTEX BUFFER description -----------------------------------
 	// - The description is created on the stack because we only need
 	//    it to create the buffer.  The description is then useless.
 	D3D11_BUFFER_DESC vbd = {};
 	vbd.Usage = D3D11_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(Vertex) * numVerts;	// number of vertices in the buffer
+	vbd.ByteWidth = sizeof(Vertex) * vertexCount;	// number of vertices in the buffer
 	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// Tells DirectX this is a vertex buffer
 	vbd.CPUAccessFlags = 0;
 	vbd.MiscFlags = 0;
@@ -56,7 +56,7 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, uint16_t numVerts, uint16_t *ind, 
 	//    it to create the buffer.  The description is then useless.
 	D3D11_BUFFER_DESC ibd = {};
 	ibd.Usage = D3D11_USAGE_IMMUTABLE;
-	ibd.ByteWidth = sizeof(uint16_t) * numVerts;	// number of indices in the buffer
+	ibd.ByteWidth = sizeof(uint16_t) * indexCount;	// number of indices in the buffer
 	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;		// Tells DirectX this is an index buffer
 	ibd.CPUAccessFlags = 0;
 	ibd.MiscFlags = 0;

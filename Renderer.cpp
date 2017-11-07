@@ -140,7 +140,7 @@ void Renderer::Draw()
 			//  - DrawIndexed() uses the currently set INDEX BUFFER to look up corresponding
 			//     vertices in the currently set VERTEX BUFFER
 			context->DrawIndexed(
-				currentScene->opaque.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
+				currentScene->opaque.at(i)->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
 				0,     // Offset to the first index we want to use
 				0);    // Offset to add to each index when looking up vertices
 		}
@@ -161,7 +161,7 @@ void Renderer::Draw()
 			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
-				currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
+				currentScene->opaqueNorm.at(i)->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
 				0,     // Offset to the first index we want to use
 				0);    // Offset to add to each index when looking up vertices
 		}
@@ -181,7 +181,7 @@ void Renderer::Draw()
 
 		context->RSSetState(static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetRast());
 		context->OMSetDepthStencilState(static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetDepthSD(), 0);
-		context->DrawIndexed(currentScene->skybox->GetMesh()->GetIndexCount(), 0, 0);
+		context->DrawIndexed(currentScene->skybox->GetMesh()->GetIndices().size(), 0, 0);
 
 		// Reset the render states we've changed
 		context->RSSetState(0);
@@ -214,7 +214,7 @@ void Renderer::Draw()
 			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->transparentNorm.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
-				currentScene->transparentNorm.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
+				currentScene->transparentNorm.at(i)->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
 				0,     // Offset to the first index we want to use
 				0);    // Offset to add to each index when looking up vertices
 		}
@@ -235,7 +235,7 @@ void Renderer::Draw()
 			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->transparent.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 			context->DrawIndexed(
-				currentScene->transparent.at(i)->GetMesh()->GetIndexCount(),     // The number of indices to use (we could draw a subset if we wanted)
+				currentScene->transparent.at(i)->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
 				0,     // Offset to the first index we want to use
 				0);    // Offset to add to each index when looking up vertices
 		}

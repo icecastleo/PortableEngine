@@ -12,9 +12,7 @@ Mesh::Mesh(char *path)
 	hasNormalMap = true;
 
 	if(hasNormalMap)
-		CalculateTangents(&vertexCollection[0], indCount, &indexCollection[0], indCount);
-	
-	/*CreateGeometry(&vertexCollection[0], indCount, &indexCollection[0], device);*/
+		CalculateTangents(&verts[0], verts.size(), &indices[0], indices.size());
 }
 
 Mesh::~Mesh()
@@ -33,11 +31,10 @@ void Mesh::loadVertices(char * path)
 	}
 
 	// Variables used while reading the file
-	vector<glm::vec3> positions;     // Positions from the file
-	vector<glm::vec3> normals;       // Normals from the file
-	vector<glm::vec2> uvs;           // UVs from the file
-	vector<Vertex> verts;           // Verts we're assembling
-	vector<uint16_t> indices;       // Indices of these verts
+	vector<glm::vec3> positions;	// Positions from the file
+	vector<glm::vec3> normals;      // Normals from the file
+	vector<glm::vec2> uvs;          // UVs from the file
+
 	uint16_t vertCounter = 0;       // Count of vertices/indices
 	char chars[100];                // String for line reading
 
@@ -187,10 +184,6 @@ void Mesh::loadVertices(char * path)
 	//
 	// - "vertCounter" is BOTH the number of vertices and the number of indices
 	// - Yes, the indices are a bit redundant here (one per vertex)
-
-	indCount = vertCounter;
-	vertexCollection = verts;
-	indexCollection = indices;
 }
 
 // --------------------------------------------------------
@@ -268,16 +261,12 @@ void Mesh::CalculateTangents(Vertex* verts, uint16_t numVerts, uint16_t* indices
 	}
 }
 
-uint16_t Mesh::GetIndexCount()
+std::vector<Vertex> Mesh::GetVertices()
 {
-	return indCount;
+	return verts;
 }
 
-std::vector<Vertex> Mesh::GetVertexCollection()
+std::vector<uint16_t> Mesh::GetIndices()
 {
-	return vertexCollection;
-}
-std::vector<uint16_t> Mesh::GetIndexCollection()
-{
-	return indexCollection;
+	return indices;
 }

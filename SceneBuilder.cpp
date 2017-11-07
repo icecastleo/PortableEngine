@@ -206,7 +206,7 @@ void SceneBuilder::BuildMeshes()
 	quadMesh = Engine::ioSystem->loadMesh(L"quad");
 	sphereMesh = Engine::ioSystem->loadMesh(L"sphere");
 	playerMesh = Engine::ioSystem->loadMesh(L"sphere");
-	asteroidMesh = Engine::ioSystem->loadMesh(L"sphereTest");
+	asteroidMesh = Engine::ioSystem->loadMesh(L"sphere");
 }
 
 //---------------------------------------------------------
@@ -367,17 +367,6 @@ void SceneBuilder::SetupScenes()
 	SortEntityList(scene3);
 	SortEntityList(scene4);
 }
-
-
-//---------------------------------------------------------
-//Create Entities found in the scene
-//---------------------------------------------------------
-/*Entity* SceneBuilder::CreateEntity(Mesh* mesh, D3D11Material* mat, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale)
-{
-	Entity* ent = new Entity(mesh, mat, pos, rot, scale);
-
-	return ent;
-}*/
 
 //---------------------------------------------------------
 //Sort the entities lists into opaque or transparent lists, with or without normal maps
