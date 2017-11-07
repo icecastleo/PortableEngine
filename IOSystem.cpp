@@ -11,6 +11,14 @@ IOSystem::~IOSystem()
 {
 }
 
+bool IOSystem::isinMap(const wchar_t * shadeName) {
+	if (std::find(shaderNames.begin(), shaderNames.end(), shadeName) != shaderNames.end()) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 // FIXME: Duplicated code
 
 //Mesh * IOSystem::loadMesh(wchar_t * objName)

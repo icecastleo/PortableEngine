@@ -45,6 +45,7 @@ private:
 
 	// Initialization helper methods - feel free to customize, combine, etc.
 	void LoadShaders();
+	void GetShaders();
 
 	HWND hWnd;					// The handle to the window itself
 

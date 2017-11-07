@@ -14,6 +14,8 @@ protected:
 
 	uint16_t indCount;
 
+	vector<const wchar_t *> shaderNames;
+
 public:
 	IOSystem();
 	virtual ~IOSystem();
@@ -26,6 +28,6 @@ public:
 	virtual void loadVSShader(const wchar_t *) = 0;
 	virtual void loadPSShader(const wchar_t *) = 0;
 
-
+	bool isinMap(const wchar_t *);  //check if the shader is loaded
 };
 

@@ -75,25 +75,25 @@ Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath, int type) {
 }
 
 void PC_IOSystem::loadVSShader(const wchar_t * shaderName) {
+		wstring path = L"Assets/ShaderObjs/" + (wstring)shaderName + L".cso";
+		LPCWSTR cPath = path.c_str();
+		SimpleVertexShader* ret = new SimpleVertexShader(device, context);
+		if (!ret->LoadShaderFile(cPath))
+			ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
 
-	wstring path = L"Assets/ShaderObjs/" + (wstring)shaderName + L".cso";
-	LPCWSTR cPath = path.c_str();
-	SimpleVertexShader* ret = new SimpleVertexShader(device, context);
-	if (!ret->LoadShaderFile(cPath))
-		ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
-	
-	VSmap.insert(std::pair<const wchar_t *, SimpleVertexShader*>(shaderName, ret));
+		VSmap.insert(std::pair<const wchar_t *, SimpleVertexShader*>(shaderName, ret));
+		shaderNames.push_back(shaderName);
 }
 
 void PC_IOSystem::loadPSShader(const wchar_t * shaderName) {
-	wstring path = L"Assets/ShaderObjs/" + (wstring)shaderName + L".cso";
-	LPCWSTR cPath = path.c_str();
-	SimplePixelShader* ret = new SimplePixelShader(device, context);
-	if (!ret->LoadShaderFile(cPath))
-		ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
+		wstring path = L"Assets/ShaderObjs/" + (wstring)shaderName + L".cso";
+		LPCWSTR cPath = path.c_str();
+		SimplePixelShader* ret = new SimplePixelShader(device, context);
+		if (!ret->LoadShaderFile(cPath))
+			ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
 
-	PSmap.insert(std::pair<const wchar_t *, SimplePixelShader*>(shaderName, ret));
-
+		PSmap.insert(std::pair<const wchar_t *, SimplePixelShader*>(shaderName, ret));
+		shaderNames.push_back(shaderName);
 }
 
 SimpleVertexShader* PC_IOSystem::getVertexShader(const wchar_t * vsName) {

@@ -25,12 +25,13 @@ public:
    
 	SimpleVertexShader* getVertexShader(const wchar_t *);
 	SimplePixelShader* getPixelShader(const wchar_t *);
-    std::map<const wchar_t *, SimpleVertexShader*> VSmap;
-	std::map<const wchar_t *, SimplePixelShader*> PSmap;
+   
 private:
 	ID3D11Device *device;
 	ID3D11DeviceContext* context;
-
+    
+	std::map<const wchar_t *, SimpleVertexShader*> VSmap;
+	std::map<const wchar_t *, SimplePixelShader*> PSmap;
     
 	
 };
