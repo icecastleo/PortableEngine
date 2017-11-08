@@ -6,7 +6,7 @@ class Camera
 {
 public:
 	Camera();
-	~Camera();
+	virtual ~Camera();
 
 	void Init(uint16_t width, uint16_t height);
 

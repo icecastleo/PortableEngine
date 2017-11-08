@@ -25,7 +25,8 @@ void Camera::Init(uint16_t width, uint16_t height)
 	rotation = vec3(15.f, 0.f, 0.f);
 #endif	
 #if _PS4
-	position = glm::vec4(5.0f, 10.0f, 20.0f, 0);
+	position = glm::vec4(5.0f, 10.0f, -20.0f, 0);
+	//rotation = vec3(15.f, 0.f, 0.f);
 #endif
 
 	CreateMatrices(width, height);
