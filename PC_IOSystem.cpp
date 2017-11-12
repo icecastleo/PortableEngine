@@ -46,32 +46,40 @@ Mesh* PC_IOSystem::loadMesh(wchar_t *objName)
 	return ret;
 }
 
-Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath) {
+Material* PC_IOSystem::loadTexture2d(const wchar_t* texturename) {
 	
-
-	Material * ret = new D3D11Material(device, context, texturepath);
+	wstring path = L"Assets/textures/" + (wstring)texturename + L".png";
+	const wchar_t *src = path.c_str();
+	
+	Material * ret = new D3D11Material(device, context, src);
 	
 	return ret;
-
 }
 
-Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath, const wchar_t* normalpath) {
+Material* PC_IOSystem::loadTexture2d(const wchar_t* texturename, const wchar_t* normalmapname) {
+
+	wstring path = L"Assets/textures/" + (wstring)texturename + L".png";
+	const wchar_t *src = path.c_str();
+	wstring pathN = L"Assets/textures/" + (wstring)normalmapname + L".png";
+	const wchar_t *srcNor = pathN.c_str();
 
 
-	Material * ret = new D3D11Material(device, context, texturepath, normalpath);
+	Material * ret = new D3D11Material(device, context, src, srcNor);
 	
-
 	return ret;
-
 }
 
-Material* PC_IOSystem::loadTexture2d(const wchar_t* texturepath, int type) {
+Material* PC_IOSystem::loadTexture2d(const wchar_t* texturename, int type) {
+	wstring path;
+	if(type == 0)
+		path = L"Assets/textures/" + (wstring)texturename + L".dds";
+	else
+		path = L"Assets/textures/" + (wstring)texturename + L".png";
+	const wchar_t *src = path.c_str();
 
-
-	Material * ret = new D3D11Material(device, context, texturepath, type);
+	Material * ret = new D3D11Material(device, context, src, type);
 
 	return ret;
-
 }
 
 void PC_IOSystem::loadVSShader(const wchar_t * shaderName) {

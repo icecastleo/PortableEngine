@@ -18,7 +18,7 @@ public:
 	SceneBuilder();
 	~SceneBuilder();
 
-	void Init(ID3D11Device*, ID3D11DeviceContext*);
+	void Init();
 	void BuildMaterials();
 	void BuildLights();
 	void BuildMeshes();

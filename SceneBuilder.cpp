@@ -61,11 +61,8 @@ SceneBuilder::~SceneBuilder()
 //---------------------------------------------------------
 //Set up a scene
 //---------------------------------------------------------
-void SceneBuilder::Init(ID3D11Device *_device, ID3D11DeviceContext *_context)
+void SceneBuilder::Init()
 {
-	//asteroidList[12];
-	//device = _device;
-	//context = _context;
 	BuildMaterials();
 	BuildLights();
 	BuildMeshes();
@@ -80,56 +77,54 @@ void SceneBuilder::BuildMaterials()
 	//Texture file path
 	const wchar_t* path;
 
-	path = L"Assets/textures/player.png";
+	path = L"player";
 	playerMat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/rock.jpg";
-	asteroidMat = Engine::ioSystem->loadTexture2d(path, L"Assets/textures/rockNormals.jpg"); //normal map
-	//path = L"Assets/textures/rockNormals.jpg";
-	//asteroidMat->setNormalPath(path);
+	path = L"rock";
+	asteroidMat = Engine::ioSystem->loadTexture2d(path, L"rockNormals"); //normal map
 
-	path = L"Assets/textures/title.png";
+	path = L"title";
 	menuMat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/creditsTexture.jpg";
+	path = L"creditsTexture";
 	creditsMat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/spaceBackground.dds";
+	path = L"spaceBackground";
 	backgroundMat = Engine::ioSystem->loadTexture2d(path,0);
 
-	path = L"Assets/textures/venus.jpg";
+	path = L"venus";
 	venusMat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/sun.jpg";
+	path = L"sun";
 	sunMat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/earth.png";
+	path = L"earth";
 	earthMat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/moon.jpg";
+	path = L"moon";
 	moonMat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/planet1.jpg";
+	path = L"planet1";
 	p1Mat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/planet2.png";
+	path = L"planet2";
 	p2Mat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/planet3.png";
+	path = L"planet3";
 	p3Mat = Engine::ioSystem->loadTexture2d(path);
 
-	path = L"Assets/textures/rainbow3.png";
+	path = L"rainbow3";
 	laneMat = Engine::ioSystem->loadTexture2d(path);
 	laneMat->UseTransperancy(true);
 
-	path = L"Assets/textures/blueSpace3.png";
+	path = L"BlueSpace3";
 	lane2Mat = Engine::ioSystem->loadTexture2d(path);
 	lane2Mat->UseTransperancy(true);
 
-	path = L"Assets/Textures/circleParticle.jpg"; 
+	path = L"circleParticle"; 
 	particelMat = Engine::ioSystem->loadTexture2d(path,1);
 
-	path = L"Assets/Textures/titleText.png";
+	path = L"titleText";
 	titleMat = Engine::ioSystem->loadTexture2d(path);
 
 }
