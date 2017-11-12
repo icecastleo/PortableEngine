@@ -5,16 +5,10 @@
 #include "RenderSystem.h"
 #include "D3D11.h"
 #include "SimpleShader.h"
-//#include <DirectXMath.h>
-#include "SceneManager.h"
-#include "SceneBuilder.h"
 #include "Renderer.h"
-#include "Camera.h"
-#include "Player.h"
-#include "Asteroid.h"
 #include "MusicPlayer.h"
 #include <vector>
-#include "Tex2Dt.h"
+
 
 // We can include the correct library files here
 // instead of in Visual Studio settings if we want
@@ -79,7 +73,6 @@ private:
 
 	Renderer Render;
 
-	Asteroid* curAsteroid;
 	int curIndex = 0;
 	float timer = 0.2f;
 	int asteroidIndex = 0;

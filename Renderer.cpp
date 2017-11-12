@@ -1,5 +1,6 @@
 //Darren Farr
 #include "Renderer.h"
+#include "D3D11Material.h"
 
 using namespace DirectX;
 

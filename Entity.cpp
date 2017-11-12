@@ -2,7 +2,7 @@
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtx\quaternion.hpp"
 
-using namespace DirectX;
+//using namespace DirectX;
 using namespace glm;
 
 Entity::Entity() 

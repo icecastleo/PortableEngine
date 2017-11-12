@@ -8,11 +8,20 @@ Engine::Engine(uint16_t windowsWidth, uint16_t windowsHeight)
 	:width(windowsWidth), height(windowsHeight)
 {
 	
+
 }
 
 Engine::~Engine()
 {
 	
+}
+void Engine::initScene()
+{
+	SceneBuild.Init();
+	SceneManag.AddScene(SceneBuild.GetScene(1));
+	SceneManag.AddScene(SceneBuild.GetScene(2));
+	SceneManag.AddScene(SceneBuild.GetScene(3));
+	SceneManag.AddScene(SceneBuild.GetScene(4));
 }
 
 void Engine::Run()

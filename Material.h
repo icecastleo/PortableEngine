@@ -12,5 +12,6 @@ public:
 	void UseTransperancy(bool);
 	bool HasNormalMap();
 	bool UseTransperancy();
+
 };
 

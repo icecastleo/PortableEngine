@@ -1,6 +1,6 @@
 #include "Player.h"
 
-using namespace DirectX;
+//using namespace DirectX;
 
 Player::Player()
 {

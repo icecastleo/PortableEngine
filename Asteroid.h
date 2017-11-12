@@ -1,7 +1,8 @@
 #pragma once
 
-#include <Windows.h>
+//#include <Windows.h>
 #include "Entity.h"
+
 
 class Asteroid :
 	public Entity

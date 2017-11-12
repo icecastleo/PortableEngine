@@ -2,7 +2,7 @@
 
 //#include "SimpleShader.h"
 //#include "Vertex.h"
-//#include <DirectXMath.h>
+//#include "D3D11Material.h"
 //#include <vector>
 //#include "Entity.h"
 #include "Camera.h"

@@ -2,8 +2,8 @@
 #include "Engine.h"
 #include <string>
 #include <Windows.h>
-#include "SceneBuilder.h"
-#include "SceneManager.h"
+//#include "SceneBuilder.h"
+//#include "SceneManager.h"
 
 class WindowsEngine :
 	public Engine
@@ -51,14 +51,11 @@ private:
 	void CreateConsoleWindow(int bufferLines, int bufferColumns, int windowLines, int windowColumns);
 	void UpdateTitleBarStats(float deltaTime);	// Puts debug info in the title bar
 
-	//Camera Cam;
 
 	void OnMouseDown(WPARAM buttonState, int x, int y);
 	void OnMouseUp(WPARAM buttonState, int x, int y);
 	void OnMouseMove(WPARAM buttonState, int x, int y);
 	void OnMouseWheel(float wheelDelta, int x, int y);
 
-	SceneBuilder SceneBuild;
-	SceneManager SceneManag;
 };
 

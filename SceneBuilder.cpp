@@ -4,7 +4,7 @@
 #include "Planet.h"
 #include "Engine.h"
 
-using namespace DirectX;
+//using namespace DirectX;
 
 //---------------------------------------------------------
 //Default Constructor

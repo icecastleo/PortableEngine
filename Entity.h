@@ -1,9 +1,9 @@
 //Darren Farr
 #pragma once
 
-
+#include "Material.h"
 #include "Mesh.h"
-#include "D3D11Material.h"
+//#include "D3D11Material.h"
 #include <vector>
 #include "Transform.h"
 

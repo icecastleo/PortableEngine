@@ -3,6 +3,8 @@
 #include <chrono>
 #include "RenderSystem.h"
 #include "IOSystem.h"
+#include "SceneManager.h"
+#include "SceneBuilder.h"
 
 class Engine
 {
@@ -18,6 +20,8 @@ public:
 
 	// FIXME:
 	static IOSystem *ioSystem;
+
+	void initScene();
 
 protected:
 	Engine(uint16_t windowsWidth, uint16_t windowsHeight);
@@ -35,11 +39,15 @@ protected:
 	// return ture to stop the game loop
 	virtual bool Update() { return true; }
 
+    SceneBuilder SceneBuild;
+	SceneManager SceneManag;
 private:
 	// Timing related data
 	std::chrono::steady_clock::time_point startTime;
 	std::chrono::steady_clock::time_point currentTime;
 	std::chrono::steady_clock::time_point previousTime;
+
+	
 
 };
 
