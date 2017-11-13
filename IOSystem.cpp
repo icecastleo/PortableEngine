@@ -11,9 +11,9 @@ IOSystem::~IOSystem()
 {
 }
 
-Mesh * IOSystem::loadMesh(wchar_t * objName)
+Mesh * IOSystem::loadMesh(wchar_t * name)
 {
-	wstring path = getMeshPath(objName);
+	wstring path = getMeshPath(name);
 	const wchar_t *src = path.c_str();
 	size_t size = wcslen(path.c_str()) * 2 + 2;
 	char *cPath = new char[size];
@@ -27,6 +27,21 @@ Mesh * IOSystem::loadMesh(wchar_t * objName)
 	delete cPath;
 
 	return ret;
+}
+
+Material * IOSystem::loadTexture2D(const wchar_t * textureName, const wchar_t * normalmapName)
+{
+	wstring path = getTexturePath(textureName);
+	const wchar_t *texturePath = path.c_str();
+
+	const wchar_t *normalTexturePath = nullptr;
+
+	if (normalmapName) {
+		wstring pathN = getTexturePath(normalmapName);
+		normalTexturePath = pathN.c_str();
+	}
+
+	return loadTexture2DFromPath(texturePath, normalTexturePath);
 }
 
 bool IOSystem::isinMap(const wchar_t * shadeName) {

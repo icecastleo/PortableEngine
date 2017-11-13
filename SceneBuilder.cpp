@@ -61,54 +61,54 @@ void SceneBuilder::Init()
 void SceneBuilder::BuildMaterials()
 {
 	//Texture file path
-	const wchar_t* path;
+	const wchar_t* name;
 
-	path = L"player";
-	playerMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"player";
+	playerMat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"rock";
-	asteroidMat = Engine::ioSystem->loadTexture2d(path, L"rockNormals"); //normal map
+	name = L"rock";
+	asteroidMat = Engine::ioSystem->loadTexture2D(name, L"rockNormals"); //normal map
 
-	path = L"title";
-	menuMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"title";
+	menuMat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"creditsTexture";
-	creditsMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"creditsTexture";
+	creditsMat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"spaceBackground";
-	backgroundMat = Engine::ioSystem->loadCubemapTexture(path);
+	name = L"spaceBackground";
+	backgroundMat = Engine::ioSystem->loadCubemapTexture(name);
 
-	path = L"venus";
-	venusMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"venus";
+	venusMat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"sun";
-	sunMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"sun";
+	sunMat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"earth";
-	earthMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"earth";
+	earthMat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"moon";
-	moonMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"moon";
+	moonMat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"planet1";
-	p1Mat = Engine::ioSystem->loadTexture2d(path);
+	name = L"planet1";
+	p1Mat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"planet2";
-	p2Mat = Engine::ioSystem->loadTexture2d(path);
+	name = L"planet2";
+	p2Mat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"planet3";
-	p3Mat = Engine::ioSystem->loadTexture2d(path);
+	name = L"planet3";
+	p3Mat = Engine::ioSystem->loadTexture2D(name);
 
-	path = L"rainbow3";
-	laneMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"rainbow3";
+	laneMat = Engine::ioSystem->loadTexture2D(name);
 	laneMat->UseTransperancy(true);
 
-	path = L"BlueSpace3";
-	lane2Mat = Engine::ioSystem->loadTexture2d(path);
+	name = L"BlueSpace3";
+	lane2Mat = Engine::ioSystem->loadTexture2D(name);
 	lane2Mat->UseTransperancy(true);
 
-	path = L"titleText";
-	titleMat = Engine::ioSystem->loadTexture2d(path);
+	name = L"titleText";
+	titleMat = Engine::ioSystem->loadTexture2D(name);
 }
 
 //---------------------------------------------------------

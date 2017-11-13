@@ -23,40 +23,24 @@ PC_IOSystem::~PC_IOSystem()
 	}
 }
 
-//Mesh* PC_IOSystem::loadMesh(wchar_t *objName)
-//{
-//	wstring path = L"Assets/Models/" + (wstring)objName + L".obj";
-//	const wchar_t *src = path.c_str();
-//	size_t size = wcslen(path.c_str()) * 2 + 2;
-//	char *cPath = new char[size];
-//	size_t result;
-//
-//	// success
-//	if (wcstombs_s(&result, cPath, size, src, size) != 0) {
-//		perror("Failed to convert wstring to c string \n");
-//		return nullptr;
-//	}
-//
-//	Mesh *ret = new D3D11Mesh(cPath, device);
-//
-//	delete cPath;
-//
-//	return ret;
-//}
+wstring PC_IOSystem::getMeshPath(const wchar_t * name)
+{
+	return L"Assets/Models/" + (wstring)name + L".obj";
+}
 
-Material* PC_IOSystem::loadTexture2d(const wchar_t* textureName, const wchar_t* normalmapName = nullptr) {
-	
-	wstring path = L"Assets/textures/" + (wstring)textureName + L".png";
-	const wchar_t *src = path.c_str();
+Mesh * PC_IOSystem::loadMesh(char * cPath)
+{
+	return new D3D11Mesh(cPath, device);
+}
 
-	const wchar_t *normalSrc = nullptr;
+wstring PC_IOSystem::getTexturePath(const wchar_t * name)
+{
+	return L"Assets/textures/" + (wstring)name + L".png";
+}
 
-	if (normalmapName) {
-		wstring pathN = L"Assets/textures/" + (wstring)normalmapName + L".png";
-		normalSrc = pathN.c_str();
-	}
-
-	return new D3D11Material(device, context, kMaterialNormal, src, normalSrc);
+Material * PC_IOSystem::loadTexture2DFromPath(const wchar_t* texturePath, const wchar_t* normalmapPath = nullptr)
+{
+	return new D3D11Material(device, context, kMaterialNormal, texturePath, normalmapPath);
 }
 
 Material* PC_IOSystem::loadCubemapTexture(const wchar_t* texturename) {
