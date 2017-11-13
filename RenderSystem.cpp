@@ -15,7 +15,7 @@ void RenderSystem::Update(float deltaTime)
 {
 	camera->Update(deltaTime);
 
-	for each (Entity* ent in scene->entities)
+	for (Entity* ent : scene->entities)
 	{
 		ent->Update(deltaTime);
 	}

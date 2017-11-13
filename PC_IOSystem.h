@@ -15,7 +15,8 @@ public:
 	PC_IOSystem(ID3D11Device *device, ID3D11DeviceContext* context);
 	~PC_IOSystem();
 
-	Mesh* loadMesh(wchar_t *) override;
+	virtual Mesh *loadMesh(char *cPath) override;
+	virtual wstring getMeshPath(wchar_t* objName) override;
 
 	Material* loadTexture2d(const wchar_t*, const wchar_t*) override;
 	Material * loadCubemapTexture(const wchar_t * texturename) override;

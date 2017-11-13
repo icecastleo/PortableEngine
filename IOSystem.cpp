@@ -11,6 +11,24 @@ IOSystem::~IOSystem()
 {
 }
 
+Mesh * IOSystem::loadMesh(wchar_t * objName)
+{
+	wstring path = getMeshPath(objName);
+	const wchar_t *src = path.c_str();
+	size_t size = wcslen(path.c_str()) * 2 + 2;
+	char *cPath = new char[size];
+	size_t result;
+
+	// success
+	assert(wcstombs_s(&result, cPath, size, src, size) == 0);
+
+	Mesh *ret = loadMesh(cPath);
+
+	delete cPath;
+
+	return ret;
+}
+
 bool IOSystem::isinMap(const wchar_t * shadeName) {
 	if (std::find(shaderNames.begin(), shaderNames.end(), shadeName) != shaderNames.end()) {
 		return true;
@@ -19,7 +37,11 @@ bool IOSystem::isinMap(const wchar_t * shadeName) {
 		return false;
 	}
 }
+
 // FIXME: Duplicated code
+
+
+
 
 //Mesh * IOSystem::loadMesh(wchar_t * objName)
 //{
