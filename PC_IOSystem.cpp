@@ -58,7 +58,7 @@ void PC_IOSystem::loadVSShader(const wchar_t * shaderName) {
 			ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
 
 		VSmap.insert(std::pair<const wchar_t *, SimpleVertexShader*>(shaderName, ret));
-		shaderNames.push_back(shaderName);
+		
 }
 
 void PC_IOSystem::loadPSShader(const wchar_t * shaderName) {
@@ -69,7 +69,7 @@ void PC_IOSystem::loadPSShader(const wchar_t * shaderName) {
 			ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
 
 		PSmap.insert(std::pair<const wchar_t *, SimplePixelShader*>(shaderName, ret));
-		shaderNames.push_back(shaderName);
+		
 }
 
 SimpleVertexShader* PC_IOSystem::getVertexShader(const wchar_t * vsName) {

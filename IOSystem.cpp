@@ -44,14 +44,6 @@ Material * IOSystem::loadTexture2D(const wchar_t * textureName, const wchar_t * 
 	return loadTexture2DFromPath(texturePath, normalTexturePath);
 }
 
-bool IOSystem::isinMap(const wchar_t * shadeName) {
-	if (std::find(shaderNames.begin(), shaderNames.end(), shadeName) != shaderNames.end()) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
 
 // FIXME: Duplicated code
 

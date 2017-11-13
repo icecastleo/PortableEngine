@@ -218,35 +218,27 @@ void WindowsRenderSystem::LoadShaders()
 {
 	const wchar_t * name;
 	name = L"VertexShader";
-	if(!Engine::ioSystem->isinMap(name))
 	   Engine::ioSystem->loadVSShader(name);
 
 	name = L"PixelShader";
-	if (!Engine::ioSystem->isinMap(name))
 	   Engine::ioSystem->loadPSShader(name);
 
 	name = L"VertexShaderNormalMap";
-	if (!Engine::ioSystem->isinMap(name)) 
 		Engine::ioSystem->loadVSShader(name);
 
 	name = L"PixelShaderNormalMap";
-	if (!Engine::ioSystem->isinMap(name)) 
 		Engine::ioSystem->loadPSShader(name);
 	
 	name = L"SkyVS";
-	if (!Engine::ioSystem->isinMap(name)) 
 		Engine::ioSystem->loadVSShader(name);
 
 	name = L"SkyPS";
-	if (!Engine::ioSystem->isinMap(name)) 
 		Engine::ioSystem->loadPSShader(name);
 
 	name = L"BlendPixelShader";
-	if (!Engine::ioSystem->isinMap(name)) 
 		Engine::ioSystem->loadPSShader(name);
 
-	name = L"PixelShaderNormalMapBlend";
-	if (!Engine::ioSystem->isinMap(name)) 
+	name = L"PixelShaderNormalMapBlend"; 
 		Engine::ioSystem->loadPSShader(name);
 }
 

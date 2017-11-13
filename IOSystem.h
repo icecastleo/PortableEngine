@@ -14,11 +14,14 @@ protected:
 
 	uint16_t indCount;
 
-	vector<const wchar_t *> shaderNames;
+	//vector<const wchar_t *> shaderNames;
 
 	virtual wstring getMeshPath(const wchar_t* name) = 0;
 	virtual wstring getTexturePath(const wchar_t *name) = 0;
+	virtual wstring getShaderPath(const wchar_t *name) = 0;
 
+	std::map<char *, void*> VSmap;
+	std::map<char *, void*> PSmap;
 public:
 	IOSystem();
 	virtual ~IOSystem();
@@ -34,6 +37,5 @@ public:
 	virtual void loadVSShader(const wchar_t *) = 0;
 	virtual void loadPSShader(const wchar_t *) = 0;
 
-	bool isinMap(const wchar_t *);  //check if the shader is loaded
 };
 
