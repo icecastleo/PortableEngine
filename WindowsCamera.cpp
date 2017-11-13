@@ -1,7 +1,8 @@
 #include "WindowsCamera.h"
 #include "glm\gtc\matrix_transform.hpp"
 
-WindowsCamera::WindowsCamera()
+WindowsCamera::WindowsCamera(uint16_t width, uint16_t height)
+	:Camera(width, height)
 {
 	
 }

@@ -16,10 +16,10 @@ public:
 	~PC_IOSystem();
 
 	Mesh* loadMesh(wchar_t *) override;
-	Material* loadTexture2d(const wchar_t*) override;
+
 	Material* loadTexture2d(const wchar_t*, const wchar_t*) override;
-	Material* loadTexture2d(const wchar_t*, int) override;
-	
+	Material * loadCubemapTexture(const wchar_t * texturename) override;
+
 	void loadVSShader(const wchar_t *);
 	void loadPSShader(const wchar_t *);
    
@@ -32,7 +32,5 @@ private:
     
 	std::map<const wchar_t *, SimpleVertexShader*> VSmap;
 	std::map<const wchar_t *, SimplePixelShader*> PSmap;
-    
-	
 };
 

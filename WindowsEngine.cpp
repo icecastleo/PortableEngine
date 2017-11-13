@@ -39,6 +39,8 @@ WindowsEngine::WindowsEngine(
 
 	ioSystem = new PC_IOSystem(windowsRender->GetDevice(), windowsRender->GetContext());
 
+	windowsRender->Init(width, height);
+
 	initScene();
 
 	windowsRender->SetScene(SceneManag.GetScene(2));

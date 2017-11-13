@@ -9,7 +9,6 @@
 #include "MusicPlayer.h"
 #include <vector>
 
-
 // We can include the correct library files here
 // instead of in Visual Studio settings if we want
 #pragma comment(lib, "d3d11.lib")
@@ -22,6 +21,7 @@ class WindowsRenderSystem
 public:
 	WindowsRenderSystem(uint16_t width, uint16_t height, HWND hWnd);
 	~WindowsRenderSystem();
+	void Init(uint16_t width, uint16_t height);
 
 	void OnResize(uint16_t width, uint16_t height) override;
 	void Update(float deltaTime) override;
@@ -33,8 +33,6 @@ public:
 	void SetScene(Scene *scene);
 	
 private:
-
-	void Init(uint16_t width, uint16_t height);
 	HRESULT InitDirectX(uint16_t width, uint16_t height);
 
 	// Initialization helper methods - feel free to customize, combine, etc.
@@ -69,16 +67,6 @@ private:
 
 	MusicPlayer musicPlayer;
 
-	Scene *scene;
-
 	Renderer Render;
-
-	int curIndex = 0;
-	float timer = 0.2f;
-	int asteroidIndex = 0;
-	float stayTime = 0;
-	float sceneChangeTime = 0;
-
-	Text2D* text;
 };
 

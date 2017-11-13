@@ -1,19 +1,10 @@
-//Darren Farr
 #include "SceneBuilder.h"
 #include "Asteroid.h"
 #include "Planet.h"
 #include "Engine.h"
 
-//using namespace DirectX;
-
-//---------------------------------------------------------
-//Default Constructor
-//---------------------------------------------------------
 SceneBuilder::SceneBuilder() {}
 
-//---------------------------------------------------------
-//Default Deconstructor
-//---------------------------------------------------------
 SceneBuilder::~SceneBuilder()
 {
 	delete asteroidMat;
@@ -30,7 +21,6 @@ SceneBuilder::~SceneBuilder()
 	delete p2Mat;
 	delete p3Mat;
 	delete lane2Mat;
-	delete particelMat;
 	delete titleMat;
 
 	delete cubeMesh;
@@ -52,10 +42,6 @@ SceneBuilder::~SceneBuilder()
 	delete scene2;
 	delete scene3;
 	delete scene4;
-
-	//for (Entity *e : asteroidList) {
-	//	delete e;
-	//}
 }
 
 //---------------------------------------------------------
@@ -90,7 +76,7 @@ void SceneBuilder::BuildMaterials()
 	creditsMat = Engine::ioSystem->loadTexture2d(path);
 
 	path = L"spaceBackground";
-	backgroundMat = Engine::ioSystem->loadTexture2d(path,0);
+	backgroundMat = Engine::ioSystem->loadCubemapTexture(path);
 
 	path = L"venus";
 	venusMat = Engine::ioSystem->loadTexture2d(path);
@@ -121,12 +107,8 @@ void SceneBuilder::BuildMaterials()
 	lane2Mat = Engine::ioSystem->loadTexture2d(path);
 	lane2Mat->UseTransperancy(true);
 
-	path = L"circleParticle"; 
-	particelMat = Engine::ioSystem->loadTexture2d(path,1);
-
 	path = L"titleText";
 	titleMat = Engine::ioSystem->loadTexture2d(path);
-
 }
 
 //---------------------------------------------------------
@@ -204,18 +186,6 @@ void SceneBuilder::BuildMeshes()
 	asteroidMesh = Engine::ioSystem->loadMesh(L"sphere");
 }
 
-//---------------------------------------------------------
-//Build Base Entities Here
-//---------------------------------------------------------
-void SceneBuilder::BuildEntities()
-{
-	//Entity template (mesh name, material name, position, rotation, scale)
-	playerEnt = new Entity(playerMesh, playerMat, glm::vec3(0.0f, -1.5f, +0.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+2.0f, +2.0f, +2.0f));
-}
-
-//---------------------------------------------------------
-//Setup the 3 built in scenes here
-//---------------------------------------------------------
 void SceneBuilder::SetupScenes()
 {
 	//Scene 1
@@ -246,13 +216,9 @@ void SceneBuilder::SetupScenes()
 	scene2 = new Scene();
 	scene2->name = "MainGame";
 	
-	for (int i = 0; i < 12; i++) {
-		Entity *entity = new Entity(asteroidMesh, asteroidMat, glm::vec3(2.0f, 1.5f, -10.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+2.0f, +2.0f, +2.0f));
-		entity->dirtyUpdate = new Asteroid(entity);
-		scene2->entities.push_back(entity);
-	}
-
-	//scene2->entities.push_back(playerEnt);
+	Entity *asteroid = new Entity(asteroidMesh, asteroidMat, glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+2.0f, +2.0f, +2.0f));
+	asteroid->dirtyUpdate = new Asteroid(asteroid);
+	scene2->entities.push_back(asteroid);
 
 	Entity *sun = new Entity(sphereMesh, sunMat, glm::vec3(30, -10, 40), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+10.0f, +10.0f, +10.0f));
 	sun->dirtyUpdate = new Planet(sun, 0.1f);
@@ -363,24 +329,14 @@ void SceneBuilder::SetupScenes()
 	SortEntityList(scene4);
 }
 
-//---------------------------------------------------------
-//Sort the entities lists into opaque or transparent lists, with or without normal maps
-//---------------------------------------------------------
+// TODO: Change??
 void SceneBuilder::SortEntityList(Scene* s)
 {
 	for (unsigned int i = 0; i < s->entities.size(); i++)
 	{
-		if (s->entities.at(i)->GetMat()->UseTransperancy() && s->entities.at(i)->GetMat()->HasNormalMap())
-		{
-			s->transparentNorm.push_back(s->entities.at(i));
-		}
-		else if (s->entities.at(i)->GetMat()->UseTransperancy())
+		if (s->entities.at(i)->GetMat()->UseTransperancy())
 		{
 			s->transparent.push_back(s->entities.at(i));
-		}
-		else if (s->entities.at(i)->GetMat()->HasNormalMap())
-		{
-			s->opaqueNorm.push_back(s->entities.at(i));
 		}
 		else
 		{
@@ -389,9 +345,6 @@ void SceneBuilder::SortEntityList(Scene* s)
 	}
 }
 
-//---------------------------------------------------------
-//Return the list of entities in the scene
-//---------------------------------------------------------
 Scene* SceneBuilder::GetScene(int num)
 {
 	if (num == 1) { return scene1; }
@@ -400,18 +353,3 @@ Scene* SceneBuilder::GetScene(int num)
 	else if (num == 4) { return scene4; }
 	else { return nullptr; }
 }
-
-//---------------------------------------------------------
-//Return the player Entity
-//This needs to go, needs to be requested from the scene itself
-//---------------------------------------------------------
-Entity* SceneBuilder::GetPlayerEntity()
-{
-	return playerEnt;
-}
-
-//Entity* SceneBuilder::GetAsteroidEntity(int num)
-//{
-//	return asteroidList[num];
-//}
-

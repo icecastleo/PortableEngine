@@ -5,8 +5,6 @@
 #include "WindowsCamera.h"
 #include "Engine.h"
 #include "PC_IOSystem.h"
-// For the DirectX Math library
-using namespace DirectX;
 
 WindowsRenderSystem::WindowsRenderSystem(uint16_t width, uint16_t height, HWND hWnd)					
 {
@@ -26,11 +24,12 @@ WindowsRenderSystem::WindowsRenderSystem(uint16_t width, uint16_t height, HWND h
 	pixelShaderBlend = 0;
 	pixelShaderNormalMapBlend = 0;
 
-	Renderer Render();
+	camera = new WindowsCamera(width, height);
 
-	camera = new WindowsCamera();
-
-	Init(width, height);
+	HRESULT hr = InitDirectX(width, height);
+	if (FAILED(hr)) {
+		perror("Failed to init DirectX \n");
+	}
 }
 
 /** 
@@ -51,7 +50,7 @@ WindowsRenderSystem::~WindowsRenderSystem()
 	//	HRESULT hr = S_OK;
 	//
 	//	ID3D11Debug * DebugDevice = nullptr;
-	//	hr = device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&DebugDevice));
+	//	hr = device->QueryInterface(__uuidof(ID3D11Debug), static_cast<void**>(&DebugDevice));
 	//	//if (FAILED(hr)) return hr;
 	//
 	//	hr = DebugDevice->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
@@ -60,34 +59,8 @@ WindowsRenderSystem::~WindowsRenderSystem()
 	//	DebugDevice->Release();
 	//#endif
 
-	if (device) { device->Release(); }
-
-	// Release any (and all!) DirectX objects
-	// we've made in the WindowsRenderSystem class
-	//if (vertexBuffer) { vertexBuffer->Release(); }
-
-	// Delete our simple shader objects, which
-	// will clean up their own internal DirectX stuff
-
-
-	/*delete vertexShader;
-	delete pixelShader;
-	delete vertexShaderNormalMap;
-	delete pixelShaderNormalMap;
-	delete skyVS;
-	delete skyPS;
-	delete pixelShaderBlend;
-	delete pixelShaderNormalMapBlend;
-    delete particleVS;
-	delete particlePS;*/
-
-	delete text;
-
-	//for (Asteroid *a : asteroids) {
-	//	delete a;
-	//}
-
-	//delete player;
+	if (device)
+		device->Release();
 
 	delete camera;
 }
@@ -98,24 +71,13 @@ WindowsRenderSystem::~WindowsRenderSystem()
 // --------------------------------------------------------
 void WindowsRenderSystem::Init(uint16_t width, uint16_t height)
 {
-	HRESULT hr = InitDirectX(width, height);
-	if (FAILED(hr)) {
-		perror("Failed to init DirectX \n");
-	}
+	LoadShaders();
+	GetShaders();
 
-	camera->Init(width, height);
+	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS,
+		pixelShaderBlend, pixelShaderNormalMapBlend);
 
-	//text = new Text2D(width, height);
-	//text->Init(context, device);
-
-	Render.Init(camera, device, context, backBufferRTV, swapChain, depthStencilView, text, width, height);
-
-	//player = new Player(SceneBuild.GetPlayerEntity());
-
-	//Make 5 Asteroids for the game
-	//for (int i = 0; i < 12; i++) {
-	//	asteroids.push_back(new Asteroid(SceneBuild.GetAsteroidEntity(i)));
-	//}
+	Render.Init(camera, device, context, backBufferRTV, swapChain, depthStencilView, width, height);
 
 	// Tell the input assembler stage of the pipeline what kind of
 	// geometric primitives (points, lines or triangles) we want to draw.  
@@ -291,51 +253,35 @@ void WindowsRenderSystem::LoadShaders()
 void WindowsRenderSystem::GetShaders() {
 	const wchar_t * name;
 	name = L"VertexShader";
-	vertexShader = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
+	vertexShader = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
 
 	name = L"PixelShader";
-	pixelShader = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
+	pixelShader = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
 	name = L"VertexShaderNormalMap";
-	vertexShaderNormalMap = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
+	vertexShaderNormalMap = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
 
 	name = L"PixelShaderNormalMap";
-	pixelShaderNormalMap = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
+	pixelShaderNormalMap = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
 	name = L"SkyVS";
-	skyVS = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
+	skyVS = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
 
 	name = L"SkyPS";
-	skyPS = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
+	skyPS = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
 	name = L"BlendPixelShader";
-	pixelShaderBlend = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
+	pixelShaderBlend = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 
 	name = L"PixelShaderNormalMapBlend";
-	pixelShaderNormalMapBlend = (reinterpret_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
+	pixelShaderNormalMapBlend = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
 }
 
 void WindowsRenderSystem::SetScene(Scene *scene)
 {
-	LoadShaders();
-	GetShaders();
-	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS,
-		pixelShaderBlend, pixelShaderNormalMapBlend);
-
-	this->scene = scene;
+	RenderSystem::SetScene(scene);
 
 	Render.SetScene(scene);
-
-	////Setup text to draw
-	//text->ClearText();
-	//if (SceneManag.GetScene(SceneNumber)->textList.size() > 0)
-	//{
-	//	Scene* temp = SceneManag.GetScene(SceneNumber);
-	//	for (unsigned int i = 0; i < temp->textList.size(); i++)
-	//	{
-	//		text->AddText(temp->textList.at(i).text, temp->textList.at(i).position);
-	//	}
-	//}
 
 	musicPlayer.stop();
 
@@ -416,6 +362,8 @@ void WindowsRenderSystem::OnResize(uint16_t width, uint16_t height)
 // --------------------------------------------------------
 void WindowsRenderSystem::Update(float deltaTime)
 {
+	RenderSystem::Update(deltaTime);
+
 	//If in scene 1 go to scene 2
 	if (GetAsyncKeyState(VK_RETURN))
 	{
@@ -439,27 +387,6 @@ void WindowsRenderSystem::Update(float deltaTime)
 	}
 
 	musicPlayer.update();
-
-	//Spawn an inactive asteroid in a random lane.
-	//srand(time(NULL));
-	//if (timer > 0.5f) {
-	//	timer = 0;
-	//	asteroids[asteroidIndex % 12]->SetActive(rand() % 2 + 1);
-	//	asteroidIndex++;
-	//}
-
-	//for (Asteroid* a : asteroids) {
-	//	a->Update(deltaTime);
-	//}
-
-	camera->Update(deltaTime);
-
-	for each (Entity* ent in scene->entities)
-	{
-		ent->Update(deltaTime);
-	}
-
-	//player->Update(deltaTime);
 }
 
 // --------------------------------------------------------

@@ -1,63 +1,30 @@
-//Darren Farr
 #pragma once
 #include "Material.h"
 #include "SimpleShader.h"
-#include "WICTextureLoader.h"
-#include "DDSTextureLoader.h"
-
 
 class D3D11Material : public Material
 {
 public:
-	
-	D3D11Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
-	D3D11Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*, const wchar_t*);
-	D3D11Material(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*, int);
+	D3D11Material(ID3D11Device * device, ID3D11DeviceContext * context, MaterialType type, const wchar_t * path, const wchar_t * normalpath);
 	~D3D11Material();
 
-	void PrepareMaterial(glm::mat4, glm::mat4, glm::mat4, SimpleVertexShader*);
-	void PrepareSkybox(glm::mat4, glm::mat4, SimpleVertexShader*, SimplePixelShader*);
+	void SetTexture(ID3D11Device * device, ID3D11DeviceContext * context, const wchar_t * path, const wchar_t * normalpath);
+	void SetupSkybox(ID3D11Device * device, ID3D11DeviceContext * context, const wchar_t * path);
+	
+	void PrepareMaterial(glm::mat4 world, glm::mat4 view, glm::mat4 projection, SimpleVertexShader * vertexShader, SimplePixelShader * pixelShader);
 
-	void SetTexture(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
-	void SetNormalMap(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
-	void SetupSkybox(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
+	ID3D11ShaderResourceView* GetSRV();
 
-
-	void SetupParticle(ID3D11Device*, ID3D11DeviceContext*, const wchar_t*);
+	ID3D11SamplerState* GetSampleState();
 
 	ID3D11RasterizerState* GetRast();
 	ID3D11DepthStencilState* GetDepthSD();
-
-	ID3D11ShaderResourceView* GetSRV();
-	ID3D11ShaderResourceView* GetSkySRV();
-	ID3D11ShaderResourceView* GetNormalSRV();
-	ID3D11SamplerState* GetSampleState();
-
-
-	ID3D11DepthStencilState* GetParticleDepthState();
-	ID3D11BlendState* GetParticleBlendState();
-	ID3D11ShaderResourceView* GetParticleTexture();
-
-
 private:
-	
-	ID3D11ShaderResourceView* SRV;
-	ID3D11SamplerState* sampleState;
-	D3D11_SAMPLER_DESC* sampleDes;
 
-	ID3D11ShaderResourceView* skySRV;
+	ID3D11ShaderResourceView* SRV;
+
+	ID3D11SamplerState* sampleState;
+
 	ID3D11RasterizerState* rsSky;
 	ID3D11DepthStencilState* dsSky;
-
-
-	ID3D11ShaderResourceView* normalSRV;
-
-
-	// Particle Texture
-	ID3D11ShaderResourceView* particleTexture;
-
-	// Particle Resources
-	ID3D11DepthStencilState* particleDepthState;
-	ID3D11BlendState* particleBlendState;
-
 };

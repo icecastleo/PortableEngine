@@ -1,9 +1,7 @@
 
-
 #include "PC_IOSystem.h"
 #include "D3D11Mesh.h"
 #include "D3D11Material.h"
-
 
 //PC_IOSystem *PC_IOSystem::IO_instance = 0;
 
@@ -46,40 +44,26 @@ Mesh* PC_IOSystem::loadMesh(wchar_t *objName)
 	return ret;
 }
 
-Material* PC_IOSystem::loadTexture2d(const wchar_t* texturename) {
+Material* PC_IOSystem::loadTexture2d(const wchar_t* textureName, const wchar_t* normalmapName = nullptr) {
 	
-	wstring path = L"Assets/textures/" + (wstring)texturename + L".png";
+	wstring path = L"Assets/textures/" + (wstring)textureName + L".png";
 	const wchar_t *src = path.c_str();
-	
-	Material * ret = new D3D11Material(device, context, src);
-	
-	return ret;
+
+	const wchar_t *normalSrc = nullptr;
+
+	if (normalmapName) {
+		wstring pathN = L"Assets/textures/" + (wstring)normalmapName + L".png";
+		normalSrc = pathN.c_str();
+	}
+
+	return new D3D11Material(device, context, kMaterialNormal, src, normalSrc);
 }
 
-Material* PC_IOSystem::loadTexture2d(const wchar_t* texturename, const wchar_t* normalmapname) {
-
-	wstring path = L"Assets/textures/" + (wstring)texturename + L".png";
-	const wchar_t *src = path.c_str();
-	wstring pathN = L"Assets/textures/" + (wstring)normalmapname + L".png";
-	const wchar_t *srcNor = pathN.c_str();
-
-
-	Material * ret = new D3D11Material(device, context, src, srcNor);
-	
-	return ret;
-}
-
-Material* PC_IOSystem::loadTexture2d(const wchar_t* texturename, int type) {
-	wstring path;
-	if(type == 0)
-		path = L"Assets/textures/" + (wstring)texturename + L".dds";
-	else
-		path = L"Assets/textures/" + (wstring)texturename + L".png";
+Material* PC_IOSystem::loadCubemapTexture(const wchar_t* texturename) {
+	wstring path = L"Assets/textures/" + (wstring)texturename + L".dds";
 	const wchar_t *src = path.c_str();
 
-	Material * ret = new D3D11Material(device, context, src, type);
-
-	return ret;
+	return new D3D11Material(device, context, kMaterialCubemap, src, nullptr);
 }
 
 void PC_IOSystem::loadVSShader(const wchar_t * shaderName) {
@@ -112,6 +96,3 @@ SimplePixelShader* PC_IOSystem::getPixelShader(const wchar_t * psName) {
 	
 	return PSmap.at(psName);
 }
-
-
-

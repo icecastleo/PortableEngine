@@ -17,8 +17,8 @@ D3D11Mesh::D3D11Mesh(char* path, ID3D11Device *device)
 D3D11Mesh::~D3D11Mesh()
 {
 	// Release any (and all!) DirectX objects
-	if (vertBuffer) { reinterpret_cast<ID3D11Buffer*>(vertBuffer)->Release(); }
-	if (indBuffer) { reinterpret_cast<ID3D11Buffer*>(indBuffer)->Release(); }
+	if (vertBuffer) { static_cast<ID3D11Buffer*>(vertBuffer)->Release(); }
+	if (indBuffer) { static_cast<ID3D11Buffer*>(indBuffer)->Release(); }
 }
 
 

@@ -22,13 +22,8 @@ public:
 	void BuildMaterials();
 	void BuildLights();
 	void BuildMeshes();
-	void BuildEntities();
 
-	//Entity* CreateEntity(Mesh*, D3D11Material*, DirectX::XMFLOAT3, DirectX::XMFLOAT3, DirectX::XMFLOAT3);
 	Scene* GetScene(int);
-	Entity* GetPlayerEntity();
-
-	//Entity* GetAsteroidEntity(int);
 
 private:
 	void SetupScenes();
@@ -39,9 +34,6 @@ private:
 	Scene* scene3;
 	Scene* scene4;
 
-	//ID3D11Device* device;
-	//ID3D11DeviceContext* context;
-
 	Mesh* cubeMesh;
 	Mesh* quadMesh;
 	Mesh* sphereMesh;
@@ -49,7 +41,6 @@ private:
 	Mesh* asteroidMesh;
 	Mesh* skyboxMesh;
 
-	
 	Material* creditsMat;
 	Material* menuMat;
 	Material* playerMat;
@@ -68,10 +59,6 @@ private:
 	Material* lane2Mat;
 	Material* titleMat;
 
-	Material* particelMat;
-
-	Entity* playerEnt;
-
 	Entity* laneEnt;
 	Entity* laneEnt2;
 
@@ -85,5 +72,4 @@ private:
 	PointLight* pointLight;
 
 	SpotLight* spotLight;
-
 };

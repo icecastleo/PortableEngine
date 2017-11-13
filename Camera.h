@@ -5,10 +5,8 @@
 class Camera
 {
 public:
-	Camera();
+	Camera(uint16_t width, uint16_t height);
 	virtual ~Camera();
-
-	void Init(uint16_t width, uint16_t height);
 
 	glm::vec3 GetPositon();
 
@@ -26,8 +24,6 @@ public:
 	void Resize(uint16_t, uint16_t);
 
 protected:
-	void CreateMatrices(uint16_t width, uint16_t height);
-
 	glm::vec3 position;
 	glm::vec3 rotation;  // degrees
 

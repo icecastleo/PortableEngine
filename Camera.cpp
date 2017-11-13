@@ -4,21 +4,13 @@
 
 using namespace glm;
 
-Camera::Camera()
+Camera::Camera(uint16_t width, uint16_t height)
 {
 
 #if defined(DEBUG) | defined(_DEBUG)
 	debugMode = true;
 #endif // DEBUG
 
-}
-
-Camera::~Camera() 
-{
-}
-
-void Camera::Init(uint16_t width, uint16_t height)
-{
 	// FIXME:  
 #if _PC
 	position = vec3(0.f, 8.f, -15.f);
@@ -29,14 +21,14 @@ void Camera::Init(uint16_t width, uint16_t height)
 	rotation = vec3(15.f, 0.f, 0.f);
 #endif
 
-	CreateMatrices(width, height);
-}
-
-// Create the base matrices for the camera
-void Camera::CreateMatrices(uint16_t width, uint16_t height)
-{
+	// Create the base matrices for the camera
 	MakeViewMatrix();
 	MakeProjectionMatrix(width, height);
+}
+
+Camera::~Camera() 
+{
+
 }
 
 void Camera::MakeViewMatrix()

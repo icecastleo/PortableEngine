@@ -13,7 +13,6 @@ Material::Material()
 
 }
 
-
 Material::~Material()
 {
 }
@@ -23,11 +22,14 @@ void Material::UseTransperancy(bool  _usesTrans) {
 }
 
 bool Material::HasNormalMap() {
-	return hasNormal;
+	return !(normalSRV == nullptr);
 }
 
 bool Material::UseTransperancy() {
 	return usesTrans;
 }
 
-
+void* Material::GetNormalSRV()
+{
+	return normalSRV;
+}

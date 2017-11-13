@@ -1,12 +1,6 @@
-//Darren Farr
 #include "Renderer.h"
 #include "D3D11Material.h"
 
-using namespace DirectX;
-
-//---------------------------------------------------------
-//Default Constructor
-//---------------------------------------------------------
 Renderer::Renderer()
 {
 	// Initialize fields
@@ -17,9 +11,6 @@ Renderer::Renderer()
 	ppSRV = 0;
 }
 
-//---------------------------------------------------------
-//Default Deconstructor
-//---------------------------------------------------------
 Renderer::~Renderer() 
 {
 	ppSRV->Release();
@@ -35,7 +26,7 @@ Renderer::~Renderer()
 //Inititialize one time members
 //---------------------------------------------------------
 void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con, ID3D11RenderTargetView* tView, 
-	IDXGISwapChain* chain, ID3D11DepthStencilView* depthStencilView, Text2D* _text, unsigned int width, unsigned int height)
+	IDXGISwapChain* chain, ID3D11DepthStencilView* depthStencilView, unsigned int width, unsigned int height)
 {
 	camera = _Cam;
 	mDevice = device;
@@ -43,7 +34,6 @@ void Renderer::Init(Camera* _Cam, ID3D11Device* device, ID3D11DeviceContext* con
 	backBufferRTV = tView;
 	swapChain = chain;
 	context->RSGetState(&defaultState);
-	text = _text;
 
 	setWidthHeight(width, height, depthStencilView);
 
@@ -70,19 +60,11 @@ void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* 
 	pixelShaderNormalMapBlend = _pixShaderNormB;
 }
 
-//---------------------------------------------------------
-//Set Entities
-//---------------------------------------------------------
 void Renderer::SetScene(Scene* _scene)
 {
 	currentScene = _scene;
 }
 
-//---------------------------------------------------------
-//Draw
-//Intitial code from original game.cpp - Chris Cascioli
-//Rewritten to work with a list of entities
-//---------------------------------------------------------
 void Renderer::Draw()
 {
 	// Background color (Cornflower Blue in this case) for clearing
@@ -92,6 +74,9 @@ void Renderer::Draw()
 	//  - Do this ONCE PER FRAME
 	//  - At the beginning of Draw (before drawing *anything*)
 	//context->ClearRenderTargetView(backBufferRTV, color);
+	context->ClearRenderTargetView(ppRTV, color);
+	context->OMSetRenderTargets(1, &ppRTV, mDepthStencilView);
+
 	context->ClearDepthStencilView(
 		mDepthStencilView,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
@@ -104,84 +89,70 @@ void Renderer::Draw()
 	// Turn off our custom blend state
 	context->OMSetBlendState(nullptr, 0, 0xFFFFFFFF);
 
-	// Post process initial setup =================
-	// Start rendering somewhere else!
-	context->ClearRenderTargetView(ppRTV, color);
-	context->OMSetRenderTargets(1, &ppRTV, mDepthStencilView);
-
 	// Set buffers in the input assembler
 	//  - Do this ONCE PER OBJECT you're drawing, since each object might
 	//    have different geometry.
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	
+	D3D11Material *material;
+
+	SimpleVertexShader *vShader;
+	SimplePixelShader *pShader;
+
 	// Buffers to hold actual geometry data
 	ID3D11Buffer* vertexBuffer;
-	ID3D11Buffer* indexBuffer;
 
-	//Loop through the list of Entities and draw each one
 	//Draw opaque entities first then opaque with normals then transparent with normals and finally transparent objects
-	if (currentScene->opaque.size() > 0)
+	for (Entity *entity : currentScene->opaque)
 	{
-		for (unsigned i = 0; i < currentScene->opaque.size(); i++)
-		{
-			static_cast<D3D11Material *>(currentScene->opaque.at(i)->GetMat())->PrepareMaterial(currentScene->opaque.at(i)->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vertexShader);
-			SetPixelShaderUp(pixelShader, currentScene->opaque, i);
+		material = static_cast<D3D11Material*>(entity->GetMat());
 
-			stride = sizeof(Vertex);
-			offset = 0;
-
-			vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->opaque.at(i)->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
-			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->opaque.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
-
-			// Finally do the actual drawing
-			//  - Do this ONCE PER OBJECT you intend to draw
-			//  - This will use all of the currently set DirectX "stuff" (shaders, buffers, etc)
-			//  - DrawIndexed() uses the currently set INDEX BUFFER to look up corresponding
-			//     vertices in the currently set VERTEX BUFFER
-			context->DrawIndexed(
-				currentScene->opaque.at(i)->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
-				0,     // Offset to the first index we want to use
-				0);    // Offset to add to each index when looking up vertices
+		if (material->HasNormalMap()) {
+			vShader = vertexShaderNormalMap;
+			pShader = pixelShaderNormalMap;
 		}
-	}//end of opaque draw calls
-
-	if (currentScene->opaqueNorm.size() > 0)
-	{
-		for (unsigned i = 0; i < currentScene->opaqueNorm.size(); i++)
-		{
-			static_cast<D3D11Material *>(currentScene->opaqueNorm.at(i)->GetMat())->PrepareMaterial(currentScene->opaqueNorm.at(i)->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vertexShaderNormalMap);
-			SetPixelShaderUp(pixelShaderNormalMap, currentScene->opaqueNorm, i);
-
-			stride = sizeof(Vertex);
-			offset = 0;
-
-			vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->opaqueNorm.at(i)->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
-			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->opaqueNorm.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
-
-			context->DrawIndexed(
-				currentScene->opaqueNorm.at(i)->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
-				0,     // Offset to the first index we want to use
-				0);    // Offset to add to each index when looking up vertices
+		else {
+			vShader = vertexShader;
+			pShader = pixelShader;
 		}
-	}//end of opaque with normal maps draw calls
 
-	//------------------------------------------------------------------------------------------------------------------------------------------------
-	//Draw the skybox if one is loaded
-	if (currentScene->skybox != NULL)
-	{
-		vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->skybox->GetMesh()->GetVertexBuffer());
-		indexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->skybox->GetMesh()->GetIndexBuffer());
+		material->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vShader, pShader);
+		SetPixelShaderUp(pShader, material);
+
+		stride = sizeof(Vertex);
+		offset = 0;
+
+		vertexBuffer = static_cast<ID3D11Buffer*>(entity->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
 
 		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-		context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+		context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(entity->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
-		static_cast<D3D11Material *>(currentScene->skybox->GetMat())->PrepareSkybox(camera->GetViewMatrix(), camera->GetProjectionMatrix(), skyVS, skyPS);
+		// Finally do the actual drawing
+		//  - Do this ONCE PER OBJECT you intend to draw
+		//  - This will use all of the currently set DirectX "stuff" (shaders, buffers, etc)
+		//  - DrawIndexed() uses the currently set INDEX BUFFER to look up corresponding
+		//     vertices in the currently set VERTEX BUFFER
+		context->DrawIndexed(
+			entity->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
+			0,     // Offset to the first index we want to use
+			0);    // Offset to add to each index when looking up vertices
+	}
 
-		context->RSSetState(static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetRast());
-		context->OMSetDepthStencilState(static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetDepthSD(), 0);
+	// draw skybox
+	if (currentScene->skybox)
+	{
+		Entity *entity = currentScene->skybox;
+
+		vertexBuffer = static_cast<ID3D11Buffer*>(entity->GetMesh()->GetVertexBuffer());
+		
+		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+		context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(entity->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
+
+		static_cast<D3D11Material *>(entity->GetMat())->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), skyVS, skyPS);
+
+		context->RSSetState(static_cast<D3D11Material *>(entity->GetMat())->GetRast());
+		context->OMSetDepthStencilState(static_cast<D3D11Material *>(entity->GetMat())->GetDepthSD(), 0);
 		context->DrawIndexed(currentScene->skybox->GetMesh()->GetIndices().size(), 0, 0);
 
 		// Reset the render states we've changed
@@ -200,48 +171,34 @@ void Renderer::Draw()
 		0, // Not using per-channel blend factors
 		0xFFFFFFFF); // Sample mask - Need all bits set (0xFFFFFFFF)
 
-	if (currentScene->transparentNorm.size() > 0)
+	for (Entity *entity : currentScene->transparent)
 	{
-		for (unsigned i = 0; i < currentScene->transparentNorm.size(); i++)
-		{
-			static_cast<D3D11Material *>(currentScene->transparentNorm.at(i)->GetMat())->PrepareMaterial(currentScene->transparentNorm.at(i)->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vertexShaderNormalMap);
-			SetPixelShaderUp(pixelShaderNormalMapBlend, currentScene->transparentNorm, i);
+		material = static_cast<D3D11Material*>(entity->GetMat());
 
-			stride = sizeof(Vertex);
-			offset = 0;
-
-			vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->transparentNorm.at(i)->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
-			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->transparentNorm.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
-
-			context->DrawIndexed(
-				currentScene->transparentNorm.at(i)->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
-				0,     // Offset to the first index we want to use
-				0);    // Offset to add to each index when looking up vertices
+		if (material->HasNormalMap()) {
+			vShader = vertexShaderNormalMap;
+			pShader = pixelShaderNormalMapBlend;
 		}
-	}//end of transparent with normal maps draw calls
-
-	if (currentScene->transparent.size() > 0)
-	{
-		for (unsigned i = 0; i < currentScene->transparent.size(); i++)
-		{
-			static_cast<D3D11Material *>(currentScene->transparent.at(i)->GetMat())->PrepareMaterial(currentScene->transparent.at(i)->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vertexShader);
-			SetPixelShaderUp(pixelShaderBlend, currentScene->transparent, i);
-
-			stride = sizeof(Vertex);
-			offset = 0;
-
-			vertexBuffer = reinterpret_cast<ID3D11Buffer*>(currentScene->transparent.at(i)->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
-			context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-			context->IASetIndexBuffer(reinterpret_cast<ID3D11Buffer*>(currentScene->transparent.at(i)->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
-
-			context->DrawIndexed(
-				currentScene->transparent.at(i)->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
-				0,     // Offset to the first index we want to use
-				0);    // Offset to add to each index when looking up vertices
+		else {
+			vShader = vertexShader;
+			pShader = pixelShaderBlend;
 		}
-		
-	}//end of transparent with normal maps draw calls
+
+		material->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vShader, pShader);
+		SetPixelShaderUp(pShader, material);
+
+		stride = sizeof(Vertex);
+		offset = 0;
+
+		vertexBuffer = static_cast<ID3D11Buffer*>(entity->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
+		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+		context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(entity->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
+
+		context->DrawIndexed(
+			entity->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
+			0,     // Offset to the first index we want to use
+			0);    // Offset to add to each index when looking up vertices
+	}
 
 	// Reset states to properly render next frame
 	context->RSSetState(0);
@@ -304,10 +261,7 @@ void Renderer::setWidthHeight(unsigned int width, unsigned int height, ID3D11Dep
 	ppTexture->Release();
 }
 
-//---------------------------------------------------------
-//Set the pixel shader up
-//---------------------------------------------------------
-void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*> list, int i)
+void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, D3D11Material *material)
 {
 	pShader->SetFloat3("cameraPosition", camera->GetPositon());
 
@@ -365,22 +319,18 @@ void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, std::vector<Entity*>
 		);
 	}
 
-	pShader->SetSamplerState("basicSampler", static_cast<D3D11Material *>(list.at(i)->GetMat())->GetSampleState());
-	pShader->SetShaderResourceView("diffuseTexture", static_cast<D3D11Material *>(list.at(i)->GetMat())->GetSRV());
+	pShader->SetSamplerState("basicSampler", material->GetSampleState());
+	pShader->SetShaderResourceView("diffuseTexture", material->GetSRV());
 
-	//check for a normal map
-	if (list.at(i)->GetMat()->HasNormalMap())
-	{
-		pShader->SetShaderResourceView("NormalMap", static_cast<D3D11Material *>(list.at(i)->GetMat())->GetNormalSRV());
+	if (material->HasNormalMap()) {
+		pShader->SetShaderResourceView("NormalMap", static_cast<ID3D11ShaderResourceView*>(material->GetNormalSRV()));
 	}
 
-	if (currentScene->skybox != NULL)
-	{
-		pShader->SetShaderResourceView("Sky", static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetSkySRV());
+	if (currentScene->skybox) {
+		pShader->SetShaderResourceView("Sky", static_cast<D3D11Material *>(currentScene->skybox->GetMat())->GetSRV());
 	}
 
 	pShader->CopyAllBufferData();
-
 	pShader->SetShader();
 }
 

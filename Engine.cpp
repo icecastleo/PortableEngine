@@ -4,6 +4,7 @@ using ms = std::chrono::duration<float, std::milli>;
 
 IOSystem *Engine::ioSystem = 0;
 
+// TODO: Move width height to render 
 Engine::Engine(uint16_t windowsWidth, uint16_t windowsHeight)
 	:width(windowsWidth), height(windowsHeight)
 {
