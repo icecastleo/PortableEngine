@@ -269,8 +269,10 @@ bool WindowsEngine::Update()
 		// Translate and dispatch the message
 		// to our custom WindowProc function
 		TranslateMessage(&msg);
-
 		DispatchMessage(&msg);
+
+		// Forward any input messages to Gainput
+		manager.HandleMessage(msg);
 	}
 
 	UpdateTitleBarStats(deltaTime);
