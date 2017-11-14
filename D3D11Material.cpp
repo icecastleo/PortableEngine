@@ -118,6 +118,7 @@ void D3D11Material::PrepareMaterial(glm::mat4 world, glm::mat4 view, glm::mat4 p
 		vertexShader->CopyAllBufferData();
 		vertexShader->SetShader();
 
+		// TODO: Move to pixel shader up
 		pixelShader->SetShaderResourceView("Sky", SRV);
 		pixelShader->CopyAllBufferData();
 		pixelShader->SetShader();

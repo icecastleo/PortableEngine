@@ -270,3 +270,13 @@ std::vector<uint16_t> Mesh::GetIndices()
 {
 	return indices;
 }
+
+void* Mesh::GetVertexBuffer()
+{
+	return vertBuffer;
+}
+
+void* Mesh::GetIndexBuffer()
+{
+	return indBuffer;
+}

@@ -73,20 +73,3 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, size_t vertexCount, uint16_t *ind,
 	result = device->CreateBuffer(&ibd, &initialIndexData, &temp);
 	indBuffer = temp;
 }
-
-// --------------------------------------------------------
-//Returns a pointer to a vertex buffer.
-// --------------------------------------------------------
-void* D3D11Mesh::GetVertexBuffer()
-{
-	return vertBuffer;
-}
-
-// --------------------------------------------------------
-//Returns a pointer to an index buffer.
-// --------------------------------------------------------
-void* D3D11Mesh::GetIndexBuffer()
-{
-	return indBuffer;
-}
-

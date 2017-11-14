@@ -9,11 +9,11 @@ public:
 	Mesh(char *path);
 	~Mesh();
 
-	virtual void* GetVertexBuffer() = 0;
-	virtual void* GetIndexBuffer() = 0;
-
 	std::vector<Vertex> GetVertices();
 	std::vector<uint16_t> GetIndices();
+
+	void* GetVertexBuffer();
+	void* GetIndexBuffer();
 
 protected:
 	void* vertBuffer;

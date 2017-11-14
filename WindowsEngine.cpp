@@ -41,9 +41,8 @@ WindowsEngine::WindowsEngine(
 
 	windowsRender->Init(width, height);
 
+	// TODO: Move?
 	initScene();
-
-	windowsRender->SetScene(SceneManag.GetScene(2));
 }
 
 WindowsEngine::~WindowsEngine()
