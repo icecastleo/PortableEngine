@@ -24,8 +24,8 @@ public:
 	Material* loadTexture2DFromPath(const wchar_t * texturePath, const wchar_t * normalmapPath) override;
 	Material* loadCubemapTexture(const wchar_t * texturename) override;
 
-	void* loadVSShaderFromPath(const wchar_t *, char*) override;
-	void* loadPSShaderFromPath(const wchar_t *, char*) override;
+	void* loadVSShaderFromPath(const wchar_t *) override;
+	void* loadPSShaderFromPath(const wchar_t *) override;
    
    
 private:

@@ -38,8 +38,8 @@ public:
 	void* loadVSShader(const wchar_t *);
 	void* loadPSShader(const wchar_t *);
 	
-	virtual void* loadVSShaderFromPath(const wchar_t * path, char * name) = 0;
-	virtual void* loadPSShaderFromPath(const wchar_t * path, char * name) = 0;
+	virtual void* loadVSShaderFromPath(const wchar_t * path) = 0;
+	virtual void* loadPSShaderFromPath(const wchar_t * path) = 0;
 
 	/*virtual void* getVertexShader(char *) = 0;
 	virtual void* getPixelShader(char *) = 0;*/

@@ -59,7 +59,7 @@ void* IOSystem::loadVSShader(const wchar_t * shaderName) {
 	assert(wcstombs_s(&result, cPath, size, src, size) == 0);
 
 	if (VSmap.count(cPath) == 0) {
-		void * ret = loadVSShaderFromPath(shaderPath, cPath);
+		void * ret = loadVSShaderFromPath(shaderPath);
 		VSmap.insert(std::pair<char*, void*>(cPath, ret));
 	}
 
@@ -81,7 +81,7 @@ void* IOSystem::loadPSShader(const wchar_t * shaderName) {
 
 	void * ret;
 	if (PSmap.count(cPath) == 0) {   //check the shader if in the map
-		void * ret = loadPSShaderFromPath(shaderPath, cPath);
+		void * ret = loadPSShaderFromPath(shaderPath);
 		PSmap.insert(std::pair<char*, void*>(cPath, ret));
 	}
 	
