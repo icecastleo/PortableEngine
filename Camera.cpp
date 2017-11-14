@@ -11,15 +11,8 @@ Camera::Camera(uint16_t width, uint16_t height)
 	debugMode = true;
 #endif // DEBUG
 
-	// FIXME:  
-#if _PC
 	position = vec3(0.f, 8.f, -15.f);
 	rotation = vec3(15.f, 0.f, 0.f);
-#endif	
-#if _PS4
-	position = glm::vec4(5.0f, 5.0f, -20.0f, 0);
-	rotation = vec3(15.f, 0.f, 0.f);
-#endif
 
 	// Create the base matrices for the camera
 	MakeViewMatrix();
