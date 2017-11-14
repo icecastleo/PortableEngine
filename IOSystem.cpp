@@ -44,6 +44,49 @@ Material * IOSystem::loadTexture2D(const wchar_t * textureName, const wchar_t * 
 	return loadTexture2DFromPath(texturePath, normalTexturePath);
 }
 
+void* IOSystem::loadVSShader(const wchar_t * shaderName) {
+	wstring path = getShaderPath(shaderName);
+	const wchar_t *shaderPath = path.c_str();
+
+	wstring name = (wstring) shaderName;
+	const wchar_t *src = name.c_str();
+	size_t size = wcslen(name.c_str()) * 2 + 2;
+	char *cPath = new char[size];
+	size_t result;
+
+	// success
+	assert(wcstombs_s(&result, cPath, size, src, size) == 0);
+
+	if (VSmap.count(cPath) == 0) {
+		void * ret = loadVSShaderFromPath(shaderPath, cPath);
+		VSmap.insert(std::pair<char*, void*>(cPath, ret));
+	}
+
+	return VSmap.at(cPath);
+}
+
+void* IOSystem::loadPSShader(const wchar_t * shaderName) {
+	wstring path = getShaderPath(shaderName);
+	const wchar_t *shaderPath = path.c_str();
+
+	wstring name = (wstring)shaderName;
+	const wchar_t *src = name.c_str();
+	size_t size = wcslen(name.c_str()) * 2 + 2;
+	char *cPath = new char[size];
+	size_t result;
+
+	// success
+	assert(wcstombs_s(&result, cPath, size, src, size) == 0);
+
+	void * ret;
+	if (PSmap.count(cPath) == 0) {   //check the shader if in the map
+		void * ret = loadPSShaderFromPath(shaderPath, cPath);
+		PSmap.insert(std::pair<char*, void*>(cPath, ret));
+	}
+	
+	return PSmap.at(cPath);
+}
+
 
 // FIXME: Duplicated code
 

@@ -3,6 +3,7 @@
 #include <vector>
 #include "Mesh.h"
 #include "Material.h"
+#include <map>
 
 using namespace std;
 class IOSystem
@@ -33,9 +34,15 @@ public:
 	virtual Material* loadTexture2DFromPath(const wchar_t * texturePath, const wchar_t * normalmapPath) = 0;
 
 	virtual Material* loadCubemapTexture(const wchar_t* texturename) = 0;
+
+	void* loadVSShader(const wchar_t *);
+	void* loadPSShader(const wchar_t *);
 	
-	virtual void loadVSShader(const wchar_t *) = 0;
-	virtual void loadPSShader(const wchar_t *) = 0;
+	virtual void* loadVSShaderFromPath(const wchar_t * path, char * name) = 0;
+	virtual void* loadPSShaderFromPath(const wchar_t * path, char * name) = 0;
+
+	/*virtual void* getVertexShader(char *) = 0;
+	virtual void* getPixelShader(char *) = 0;*/
 
 };
 

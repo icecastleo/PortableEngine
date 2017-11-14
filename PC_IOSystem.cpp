@@ -38,6 +38,11 @@ wstring PC_IOSystem::getTexturePath(const wchar_t * name)
 	return L"Assets/textures/" + (wstring)name + L".png";
 }
 
+wstring PC_IOSystem::getShaderPath(const wchar_t *name)
+{
+	return L"Assets/ShaderObjs/" + (wstring)name + L".cso";
+}
+
 Material * PC_IOSystem::loadTexture2DFromPath(const wchar_t* texturePath, const wchar_t* normalmapPath = nullptr)
 {
 	return new D3D11Material(device, context, kMaterialNormal, texturePath, normalmapPath);
@@ -50,33 +55,19 @@ Material* PC_IOSystem::loadCubemapTexture(const wchar_t* texturename) {
 	return new D3D11Material(device, context, kMaterialCubemap, src, nullptr);
 }
 
-void PC_IOSystem::loadVSShader(const wchar_t * shaderName) {
-		wstring path = L"Assets/ShaderObjs/" + (wstring)shaderName + L".cso";
-		LPCWSTR cPath = path.c_str();
-		SimpleVertexShader* ret = new SimpleVertexShader(device, context);
-		if (!ret->LoadShaderFile(cPath))
-			ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
-
-		VSmap.insert(std::pair<const wchar_t *, SimpleVertexShader*>(shaderName, ret));
+void* PC_IOSystem::loadVSShaderFromPath(const wchar_t * shaderPath, char * shaderName) {
 		
+	    SimpleVertexShader * ret = new SimpleVertexShader(device, context);
+		if (!ret->LoadShaderFile(shaderPath))
+			ret->LoadShaderFile(shaderPath);
+		return ret;
 }
 
-void PC_IOSystem::loadPSShader(const wchar_t * shaderName) {
-		wstring path = L"Assets/ShaderObjs/" + (wstring)shaderName + L".cso";
-		LPCWSTR cPath = path.c_str();
+void* PC_IOSystem::loadPSShaderFromPath(const wchar_t * shaderPath, char * shaderName) {
+		
 		SimplePixelShader* ret = new SimplePixelShader(device, context);
-		if (!ret->LoadShaderFile(cPath))
-			ret->LoadShaderFile(((wstring)shaderName + L".cso").c_str());
+		if (!ret->LoadShaderFile(shaderPath))
+			ret->LoadShaderFile(shaderPath);
 
-		PSmap.insert(std::pair<const wchar_t *, SimplePixelShader*>(shaderName, ret));
-		
-}
-
-SimpleVertexShader* PC_IOSystem::getVertexShader(const wchar_t * vsName) {
-	return VSmap.at(vsName);
-}
-
-SimplePixelShader* PC_IOSystem::getPixelShader(const wchar_t * psName) {
-	
-	return PSmap.at(psName);
+		return ret;
 }

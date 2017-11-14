@@ -72,7 +72,7 @@ WindowsRenderSystem::~WindowsRenderSystem()
 void WindowsRenderSystem::Init(uint16_t width, uint16_t height)
 {
 	LoadShaders();
-	GetShaders();
+	
 
 	Render.SetShaders(vertexShader, pixelShader, vertexShaderNormalMap, pixelShaderNormalMap, skyVS, skyPS,
 		pixelShaderBlend, pixelShaderNormalMapBlend);
@@ -218,56 +218,30 @@ void WindowsRenderSystem::LoadShaders()
 {
 	const wchar_t * name;
 	name = L"VertexShader";
-	   Engine::ioSystem->loadVSShader(name);
+	vertexShader = static_cast<SimpleVertexShader*>(Engine::ioSystem->loadVSShader(name));
 
 	name = L"PixelShader";
-	   Engine::ioSystem->loadPSShader(name);
+	pixelShader = static_cast<SimplePixelShader *>(Engine::ioSystem->loadPSShader(name));
 
 	name = L"VertexShaderNormalMap";
-		Engine::ioSystem->loadVSShader(name);
+	vertexShaderNormalMap = static_cast<SimpleVertexShader*>(Engine::ioSystem->loadVSShader(name));
 
 	name = L"PixelShaderNormalMap";
-		Engine::ioSystem->loadPSShader(name);
+	pixelShaderNormalMap = static_cast<SimplePixelShader *>(Engine::ioSystem->loadPSShader(name));
 	
 	name = L"SkyVS";
-		Engine::ioSystem->loadVSShader(name);
+	skyVS = static_cast<SimpleVertexShader*>(Engine::ioSystem->loadVSShader(name));
 
 	name = L"SkyPS";
-		Engine::ioSystem->loadPSShader(name);
+	skyPS = static_cast<SimplePixelShader *>(Engine::ioSystem->loadPSShader(name));
 
 	name = L"BlendPixelShader";
-		Engine::ioSystem->loadPSShader(name);
+	pixelShaderBlend = static_cast<SimplePixelShader *>(Engine::ioSystem->loadPSShader(name));
 
 	name = L"PixelShaderNormalMapBlend"; 
-		Engine::ioSystem->loadPSShader(name);
+	pixelShaderNormalMapBlend = static_cast<SimplePixelShader *>(Engine::ioSystem->loadPSShader(name));
 }
 
-void WindowsRenderSystem::GetShaders() {
-	const wchar_t * name;
-	name = L"VertexShader";
-	vertexShader = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
-
-	name = L"PixelShader";
-	pixelShader = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
-
-	name = L"VertexShaderNormalMap";
-	vertexShaderNormalMap = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
-
-	name = L"PixelShaderNormalMap";
-	pixelShaderNormalMap = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
-
-	name = L"SkyVS";
-	skyVS = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getVertexShader(name);
-
-	name = L"SkyPS";
-	skyPS = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
-
-	name = L"BlendPixelShader";
-	pixelShaderBlend = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
-
-	name = L"PixelShaderNormalMapBlend";
-	pixelShaderNormalMapBlend = (static_cast<PC_IOSystem *>(Engine::ioSystem))->getPixelShader(name);
-}
 
 void WindowsRenderSystem::SetScene(Scene *scene)
 {
