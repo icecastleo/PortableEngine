@@ -8,7 +8,7 @@ SceneBuilder::SceneBuilder() {}
 SceneBuilder::~SceneBuilder()
 {
 	delete asteroidMat;
-	delete menuMat;
+	//delete menuMat;
 	delete creditsMat;
 	delete playerMat;
 	delete backgroundMat;
@@ -21,7 +21,7 @@ SceneBuilder::~SceneBuilder()
 	delete p2Mat;
 	delete p3Mat;
 	delete lane2Mat;
-	delete titleMat;
+	//delete titleMat;
 
 	delete cubeMesh;
 	delete asteroidMesh;
@@ -69,8 +69,8 @@ void SceneBuilder::BuildMaterials()
 	name = L"rock";
 	asteroidMat = Engine::ioSystem->loadTexture2D(name, L"rockNormals"); //normal map
 
-	name = L"title";
-	menuMat = Engine::ioSystem->loadTexture2D(name);
+	//name = L"title";
+	//menuMat = Engine::ioSystem->loadTexture2D(name);
 
 	name = L"creditsTexture";
 	creditsMat = Engine::ioSystem->loadTexture2D(name);
@@ -107,8 +107,8 @@ void SceneBuilder::BuildMaterials()
 	lane2Mat = Engine::ioSystem->loadTexture2D(name);
 	lane2Mat->UseTransperancy(true);
 
-	name = L"titleText";
-	titleMat = Engine::ioSystem->loadTexture2D(name);
+	//name = L"titleText";
+	//titleMat = Engine::ioSystem->loadTexture2D(name);
 }
 
 //---------------------------------------------------------
@@ -193,11 +193,11 @@ void SceneBuilder::SetupScenes()
 	scene1 = new Scene();
 	scene1->name = "Menu";
 
-	Entity *background = new Entity(quadMesh, menuMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+20.0f, +20.0f, +1.0f));
-	scene1->entities.push_back(background);
+	//Entity *background = new Entity(quadMesh, menuMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+20.0f, +20.0f, +1.0f));
+	//scene1->entities.push_back(background);
 
-	Entity *title = new Entity(quadMesh, titleMat, glm::vec3(+0.0f, +5.0f, +0.0f), glm::vec3(+0.2f, +0.0f, +0.0f), glm::vec3(+13.0f, +1.0f, +1.0f));
-	scene1->entities.push_back(title);
+	//Entity *title = new Entity(quadMesh, titleMat, glm::vec3(+0.0f, +5.0f, +0.0f), glm::vec3(+0.2f, +0.0f, +0.0f), glm::vec3(+13.0f, +1.0f, +1.0f));
+	//scene1->entities.push_back(title);
 
 	//Lights
 	scene1->globalLights.push_back(ambient);

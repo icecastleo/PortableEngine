@@ -35,12 +35,13 @@ Material * IOSystem::loadTexture2D(const wchar_t * textureName, const wchar_t * 
 	const wchar_t *texturePath = path.c_str();
 
 	const wchar_t *normalTexturePath = nullptr;
+	wstring pathN;
 
 	if (normalmapName) {
-		wstring pathN = getTexturePath(normalmapName);
+		pathN = getTexturePath(normalmapName);
 		normalTexturePath = pathN.c_str();
 	}
-
+	
 	return loadTexture2DFromPath(texturePath, normalTexturePath);
 }
 

@@ -42,7 +42,7 @@ private:
 	Mesh* skyboxMesh;
 
 	Material* creditsMat;
-	Material* menuMat;
+	//Material* menuMat;
 	Material* playerMat;
 	Material* laneMat;
 	Material* asteroidMat;
@@ -57,7 +57,7 @@ private:
 	Material* p2Mat;
     Material* p3Mat;
 	Material* lane2Mat;
-	Material* titleMat;
+	//Material* titleMat;
 
 	Entity* laneEnt;
 	Entity* laneEnt2;
