@@ -261,7 +261,7 @@ void SceneBuilder::SetupScenes()
 	scene2->entities.push_back(new Entity(quadMesh, laneMat, glm::vec3(3.0f, -1.2f, 8.0f), glm::vec3(+90.0f, -0.0f, +0.0f), glm::vec3(+1.0f, +14.0f, +1.0f)));
 
 	//Background
-	scene2->skybox = new Entity(skyboxMesh, backgroundMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+10.0f, +10.0f, +10.0f));
+	scene2->skybox = new Entity(skyboxMesh, backgroundMat, glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 	//Lights
 	scene2->globalLights.push_back(ambient);

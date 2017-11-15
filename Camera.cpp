@@ -14,9 +14,6 @@ Camera::Camera(uint16_t width, uint16_t height)
 	position = vec3(0.f, 8.f, -15.f);
 	rotation = vec3(15.f, 0.f, 0.f);
 
-	position = vec3(0.f, 8.f, -15.f);
-	rotation = vec3(15.f, 0.f, 0.f);
-
 	// Create the base matrices for the camera
 	MakeViewMatrix();
 	MakeProjectionMatrix(width, height);
@@ -29,8 +26,8 @@ Camera::~Camera()
 
 void Camera::MakeViewMatrix()
 {
-	glm::mat4 identity = glm::mat4(1.0f);
-	glm::mat4 trans = glm::translate(identity, position);
+	//glm::mat4 identity = glm::mat4(1.0f);
+	//glm::mat4 trans = glm::translate(identity, position);
 
 	mat3 rotationMatrix = toMat3(quat(radians(rotation)));
 
