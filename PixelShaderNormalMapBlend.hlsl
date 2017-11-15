@@ -47,7 +47,7 @@ struct GlobalLight
 cbuffer lightData : register(b0)
 {
 	GlobalLight ambient0;
-	float4 camPos;
+	float3 cameraPosition;
 	DirectionalLight light0;
 	DirectionalLight light1;
 	PointLight lightP0;

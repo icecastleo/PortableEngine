@@ -27,6 +27,7 @@ public:
 	void* loadVSShaderFromPath(const wchar_t *) override;
 	void* loadPSShaderFromPath(const wchar_t *) override;
    
+	
    
 private:
 	ID3D11Device *device;

@@ -263,7 +263,8 @@ void Renderer::setWidthHeight(unsigned int width, unsigned int height, ID3D11Dep
 
 void Renderer::SetPixelShaderUp(SimplePixelShader* pShader, D3D11Material *material)
 {
-	pShader->SetFloat3("cameraPosition", camera->GetPositon());
+	//pShader->SetFloat3("cameraPosition", camera->GetPositon());
+	pShader->SetFloat4("cameraPosition", glm::vec4(camera->GetPositon(), 1));
 
 	if (currentScene->spotLights.size() > 0) {
 		currentScene->spotLights.at(0)->Position = camera->GetPositon();

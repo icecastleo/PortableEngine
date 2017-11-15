@@ -15,11 +15,13 @@ PC_IOSystem::~PC_IOSystem()
 {
 	for (auto it = VSmap.cbegin(); it != VSmap.cend(); ++it)
 	{
-		delete VSmap.at(it->first);
+		delete it->first;
+		delete static_cast<SimpleVertexShader*> (it->second);
 	}
 	for (auto it = PSmap.cbegin(); it != PSmap.cend(); ++it)
 	{
-		delete PSmap.at(it->first);
+		delete it->first;
+		delete static_cast<SimpleVertexShader*>(it->second);
 	}
 }
 
@@ -58,7 +60,7 @@ Material* PC_IOSystem::loadCubemapTexture(const wchar_t* texturename) {
 void* PC_IOSystem::loadVSShaderFromPath(const wchar_t * shaderPath) {
 		
 	    SimpleVertexShader * ret = new SimpleVertexShader(device, context);
-		if (!ret->LoadShaderFile(shaderPath))
+		//if (!ret->LoadShaderFile(shaderPath))
 			ret->LoadShaderFile(shaderPath);
 		return ret;
 }
@@ -66,8 +68,9 @@ void* PC_IOSystem::loadVSShaderFromPath(const wchar_t * shaderPath) {
 void* PC_IOSystem::loadPSShaderFromPath(const wchar_t * shaderPath) {
 		
 		SimplePixelShader* ret = new SimplePixelShader(device, context);
-		if (!ret->LoadShaderFile(shaderPath))
+		//if (!ret->LoadShaderFile(shaderPath))
 			ret->LoadShaderFile(shaderPath);
 
 		return ret;
 }
+

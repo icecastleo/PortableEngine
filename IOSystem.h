@@ -23,6 +23,8 @@ protected:
 
 	std::map<char *, void*> VSmap;
 	std::map<char *, void*> PSmap;
+
+
 public:
 	IOSystem();
 	virtual ~IOSystem();
@@ -40,9 +42,5 @@ public:
 	
 	virtual void* loadVSShaderFromPath(const wchar_t * path) = 0;
 	virtual void* loadPSShaderFromPath(const wchar_t * path) = 0;
-
-	/*virtual void* getVertexShader(char *) = 0;
-	virtual void* getPixelShader(char *) = 0;*/
-
 };
 

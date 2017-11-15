@@ -170,9 +170,9 @@ void SceneBuilder::BuildLights()
 	spotLight->theta = 90.0f;*/
 	spotLight->DiffuseColor = glm::vec4(0.8f, 0.3f, 0.0f, 1);
 	spotLight->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
-	spotLight->phi = 0.0f;
+	//spotLight->phi = 0.0f;
 	spotLight->Position = glm::vec3(0.0f, 15.0f, 0.0f);
-	spotLight->theta = 90.0f;
+	//spotLight->theta = 90.0f;
 }
 
 //---------------------------------------------------------

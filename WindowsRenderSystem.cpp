@@ -216,6 +216,7 @@ ID3D11DeviceContext * WindowsRenderSystem::GetContext()
 // --------------------------------------------------------
 void WindowsRenderSystem::LoadShaders()
 {
+
 	const wchar_t * name;
 	name = L"VertexShader";
 	vertexShader = static_cast<SimpleVertexShader*>(Engine::ioSystem->loadVSShader(name));
