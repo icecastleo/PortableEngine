@@ -16,7 +16,7 @@ void WindowsCamera::Update(float deltaTime) {
 
 	if (debugMode)
 	{
-		static float speed = 2.0f;
+		static float speed = 5.0f;
 
 		glm::vec3 moveDir = glm::vec3(0.0f);
 

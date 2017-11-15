@@ -223,31 +223,31 @@ void SceneBuilder::SetupScenes()
 	scene2->entities.push_back(asteroid);
 
 	Entity *sun = new Entity(sphereMesh, sunMat, glm::vec3(30, -10, 40), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+10.0f, +10.0f, +10.0f));
-	sun->dirtyUpdate = new Planet(sun, 0.1f);
+	sun->dirtyUpdate = new Planet(sun, 20.f);
 	scene2->entities.push_back(sun);
 
 	Entity *venus = new Entity(sphereMesh, venusMat, glm::vec3(-60, -10, 30), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+100.0f, +100.0f, +100.0f));
-	venus->dirtyUpdate = new Planet(venus, 0.005f);
+	venus->dirtyUpdate = new Planet(venus, 1.0f);
 	scene2->entities.push_back(venus);
 
 	Entity *earth = new Entity(sphereMesh, earthMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.5f, +0.5f, +0.5f));
-	earth->dirtyUpdate = new Planet(earth, 0.2f);
+	earth->dirtyUpdate = new Planet(earth, 40.f);
 	scene2->entities.push_back(earth);
 
 	Entity *moon = new Entity(sphereMesh, moonMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.3f, +0.3f, +0.3f));
-	moon->dirtyUpdate = new Planet(moon, 0.3f);
+	moon->dirtyUpdate = new Planet(moon, 60.f);
 	scene2->entities.push_back(moon);
 
 	Entity *p1 = new Entity(sphereMesh, p1Mat, glm::vec3(0, 0, 1.5f), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.7f, +0.7f, +0.7f));
-	p1->dirtyUpdate = new Planet(p1, 0.5f);
+	p1->dirtyUpdate = new Planet(p1, 100.f);
 	scene2->entities.push_back(p1);
 
 	Entity *p2 = new Entity(sphereMesh, p2Mat, glm::vec3(-1.5f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.3f, +0.3f, +0.3f));
-	p2->dirtyUpdate = new Planet(p2, -0.4f);
+	p2->dirtyUpdate = new Planet(p2, -80.f);
 	scene2->entities.push_back(p2);
 
 	Entity *p3 = new Entity(sphereMesh, p3Mat, glm::vec3(-1.5f, 0, -1), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.6f, +0.6f, +0.6f));
-	p3->dirtyUpdate = new Planet(p3, 0.15f);
+	p3->dirtyUpdate = new Planet(p3, 30.f);
 	scene2->entities.push_back(p3);
 
 	p1->SetParent(sun);
