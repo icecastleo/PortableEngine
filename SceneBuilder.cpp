@@ -118,9 +118,8 @@ void SceneBuilder::BuildLights()
 {
 	//global ambient light
 	ambient = new GlobalLight();
-	//ambient->AmbientColor = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
 	ambient->AmbientColor = glm::vec4(0.4f, 0.4f, 0.4f, 1.0f);
-
+	//ambient->AmbientColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	//Directional Lights
 	//-----------------------------------------------------------
 
@@ -129,8 +128,9 @@ void SceneBuilder::BuildLights()
 	dirLight = new DirectionalLight();
 	/*dirLight->DiffuseColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	dirLight->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
-	dirLight->DiffuseColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-	dirLight->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
+	dirLight->DiffuseColor = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	//dirLight->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
+	dirLight->Direction = glm::vec3(1.0f, 0.0f, 0.0f);
 
 	dirLight2 = new DirectionalLight();
 	/*dirLight2->DiffuseColor = XMFLOAT4(.3f, .3f, .3f, 1);
@@ -155,8 +155,10 @@ void SceneBuilder::BuildLights()
 	pointLight = new PointLight();
 	/*pointLight->DiffuseColor = XMFLOAT4(0.6f, 1.0f, 1.0f, 1.0f);
 	pointLight->Position = XMFLOAT3(20.0f, 20.0f, 20.0f);*/
+	//pointLight->DiffuseColor = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
 	pointLight->DiffuseColor = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
-	pointLight->Position = glm::vec3(20.0f, 20.0f, 20.0f);
+	//pointLight->Position = glm::vec3(20.0f, 20.0f, 20.0f);
+	pointLight->Position = glm::vec3(0.0f,8.0f,-15.0f);
 
 	//Spot Lights
 	//-----------------------------------------------------------

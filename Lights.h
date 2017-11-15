@@ -13,12 +13,14 @@ struct DirectionalLight
 {
 	glm::vec4 DiffuseColor;
 	glm::vec3 Direction;
+	float padding;
 };
 
 struct PointLight
 {
 	glm::vec4 DiffuseColor;
 	glm::vec3 Position;
+	float padding;
 };
 
 struct SpotLight

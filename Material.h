@@ -9,7 +9,7 @@ class Material
 {
 protected:
 	void* normalSRV;
-	bool usesTrans;
+	bool usesTrans = false;
 
 public:
 	Material();

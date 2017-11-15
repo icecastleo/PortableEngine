@@ -21,6 +21,9 @@ Camera::Camera(uint16_t width, uint16_t height)
 	rotation = vec3(15.f, 0.f, 0.f);
 #endif
 
+	position = vec3(0.f, 8.f, -15.f);
+	rotation = vec3(15.f, 0.f, 0.f);
+
 	// Create the base matrices for the camera
 	MakeViewMatrix();
 	MakeProjectionMatrix(width, height);
