@@ -1,8 +1,6 @@
 #include "Bloom.h"
 
-//using namespace DirectX;
-
-const BloomSettings Bloom::DefaultBloomSettings = { 0.50f, 1.2f, 1.0f, 1.0f, 1.0f, 1.0f };
+const BloomSettings Bloom::DefaultBloomSettings = { 0.70f, 1.1f, 1.0f, 1.0f, 1.0f, 1.0f };
 
 Bloom::Bloom(ID3D11Device * device, ID3D11DeviceContext * context, _BloomSettings bloomSettings)
 	: mDevice(device), mContext(context), mBloomSettings(bloomSettings), 

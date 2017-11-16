@@ -16,7 +16,7 @@ void WindowsCamera::Update(float deltaTime) {
 
 	if (debugMode)
 	{
-		static float speed = 5.0f;
+		static float speed = 10.0f;
 
 		glm::vec3 moveDir = glm::vec3(0.0f);
 
@@ -53,19 +53,19 @@ void WindowsCamera::Update(float deltaTime) {
 
 		if (GetKeyState('I') & 0x8000)
 		{
-			rotation += glm::vec3(1.f,0.f,0.f) * speed * 5.f * deltaTime;
+			rotation += glm::vec3(-1.f,0.f,0.f) * speed * 3.f * deltaTime;
 		}
 		if (GetKeyState('K') & 0x8000)
 		{
-			rotation += glm::vec3(-1.f, 0.f, 0.f) * speed * 5.f * deltaTime;
+			rotation += glm::vec3(1.f, 0.f, 0.f) * speed * 3.f * deltaTime;
 		}
 		if (GetKeyState('J') & 0x8000)
 		{
-			rotation += glm::vec3(0.f, 1.f, 0.f) * speed * 5.f * deltaTime;
+			rotation += glm::vec3(0.f, -1.f, 0.f) * speed * 3.f * deltaTime;
 		}
 		if (GetKeyState('L') & 0x8000)
 		{
-			rotation += glm::vec3(0.f, -1.f, 0.f) * speed * 5.f * deltaTime;
+			rotation += glm::vec3(0.f, 1.f, 0.f) * speed * 3.f * deltaTime;
 		}
 	}
 }

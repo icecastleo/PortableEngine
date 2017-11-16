@@ -24,9 +24,6 @@ public:
 	void Init(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
 	void Resize(unsigned int width, unsigned int height, ID3D11DepthStencilView* depthStencilView);
 	
-	//const BloomSettings& GetBloomSettings() const;
-	//void SetBloomSettings(const BloomSettings& bloomSettings);
-
 	void Draw(ID3D11ShaderResourceView* inputSRV, ID3D11RenderTargetView* outputRTV);
 
 private:
