@@ -41,7 +41,7 @@ VertexToPixel main( VertexShaderInput input )
 	output.position = mul(float4(input.position, 1.0f), viewProj);
 
 	// Ensure our polygons are at max depth
-	output.position.w = output.position.z;
+	output.position.z = output.position.w;
 	
 	// Use the cube's vertex position as a direction in space
 	// from the origin (center of the cube)
