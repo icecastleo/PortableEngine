@@ -1,4 +1,3 @@
-
 #include "D3D11Mesh.h"
 
 D3D11Mesh::D3D11Mesh(char* path, ID3D11Device *device)
@@ -8,12 +7,6 @@ D3D11Mesh::D3D11Mesh(char* path, ID3D11Device *device)
 }
 
 
-// --------------------------------------------------------
-// Destructor - Clean up anything our game has created:
-//  - Release all DirectX objects created here
-//Copied from Game.cpp - Chris Cascioli
-//Modified for use here
-// --------------------------------------------------------
 D3D11Mesh::~D3D11Mesh()
 {
 	// Release any (and all!) DirectX objects
@@ -21,12 +14,7 @@ D3D11Mesh::~D3D11Mesh()
 	if (indBuffer) { static_cast<ID3D11Buffer*>(indBuffer)->Release(); }
 }
 
-
-// --------------------------------------------------------
-//Creates the geometry we're going to draw
-//Copied from Game.cpp - Chris Cascioli
-//Modified for use here
-// --------------------------------------------------------
+// Creates the geometry we're going to draw
 void D3D11Mesh::CreateGeometry(Vertex* verts, size_t vertexCount, uint16_t *ind, size_t indexCount, ID3D11Device *device)
 {
 	// Create the VERTEX BUFFER description -----------------------------------
@@ -47,9 +35,7 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, size_t vertexCount, uint16_t *ind,
 
 	// Actually create the buffer with the initial data
 	// - Once we do this, we'll NEVER CHANGE THE BUFFER AGAIN
-	ID3D11Buffer *temp = 0;
-	HRESULT result = device->CreateBuffer(&vbd, &initialVertexData, &temp);
-	vertBuffer = temp;
+	HRESULT result = device->CreateBuffer(&vbd, &initialVertexData, reinterpret_cast<ID3D11Buffer**>(&vertBuffer));
 
 	// Create the INDEX BUFFER description ------------------------------------
 	// - The description is created on the stack because we only need
@@ -69,7 +55,5 @@ void D3D11Mesh::CreateGeometry(Vertex* verts, size_t vertexCount, uint16_t *ind,
 
 	// Actually create the buffer with the initial data
 	// - Once we do this, we'll NEVER CHANGE THE BUFFER AGAIN
-	temp = 0;
-	result = device->CreateBuffer(&ibd, &initialIndexData, &temp);
-	indBuffer = temp;
+	result = device->CreateBuffer(&ibd, &initialIndexData, reinterpret_cast<ID3D11Buffer**>(&indBuffer));
 }

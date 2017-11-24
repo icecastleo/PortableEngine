@@ -58,10 +58,10 @@ void* IOSystem::loadVSShader(const wchar_t * shaderName) {
 	// success
 	assert(wcstombs_s(&result, cPath, size, src, size) == 0);
 
+	// TODO: Like load PS Shader
 	if (VSmap.count(cPath) == 0) {
 		void * ret = loadVSShaderFromPath(shaderPath);
 		VSmap.insert(std::pair<char*, void*>(cPath, ret));
-		
 	}
 	
 	return VSmap.at(cPath);
@@ -80,41 +80,16 @@ void* IOSystem::loadPSShader(const wchar_t * shaderName) {
 	// success
 	assert(wcstombs_s(&result, cPath, size, src, size) == 0);
 
-	if (PSmap.count(cPath) == 0) {   //check the shader if in the map
-		void * ret = loadPSShaderFromPath(shaderPath);
-		PSmap.insert(std::pair<char*, void*>(cPath, ret));
-		
+	void * ret = 0;
+
+	//check the shader if in the map
+	if (PSmap.find(cPath) != PSmap.end()) {   
+		ret = PSmap[cPath];
+	}
+	else {
+		ret = loadPSShaderFromPath(shaderPath);
+		PSmap[cPath] = ret;
 	}
 	
-	return PSmap.at(cPath);
+	return ret;
 }
-
-
-// FIXME: Duplicated code
-
-
-
-
-//Mesh * IOSystem::loadMesh(wchar_t * objName)
-//{
-//	wstring path = L"Assets/Models/" + (wstring)objName + L".obj";
-//	const wchar_t *src = path.c_str();
-//	size_t size = wcslen(path.c_str()) * 2 + 2;
-//	char *cPath = new char[size];
-//	size_t ret;
-//
-//	// success
-//	assert(wcstombs_s(&ret, cPath, size, src, size) == 0);
-//
-//
-//	delete cPath;
-//
-//#if defined(_PC)  
-//
-//
-//#elif defined(_PS4)  
-//
-//#else  
-//	return nullptr;
-//#endif
-//}

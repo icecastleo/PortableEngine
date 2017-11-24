@@ -28,7 +28,6 @@ struct VertexShaderInput
 	float2 uv			: TEXCOORD;
 	float3 normal		: NORMAL;
 	float3 tangent		: TANGENT;
-	
 };
 
 // Struct representing the data we're sending down the pipeline

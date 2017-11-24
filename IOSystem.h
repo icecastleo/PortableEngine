@@ -24,7 +24,6 @@ protected:
 	std::map<char *, void*> VSmap;
 	std::map<char *, void*> PSmap;
 
-
 public:
 	IOSystem();
 	virtual ~IOSystem();

@@ -52,8 +52,7 @@ void D3D11Material::SetTexture(ID3D11Device* device, ID3D11DeviceContext* contex
 	DirectX::CreateWICTextureFromFile(device, context, path, 0, &SRV);
 
 	if (normalpath) {
-		ID3D11ShaderResourceView *temp = static_cast<ID3D11ShaderResourceView*>(normalSRV);
-		DirectX::CreateWICTextureFromFile(device, context, path, 0, &temp);
+		DirectX::CreateWICTextureFromFile(device, context, path, 0, reinterpret_cast<ID3D11ShaderResourceView**>(&normalSRV));
 	}
 }
 

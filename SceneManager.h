@@ -1,4 +1,3 @@
-//Darren Farr
 #pragma once
 #include <vector>
 #include "Scene.h"

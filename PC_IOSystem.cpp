@@ -58,19 +58,15 @@ Material* PC_IOSystem::loadCubemapTexture(const wchar_t* texturename) {
 }
 
 void* PC_IOSystem::loadVSShaderFromPath(const wchar_t * shaderPath) {
-		
-	    SimpleVertexShader * ret = new SimpleVertexShader(device, context);
-		//if (!ret->LoadShaderFile(shaderPath))
-			ret->LoadShaderFile(shaderPath);
-		return ret;
+
+	SimpleVertexShader * ret = new SimpleVertexShader(device, context);
+	ret->LoadShaderFile(shaderPath);
+	return ret;
 }
 
 void* PC_IOSystem::loadPSShaderFromPath(const wchar_t * shaderPath) {
-		
-		SimplePixelShader* ret = new SimplePixelShader(device, context);
-		//if (!ret->LoadShaderFile(shaderPath))
-			ret->LoadShaderFile(shaderPath);
 
-		return ret;
+	SimplePixelShader* ret = new SimplePixelShader(device, context);
+	ret->LoadShaderFile(shaderPath);
+	return ret;
 }
-

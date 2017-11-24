@@ -104,7 +104,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 	float4 surfaceColor = diffuseTexture.Sample(basicSampler, input.uv);
 
 	//Global Light(s)
-	float4 globalLight = ambient0.AmbientColor;
+	float4 globalLight = surfaceColor * ambient0.AmbientColor;
 
 	//Directional Light(s)
 	float4 DirLights = getDirLightColor(light0, input)

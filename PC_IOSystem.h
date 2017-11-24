@@ -27,13 +27,8 @@ public:
 	void* loadVSShaderFromPath(const wchar_t *) override;
 	void* loadPSShaderFromPath(const wchar_t *) override;
    
-	
-   
 private:
 	ID3D11Device *device;
 	ID3D11DeviceContext* context;
-    
-	/*std::map<const wchar_t *, SimpleVertexShader*> VSmap;
-	std::map<const wchar_t *, SimplePixelShader*> PSmap;*/
 };
 

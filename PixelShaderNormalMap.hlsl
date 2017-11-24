@@ -22,12 +22,14 @@ struct DirectionalLight
 {
 	float4 DiffuseColor;
 	float3 Direction;
+	float padding;
 };
 
 struct PointLight
 {
 	float4 DiffuseColor;
 	float3 Position;
+	float padding;
 };
 
 struct SpotLight
@@ -72,7 +74,6 @@ float4 main(VertexToPixel input) : SV_TARGET
 {
 	input.normal = normalize(input.normal);
 	input.tangent = normalize(input.tangent);
-
 
 	//---------------------------------------------------------------------------------------------
 	//Normal Mapping
