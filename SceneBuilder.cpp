@@ -185,7 +185,7 @@ void SceneBuilder::BuildMeshes()
 	quadMesh = Engine::ioSystem->loadMesh(L"quad");
 	sphereMesh = Engine::ioSystem->loadMesh(L"sphere");
 	playerMesh = Engine::ioSystem->loadMesh(L"sphere");
-	asteroidMesh = Engine::ioSystem->loadMesh(L"sphere");
+	asteroidMesh = Engine::ioSystem->loadMesh(L"cube");
 }
 
 void SceneBuilder::SetupScenes()
@@ -273,6 +273,12 @@ void SceneBuilder::SetupScenes()
 
 	//2D Text
 	scene2->textList.push_back(textObject{ L"Score: ", glm::vec2(500, 10) });
+
+	// Test
+	Mesh *fbx = Engine::ioSystem->loadMesh(L"test");
+	Entity *test = new Entity(fbx, moonMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.05f, +0.05f, +0.05f));
+	scene2->entities.push_back(test);
+
 
 	//End of Scene 2 -----------------------------------------------------------------------------
 

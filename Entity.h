@@ -18,13 +18,11 @@ public:
 
 	virtual void Update(float deltaTime);
 
-
 	glm::mat4 GetWorldMat();
 	glm::vec3 GetPosition();
 	glm::vec3 GetRotation();
 	glm::vec3 GetScale();
 
-	
 	void SetPosition(glm::vec3);
 	void SetRotation(glm::vec3);
 	void SetScale(glm::vec3);

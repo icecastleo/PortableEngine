@@ -352,6 +352,7 @@ void WindowsRenderSystem::Update(float deltaTime)
 			setScene();
 		}*/
 	}
+	Render.Update(deltaTime);
 
 	musicPlayer.update();
 }

@@ -1,11 +1,58 @@
 #include "Mesh.h"
-#include "glm\glm.hpp"
-#include <vector>
+#include <assimp/DefaultLogger.hpp>
 
 using namespace std;
+using namespace glm;
+using namespace Assimp;
 
 Mesh::Mesh(char *path)
 {
+	// Create a logger instance
+	DefaultLogger::create("", Logger::VERBOSE);
+	// Now I am ready for logging my stuff
+	DefaultLogger::get()->info("this is my info-call");
+	// Kill it after the work is done
+	
+	if (strcmp(path, "Assets/Models/test.obj") == 0) {
+		string Filename = "Assets/Models/amandaModel.fbx";
+		//string Filename = "Assets/Models/Handgun_fbx_7.4_binary.fbx";
+		
+		Assimp::Importer importer;
+		const aiScene *scene = importer.ReadFile(Filename.c_str(), 
+			aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace
+		| aiProcess_ValidateDataStructure);
+
+		// Check for errors
+		if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+		{
+			char buffer[500];
+			sprintf_s(buffer, "ERROR::ASSIMP:: %s \n", importer.GetErrorString());
+			perror(buffer);
+			return;
+		}
+
+		InitFromScene(scene, Filename);
+	} else {
+		
+		Assimp::Importer importer;
+		const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace
+			| aiProcess_ValidateDataStructure);
+
+		// Check for errors
+		if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+		{
+			char buffer[100];
+			sprintf_s(buffer, "ERROR::ASSIMP:: %s \n", importer.GetErrorString());
+			perror(buffer);
+			return;
+		}
+
+		InitFromScene(scene, path);
+	}
+
+	DefaultLogger::kill();
+	return;
+
 	loadVertices(path);
 
 	// FIXME:
@@ -31,9 +78,9 @@ void Mesh::loadVertices(char * path)
 	}
 
 	// Variables used while reading the file
-	vector<glm::vec3> positions;	// Positions from the file
-	vector<glm::vec3> normals;      // Normals from the file
-	vector<glm::vec2> uvs;          // UVs from the file
+	vector<vec3> positions;		// Positions from the file
+	vector<vec3> normals;		// Normals from the file
+	vector<vec2> uvs;			// UVs from the file
 
 	uint16_t vertCounter = 0;       // Count of vertices/indices
 	char chars[100];                // String for line reading
@@ -47,7 +94,7 @@ void Mesh::loadVertices(char * path)
 		if (chars[0] == 'v' && chars[1] == 'n')
 		{
 			// Read the 3 numbers directly into an XMFLOAT3
-			glm::vec3 norm;
+			vec3 norm;
 			sscanf_s(
 				chars,
 				"vn %f %f %f",
@@ -59,7 +106,7 @@ void Mesh::loadVertices(char * path)
 		else if (chars[0] == 'v' && chars[1] == 't')
 		{
 			// Read the 2 numbers directly into an XMFLOAT2
-			glm::vec2 uv;
+			vec2 uv;
 			sscanf_s(
 				chars,
 				"vt %f %f",
@@ -71,7 +118,7 @@ void Mesh::loadVertices(char * path)
 		else if (chars[0] == 'v')
 		{
 			// Read the 3 numbers directly into an XMFLOAT3
-			glm::vec3 pos;
+			vec3 pos;
 			sscanf_s(
 				chars,
 				"v %f %f %f",
@@ -194,7 +241,7 @@ void Mesh::CalculateTangents(Vertex* verts, uint16_t numVerts, uint16_t* indices
 	// Reset tangents
 	for (size_t i = 0; i < numVerts; i++)
 	{
-		verts[i].Tangent = glm::vec3(0, 0, 0);
+		verts[i].Tangent = vec3(0, 0, 0);
 	}
 
 	// Calculate tangents one whole triangle at a time
@@ -249,15 +296,118 @@ void Mesh::CalculateTangents(Vertex* verts, uint16_t numVerts, uint16_t* indices
 	for (int i = 0; i < numVerts; i++)
 	{
 		// Grab the two vectors
-		glm::vec3 normal = verts[i].Normal;
-		glm::vec3 tangent = verts[i].Tangent;
+		vec3 normal = verts[i].Normal;
+		vec3 tangent = verts[i].Tangent;
 
 		// Use Gram-Schmidt orthogonalize
-		tangent = glm::normalize(
-			tangent - normal * glm::dot(normal, tangent));
+		tangent = normalize(
+			tangent - normal * dot(normal, tangent));
 
 		// Store the tangent
 		verts[i].Tangent = tangent;
+	}
+}
+
+bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
+{
+	m_Entries.resize(pScene->mNumMeshes);
+	//m_Textures.resize(pScene->mNumMaterials);
+
+	uint16_t NumVertices = 0;
+	uint16_t NumIndices = 0;
+
+	// Count the number of vertices and indices
+	for (uint i = 0; i < m_Entries.size(); i++) {
+		m_Entries[i].BaseVertex = NumVertices;
+		m_Entries[i].BaseIndex = NumIndices;
+		m_Entries[i].NumIndices = pScene->mMeshes[i]->mNumFaces * 3;
+		m_Entries[i].MaterialIndex = pScene->mMeshes[i]->mMaterialIndex;
+		
+		NumVertices += pScene->mMeshes[i]->mNumVertices;
+		NumIndices += m_Entries[i].NumIndices;
+	}
+
+	// Reserve space in the vectors for the vertex attributes and indices
+	verts.reserve(NumVertices);
+	bones.resize(NumVertices);
+	indices.reserve(NumIndices);
+
+	// Initialize the meshes in the scene one by one
+	for (uint i = 0; i < m_Entries.size(); i++) {
+		const aiMesh* paiMesh = pScene->mMeshes[i];
+		InitMesh(i, paiMesh, verts, bones, indices);
+	}
+
+	//if (!InitMaterials(pScene, Filename)) {
+	//	return false;
+	//}
+
+	return true;
+}
+
+void Mesh::InitMesh(
+	uint16_t MeshIndex,
+	const aiMesh* paiMesh,
+	vector<Vertex>& Vertices,
+	vector<VertexBoneData>& Bones,
+	vector<uint16_t>& Indices)
+{
+	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
+
+	// Populate the vertex attribute vectors
+	for (uint16_t i = 0; i < paiMesh->mNumVertices; i++) {
+		const aiVector3D* pPos = &(paiMesh->mVertices[i]);
+		const aiVector3D* pNormal = &(paiMesh->mNormals[i]);
+		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
+		//const aiVector3D* pTangents = &(paiMesh->mTangents[i]);
+
+		Vertex vertex;
+
+		vertex.Position = vec3(pPos->x, pPos->y, pPos->z);
+		vertex.Normal = vec3(pNormal->x, pNormal->y, pNormal->z);
+		vertex.UV = vec2(pTexCoord->x, pTexCoord->y);
+		//vertex.Tangent = vec3(pTangents->x, pTangents->y, pTangents->z);
+
+		Vertices.push_back(vertex);
+	}
+
+	//LoadBones(MeshIndex, paiMesh, Bones);
+
+	// Populate the index buffer
+	for (uint16_t i = 0; i < paiMesh->mNumFaces; i++) {
+		const aiFace& Face = paiMesh->mFaces[i];
+		assert(Face.mNumIndices == 3);
+		Indices.push_back(Face.mIndices[0]);
+		Indices.push_back(Face.mIndices[1]);
+		Indices.push_back(Face.mIndices[2]);
+	}
+}
+
+void Mesh::LoadBones(uint16_t MeshIndex, const aiMesh* pMesh, vector<VertexBoneData>& Bones)
+{
+	for (uint16_t i = 0; i < pMesh->mNumBones; i++) {
+		uint16_t BoneIndex = 0;
+		string BoneName(pMesh->mBones[i]->mName.data);
+
+		if (m_BoneMapping.find(BoneName) == m_BoneMapping.end()) {
+			// Allocate an index for a new bone
+			BoneIndex = m_NumBones;
+			m_NumBones++;
+			BoneInfo bi;
+			m_BoneInfo.push_back(bi);
+			//m_BoneInfo[BoneIndex].BoneOffset = pMesh->mBones[i]->mOffsetMatrix;
+			m_BoneInfo[BoneIndex].BoneOffset = mat4(reinterpret_cast<mat4&>(pMesh->mBones[i]->mOffsetMatrix));
+			m_BoneMapping[BoneName] = BoneIndex;
+		}
+		else {
+			BoneIndex = m_BoneMapping[BoneName];
+		}
+
+		for (uint16_t j = 0; j < pMesh->mBones[i]->mNumWeights; j++) {
+			uint VertexID = m_Entries[MeshIndex].BaseVertex + pMesh->mBones[i]->mWeights[j].mVertexId;
+			float Weight = pMesh->mBones[i]->mWeights[j].mWeight;
+			Bones[VertexID].AddBoneData(BoneIndex, Weight);
+		}
 	}
 }
 

@@ -118,6 +118,11 @@ void Renderer::Draw()
 		}
 
 		material->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vShader, pShader);
+
+		if (material->HasNormalMap()) {
+			material->PrepareMaterial(mSkullWorld, camera->GetViewMatrix(), camera->GetProjectionMatrix(), vShader, pShader);
+		}
+
 		SetPixelShaderUp(pShader, material);
 
 		stride = sizeof(Vertex);
@@ -133,10 +138,17 @@ void Renderer::Draw()
 		//  - This will use all of the currently set DirectX "stuff" (shaders, buffers, etc)
 		//  - DrawIndexed() uses the currently set INDEX BUFFER to look up corresponding
 		//     vertices in the currently set VERTEX BUFFER
-		context->DrawIndexed(
-			entity->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
-			0,     // Offset to the first index we want to use
-			0);    // Offset to add to each index when looking up vertices
+		for (MeshEntry &entry : entity->GetMesh()->m_Entries) {
+			//context->DrawIndexed(
+			//	entity->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
+			//	0,     // Offset to the first index we want to use
+			//	0);    // Offset to add to each index when looking up vertices
+
+			context->DrawIndexed(
+				entry.NumIndices,	// The number of indices to use (we could draw a subset if we wanted)
+				entry.BaseIndex,	// Offset to the first index we want to use
+				entry.BaseVertex);	// Offset to add to each index when looking up vertices
+		}
 	}
 
 	// draw skybox
@@ -214,6 +226,23 @@ void Renderer::Draw()
 	//  - Puts the final frame we're drawing into the window so the user can see it
 	//  - Do this exactly ONCE PER FRAME (always at the very end of the frame)
 	swapChain->Present(0, 0);
+}
+
+void Renderer::Update(float t)
+{
+	// Animation Test
+	static float mAnimTimePos = 0.f;
+	static BoneAnimation mSkullAnimation;
+
+	// Increase the time position.
+	mAnimTimePos += t;
+	if (mAnimTimePos >= mSkullAnimation.GetEndTime())
+	{
+		// Loop animation back to beginning.
+		mAnimTimePos = 0.0f;
+	}
+	// Get the skull¡¦s world matrix at this time instant.
+	mSkullAnimation.Interpolate(mAnimTimePos, mSkullWorld);
 }
 
 void Renderer::setWidthHeight(unsigned int width, unsigned int height, ID3D11DepthStencilView * depthStencilView)
