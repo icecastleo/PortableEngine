@@ -36,6 +36,8 @@ void Entity::Update(float deltaTime)
 	}
 
 	SetWorldMat();
+	
+	mesh->BoneTransform(deltaTime);
 }
 
 void Entity::SetParent(Entity * e)

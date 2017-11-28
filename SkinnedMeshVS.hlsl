@@ -1,3 +1,6 @@
+
+const static int MAX_BONES = 100;
+
 // Constant Buffer
 // - Allows us to define a buffer of individual variables 
 //    which will (eventually) hold data from our C++ code
@@ -9,6 +12,7 @@ cbuffer externalData : register(b0)
 	matrix world;
 	matrix view;
 	matrix projection;
+	matrix gBones[MAX_BONES];
 };
 
 // Struct representing a single vertex worth of data
@@ -26,6 +30,9 @@ struct VertexShaderInput
 	float3 position		: POSITION;     // XYZ position
 	float2 uv			: TEXCOORD;
 	float3 normal		: NORMAL;
+	float3 tangent		: Tangent;
+	float4 BoneIDs		: BoneIDs;
+	float4 Weights		: Weights;
 };
 
 // Struct representing the data we're sending down the pipeline
@@ -58,6 +65,19 @@ VertexToPixel main(VertexShaderInput input)
 	// Set up output struct
 	VertexToPixel output;
 
+	matrix BoneTransform =
+	{
+		{ 1, 0, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 0, 1, 0 },
+		{ 0, 0, 0, 1 }
+	};
+
+	//matrix BoneTransform = gBones[input.BoneIDs[0]] * input.Weights[0];
+	//BoneTransform += gBones[input.BoneIDs[1]] * input.Weights[1];
+	//BoneTransform += gBones[input.BoneIDs[2]] * input.Weights[2];
+	//BoneTransform += gBones[input.BoneIDs[3]] * input.Weights[3];
+
 	// The vertex's position (input.position) must be converted to world space,
 	// then camera space (relative to our 3D camera), then to proper homogenous 
 	// screen-space coordinates.  This is taken care of by our world, view and
@@ -72,9 +92,9 @@ VertexToPixel main(VertexShaderInput input)
 	//
 	// The result is essentially the position (XY) of the vertex on our 2D 
 	// screen and the distance (Z) from the camera (the "depth" of the pixel)
-	output.position = mul(float4(input.position, 1.0f), worldViewProj);
+	output.position = mul(mul(float4(input.position, 1.0f), BoneTransform), worldViewProj);
 
-	output.normal = mul(input.normal, (float3x3)world);
+	output.normal = mul(mul(input.normal, (float3x3)BoneTransform), (float3x3)world);
 
 	//calculate where the vertex would end up after its transformations in world space
 	output.worldPos = mul(float4(input.position, 1.0f), world).xyz;

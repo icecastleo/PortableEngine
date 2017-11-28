@@ -28,6 +28,7 @@ private:
 	Scene* scene3;
 	Scene* scene4;
 
+	Mesh *fbx;
 	Mesh* cubeMesh;
 	Mesh* quadMesh;
 	Mesh* sphereMesh;

@@ -23,6 +23,7 @@ SceneBuilder::~SceneBuilder()
 	delete lane2Mat;
 	//delete titleMat;
 
+	delete fbx;
 	delete cubeMesh;
 	delete asteroidMesh;
 	delete sphereMesh;
@@ -275,7 +276,7 @@ void SceneBuilder::SetupScenes()
 	scene2->textList.push_back(textObject{ L"Score: ", glm::vec2(500, 10) });
 
 	// Test
-	Mesh *fbx = Engine::ioSystem->loadMesh(L"test");
+	fbx = Engine::ioSystem->loadMesh(L"test");
 	Entity *test = new Entity(fbx, moonMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.05f, +0.05f, +0.05f));
 	scene2->entities.push_back(test);
 
