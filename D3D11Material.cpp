@@ -88,7 +88,8 @@ void D3D11Material::SetupSkybox(ID3D11Device* device, ID3D11DeviceContext* conte
 //---------------------------------------------------------
 //Prepare the material for drawing
 //---------------------------------------------------------
-void D3D11Material::PrepareMaterial(glm::mat4 world, glm::mat4 view, glm::mat4 projection, SimpleVertexShader* vertexShader, SimplePixelShader* pixelShader)
+void D3D11Material::PrepareMaterial(glm::mat4 world, glm::mat4 view, glm::mat4 projection, 
+	std::vector<glm::mat4> &boneTransforms, SimpleVertexShader* vertexShader, SimplePixelShader* pixelShader)
 {
 	if (type == kMaterialNormal) {
 		// Send data to shader variables
@@ -99,6 +100,10 @@ void D3D11Material::PrepareMaterial(glm::mat4 world, glm::mat4 view, glm::mat4 p
 		vertexShader->SetMatrix4x4("world", world);
 		vertexShader->SetMatrix4x4("view", view);
 		vertexShader->SetMatrix4x4("projection", projection);
+
+		if (boneTransforms.size() > 0) {
+			vertexShader->SetData("gBones", &boneTransforms[0], 100 * sizeof(glm::mat4));
+		}
 
 		// Once you've set all of the data you care to change for
 		// the next draw call, you need to actually send it to the GPU

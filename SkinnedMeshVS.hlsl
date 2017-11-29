@@ -30,9 +30,9 @@ struct VertexShaderInput
 	float3 position		: POSITION;     // XYZ position
 	float2 uv			: TEXCOORD;
 	float3 normal		: NORMAL;
-	float3 tangent		: Tangent;
-	float4 BoneIDs		: BoneIDs;
-	float4 Weights		: Weights;
+	float3 tangent		: TANGENT;
+	float4 boneIDs		: BONEIDS;
+	float4 weights		: WEIGHTS;
 };
 
 // Struct representing the data we're sending down the pipeline
@@ -65,18 +65,20 @@ VertexToPixel main(VertexShaderInput input)
 	// Set up output struct
 	VertexToPixel output;
 
-	matrix BoneTransform =
-	{
-		{ 1, 0, 0, 0 },
-		{ 0, 1, 0, 0 },
-		{ 0, 0, 1, 0 },
-		{ 0, 0, 0, 1 }
-	};
+	matrix BoneTransform = gBones[input.boneIDs[0]] * input.weights[0];
+	BoneTransform += gBones[input.boneIDs[1]] * input.weights[1];
+	BoneTransform += gBones[input.boneIDs[2]] * input.weights[2];
+	BoneTransform += gBones[input.boneIDs[3]] * input.weights[3];
 
-	//matrix BoneTransform = gBones[input.BoneIDs[0]] * input.Weights[0];
-	//BoneTransform += gBones[input.BoneIDs[1]] * input.Weights[1];
-	//BoneTransform += gBones[input.BoneIDs[2]] * input.Weights[2];
-	//BoneTransform += gBones[input.BoneIDs[3]] * input.Weights[3];
+	//matrix test =
+	//{
+	//	{ 0.5, 0, 0, 0 },
+	//	{ 0, 0.5, 0, 0 },
+	//	{ 0, 0, 0.5, 0 },
+	//	{ 0, 0, 0, 0.5 }
+	//};
+
+	//BoneTransform = test;
 
 	// The vertex's position (input.position) must be converted to world space,
 	// then camera space (relative to our 3D camera), then to proper homogenous 

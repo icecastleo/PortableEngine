@@ -33,6 +33,7 @@ private:
 	SimpleVertexShader* vertexShader;
 	SimplePixelShader* pixelShader;
 	SimpleVertexShader* vertexShaderNormalMap;
+	SimpleVertexShader* skinnedMeshVS;
 	SimplePixelShader* pixelShaderNormalMap;
 	SimpleVertexShader* skyVS;
 	SimplePixelShader* skyPS;

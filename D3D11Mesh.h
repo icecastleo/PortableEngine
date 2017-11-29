@@ -10,5 +10,5 @@ public:
 	~D3D11Mesh();
 
 private:
-	void CreateGeometry(Vertex*, size_t, uint16_t*, size_t, ID3D11Device*);
+	void CreateGeometry(ID3D11Device*);
 };

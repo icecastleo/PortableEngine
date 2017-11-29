@@ -17,11 +17,11 @@ Mesh::Mesh(char *path)
 	
 	if (strcmp(path, "Assets/Models/test.obj") == 0) {
 		string Filename = "Assets/Models/amandaModel.fbx";
-
-		//Assimp::Importer importer;
+		Filename = "Assets/Models/Spider_3.fbx";
+		
 		m_pScene = m_Importer.ReadFile(Filename.c_str(), 
 			aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace
-		| aiProcess_ValidateDataStructure);
+		| aiProcess_LimitBoneWeights | aiProcess_ValidateDataStructure);
 
 		// Check for errors
 		if (!m_pScene || m_pScene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !m_pScene->mRootNode) // if is Not Zero
@@ -34,10 +34,10 @@ Mesh::Mesh(char *path)
 
 		InitFromScene(m_pScene, Filename);
 	} else {
-		//Assimp::Importer importer;
+
 		m_pScene = m_Importer.ReadFile(path,
 			aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace
-			| aiProcess_ValidateDataStructure);
+			| aiProcess_LimitBoneWeights | aiProcess_ValidateDataStructure);
 
 		// Check for errors
 		if (!m_pScene || m_pScene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !m_pScene->mRootNode) // if is Not Zero
@@ -53,17 +53,7 @@ Mesh::Mesh(char *path)
 
 	DefaultLogger::kill();
 
-	// FIXME:
-	hasNormalMap = true;
-
 	return;
-
-	//loadVertices(path);
-
-	//
-
-	//if(hasNormalMap)
-	//	CalculateTangents(&verts[0], verts.size(), &indices[0], indices.size());
 }
 
 Mesh::~Mesh()
@@ -335,7 +325,7 @@ bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
 	verts.reserve(NumVertices);
 	bones.resize(NumVertices);
 	indices.reserve(NumIndices);
-
+	
 	// Initialize the meshes in the scene one by one
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
 		const aiMesh* paiMesh = pScene->mMeshes[i];
@@ -345,6 +335,11 @@ bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
 	//if (!InitMaterials(pScene, Filename)) {
 	//	return false;
 	//}
+
+	if (m_NumBones == 0) {
+		bones.resize(0);
+		BoneTransforms.resize(0);
+	}
 
 	return true;
 }
@@ -358,14 +353,14 @@ void Mesh::InitMesh(
 {
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 
+	Vertex vertex;
+
 	// Populate the vertex attribute vectors
 	for (unsigned int i = 0; i < paiMesh->mNumVertices; i++) {
 		const aiVector3D* pPos = &(paiMesh->mVertices[i]);
 		const aiVector3D* pNormal = &(paiMesh->mNormals[i]);
 		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
 		const aiVector3D* pTangents = &(paiMesh->mTangents[i]);
-
-		Vertex vertex;
 
 		vertex.Position = vec3(pPos->x, pPos->y, pPos->z);
 		vertex.Normal = vec3(pNormal->x, pNormal->y, pNormal->z);
@@ -401,6 +396,8 @@ void Mesh::LoadBones(unsigned int MeshIndex, const aiMesh* pMesh, vector<VertexB
 			m_BoneInfo.push_back(bi);
 			//m_BoneInfo[BoneIndex].BoneOffset = pMesh->mBones[i]->mOffsetMatrix;
 			m_BoneInfo[BoneIndex].BoneOffset = mat4(reinterpret_cast<mat4&>(pMesh->mBones[i]->mOffsetMatrix));
+			m_BoneInfo[BoneIndex].BoneOffset = transpose(m_BoneInfo[BoneIndex].BoneOffset);
+
 			m_BoneMapping[BoneName] = BoneIndex;
 		}
 		else {
@@ -430,10 +427,13 @@ void Mesh::BoneTransform(float TimeInSeconds)
 
 	ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, Identity);
 
-	BoneTransforms.resize(m_NumBones);
+	// FIXME: size constant
+	BoneTransforms.resize(100);
 
 	for (unsigned int i = 0; i < m_NumBones; i++) {
-		BoneTransforms[i] = m_BoneInfo[i].FinalTransformation;
+		//BoneTransforms[i] = m_BoneInfo[i].FinalTransformation;
+		//BoneTransforms[i] = transpose(m_BoneInfo[i].FinalTransformation);
+		BoneTransforms[i] = mat4(0.25f);
 	}
 }
 
@@ -444,6 +444,7 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const mat
 	const aiAnimation* pAnimation = m_pScene->mAnimations[0];
 
 	mat4 NodeTransformation(reinterpret_cast<const mat4&>(pNode->mTransformation));
+	NodeTransformation = transpose(NodeTransformation);
 
 	const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
 
@@ -469,10 +470,12 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const mat
 		//TranslationM.InitTranslationTransform(Translation.x, Translation.y, Translation.z);
 
 		// Combine the above transformations
-		NodeTransformation = TranslationM * RotationM * ScalingM;
+		//NodeTransformation = TranslationM * RotationM * ScalingM;
+		//NodeTransformation = local;
 	}
 
 	mat4 GlobalTransformation = ParentTransform * NodeTransformation;
+	//mat4 GlobalTransformation = mat4(1.0f);
 
 	if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
 		unsigned int BoneIndex = m_BoneMapping[NodeName];
@@ -610,9 +613,14 @@ std::vector<uint16_t> Mesh::GetIndices()
 	return indices;
 }
 
-void* Mesh::GetVertexBuffer()
+void** Mesh::GetVertexBuffer()
 {
-	return vertBuffer;
+	return &vertBuffer;
+}
+
+void** Mesh::GetVertexBuffer2()
+{
+	return &vertBuffer2;
 }
 
 void* Mesh::GetIndexBuffer()

@@ -1,6 +1,7 @@
 #pragma once
 #include "Material.h"
 #include "SimpleShader.h"
+#include "Vertex.h"
 
 class D3D11Material : public Material
 {
@@ -11,7 +12,7 @@ public:
 	void SetTexture(ID3D11Device * device, ID3D11DeviceContext * context, const wchar_t * path, const wchar_t * normalpath);
 	void SetupSkybox(ID3D11Device * device, ID3D11DeviceContext * context, const wchar_t * path);
 	
-	void PrepareMaterial(glm::mat4 world, glm::mat4 view, glm::mat4 projection, SimpleVertexShader * vertexShader, SimplePixelShader * pixelShader);
+	void PrepareMaterial(glm::mat4 world, glm::mat4 view, glm::mat4 projection, std::vector<glm::mat4> &boneTransforms, SimpleVertexShader * vertexShader, SimplePixelShader * pixelShader);
 
 	ID3D11ShaderResourceView* GetSRV();
 

@@ -18,6 +18,8 @@ struct BoneInfo
 
 	BoneInfo()
 	{
+		BoneOffset = glm::mat4(0.f);
+		FinalTransformation = glm::mat4(0.f);
 		/*BoneOffset.SetZero();
 		FinalTransformation.SetZero();*/
 	}
@@ -82,11 +84,13 @@ public:
 	std::vector<Vertex> GetVertices();
 	std::vector<uint16_t> GetIndices();
 
-	void* GetVertexBuffer();
+	void** GetVertexBuffer();
+	void** GetVertexBuffer2();
 	void* GetIndexBuffer();
 
 protected:
 	void* vertBuffer;
+	void* vertBuffer2;
 	void* indBuffer;
 
 	bool hasNormalMap;

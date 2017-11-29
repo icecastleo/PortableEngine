@@ -2,7 +2,7 @@
 
 #include "glm\glm.hpp"
 
-#define kVertexMaxBoneWeight 6
+#define kVertexMaxBoneWeight 4
 
 struct Vertex
 {

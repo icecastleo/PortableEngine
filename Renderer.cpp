@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "D3D11Material.h"
+#include "Engine.h"
 
 Renderer::Renderer()
 {
@@ -58,6 +59,10 @@ void Renderer::SetShaders(SimpleVertexShader* _vertexShader, SimplePixelShader* 
 	skyPS = _skyPs;
 	pixelShaderBlend = _pixelShaderB;
 	pixelShaderNormalMapBlend = _pixShaderNormB;
+
+	const wchar_t * name;
+	name = L"SkinnedMeshVS";
+	skinnedMeshVS = static_cast<SimpleVertexShader*>(Engine::ioSystem->loadVSShader(name));
 }
 
 void Renderer::SetScene(Scene* _scene)
@@ -100,9 +105,6 @@ void Renderer::Draw()
 	SimpleVertexShader *vShader;
 	SimplePixelShader *pShader;
 
-	// Buffers to hold actual geometry data
-	ID3D11Buffer* vertexBuffer;
-
 	//Draw opaque entities first then opaque with normals then transparent with normals and finally transparent objects
 	for (Entity *entity : currentScene->opaque)
 	{
@@ -115,12 +117,18 @@ void Renderer::Draw()
 		else {
 			vShader = vertexShader;
 			pShader = pixelShader;
+
+			if (entity->GetMesh()->bones.size() > 0) {
+				vShader = skinnedMeshVS;
+			}
 		}
 
-		material->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vShader, pShader);
+		material->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(),
+			camera->GetProjectionMatrix(), entity->GetMesh()->BoneTransforms, vShader, pShader);
 
 		if (material->HasNormalMap()) {
-			material->PrepareMaterial(mSkullWorld, camera->GetViewMatrix(), camera->GetProjectionMatrix(), vShader, pShader);
+			material->PrepareMaterial(mSkullWorld, camera->GetViewMatrix(),
+				camera->GetProjectionMatrix(), entity->GetMesh()->BoneTransforms, vShader, pShader);
 		}
 
 		SetPixelShaderUp(pShader, material);
@@ -128,9 +136,12 @@ void Renderer::Draw()
 		stride = sizeof(Vertex);
 		offset = 0;
 
-		vertexBuffer = static_cast<ID3D11Buffer*>(entity->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
+		context->IASetVertexBuffers(0, 1, reinterpret_cast<ID3D11Buffer**>(entity->GetMesh()->GetVertexBuffer()), &stride, &offset);
 
-		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+		if (entity->GetMesh()->bones.size() > 0) {
+			context->IASetVertexBuffers(1, 1, reinterpret_cast<ID3D11Buffer**>(entity->GetMesh()->GetVertexBuffer2()), &stride, &offset);
+		}
+
 		context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(entity->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 		// Finally do the actual drawing
@@ -139,11 +150,6 @@ void Renderer::Draw()
 		//  - DrawIndexed() uses the currently set INDEX BUFFER to look up corresponding
 		//     vertices in the currently set VERTEX BUFFER
 		for (MeshEntry &entry : entity->GetMesh()->m_Entries) {
-			//context->DrawIndexed(
-			//	entity->GetMesh()->GetIndices().size(),     // The number of indices to use (we could draw a subset if we wanted)
-			//	0,     // Offset to the first index we want to use
-			//	0);    // Offset to add to each index when looking up vertices
-
 			context->DrawIndexed(
 				entry.NumIndices,	// The number of indices to use (we could draw a subset if we wanted)
 				entry.BaseIndex,	// Offset to the first index we want to use
@@ -156,12 +162,10 @@ void Renderer::Draw()
 	{
 		Entity *entity = currentScene->skybox;
 
-		vertexBuffer = static_cast<ID3D11Buffer*>(entity->GetMesh()->GetVertexBuffer());
-		
-		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+		context->IASetVertexBuffers(0, 1, reinterpret_cast<ID3D11Buffer**>(entity->GetMesh()->GetVertexBuffer()), &stride, &offset);
 		context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(entity->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
-		static_cast<D3D11Material *>(entity->GetMat())->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), skyVS, skyPS);
+		static_cast<D3D11Material *>(entity->GetMat())->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), entity->GetMesh()->BoneTransforms, skyVS, skyPS);
 
 		context->RSSetState(static_cast<D3D11Material *>(entity->GetMat())->GetRast());
 		context->OMSetDepthStencilState(static_cast<D3D11Material *>(entity->GetMat())->GetDepthSD(), 0);
@@ -196,14 +200,13 @@ void Renderer::Draw()
 			pShader = pixelShaderBlend;
 		}
 
-		material->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), vShader, pShader);
+		material->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), entity->GetMesh()->BoneTransforms, vShader, pShader);
 		SetPixelShaderUp(pShader, material);
 
 		stride = sizeof(Vertex);
 		offset = 0;
 
-		vertexBuffer = static_cast<ID3D11Buffer*>(entity->GetMesh()->GetVertexBuffer()); //Store the vertex buffer address
-		context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+		context->IASetVertexBuffers(0, 1, reinterpret_cast<ID3D11Buffer**>(entity->GetMesh()->GetVertexBuffer()), &stride, &offset);
 		context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(entity->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 		context->DrawIndexed(
