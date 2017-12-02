@@ -1,14 +1,41 @@
+#define GLM_FORCE_SWIZZLE
+
 #include "Mesh.h"
 #include <assimp/DefaultLogger.hpp>
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtx\quaternion.hpp"
+#include <string>
 
 using namespace std;
 using namespace glm;
 using namespace Assimp;
 
+// Private functions to convert from Assimp data types to glm
+static glm::vec3 aiToGlm(const aiVector3D& v)
+{
+	glm::vec3 out;
+	assert(sizeof(out) == sizeof(v));
+	memcpy(&out, &v, sizeof(v));
+	return out;
+}
+
+static glm::quat aiToGlm(const aiQuaternion& v)
+{
+	return glm::quat(v.w, v.x, v.y, v.z);
+}
+
+static glm::mat4 aiToGlm(const aiMatrix4x4& v)
+{
+	glm::mat4 out;
+	assert(sizeof(out) == sizeof(v));
+	memcpy(&out, &v, sizeof(v));
+	return glm::transpose(out);
+}
+
 Mesh::Mesh(char *path)
 {
+	BoneTransforms.resize(0);
+
 	// Create a logger instance
 	DefaultLogger::create("", Logger::VERBOSE);
 	// Now I am ready for logging my stuff
@@ -16,290 +43,31 @@ Mesh::Mesh(char *path)
 	// Kill it after the work is done
 	
 	if (strcmp(path, "Assets/Models/test.obj") == 0) {
-		string Filename = "Assets/Models/amandaModel.fbx";
-		Filename = "Assets/Models/Spider_3.fbx";
-		
-		m_pScene = m_Importer.ReadFile(Filename.c_str(), 
-			aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace
+		path = "Assets/Models/Spider_3.fbx";
+	}
+
+	m_pScene = m_Importer.ReadFile(path,
+		aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace
 		| aiProcess_LimitBoneWeights | aiProcess_ValidateDataStructure);
 
-		// Check for errors
-		if (!m_pScene || m_pScene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !m_pScene->mRootNode) // if is Not Zero
-		{
-			char buffer[500];
-			sprintf_s(buffer, "ERROR::ASSIMP:: %s \n", m_Importer.GetErrorString());
-			perror(buffer);
-			return;
-		}
-
-		InitFromScene(m_pScene, Filename);
-	} else {
-
-		m_pScene = m_Importer.ReadFile(path,
-			aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace
-			| aiProcess_LimitBoneWeights | aiProcess_ValidateDataStructure);
-
-		// Check for errors
-		if (!m_pScene || m_pScene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !m_pScene->mRootNode) // if is Not Zero
-		{
-			char buffer[500];
-			sprintf_s(buffer, "ERROR::ASSIMP:: %s \n", m_Importer.GetErrorString());
-			perror(buffer);
-			return;
-		}
-
-		InitFromScene(m_pScene, path);
+	// Check for errors
+	if (!m_pScene || m_pScene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !m_pScene->mRootNode) // if is Not Zero
+	{
+		char buffer[500];
+		sprintf_s(buffer, "ERROR::ASSIMP:: %s \n", m_Importer.GetErrorString());
+		perror(buffer);
+		return;
 	}
+
+	InitFromScene(m_pScene, string(path));
 
 	DefaultLogger::kill();
 
 	return;
 }
 
-Mesh::~Mesh()
-{
-}
+Mesh::~Mesh() {
 
-void Mesh::loadVertices(char * path)
-{
-	// File input object
-	FILE *pFile;
-
-	// Check for successful open
-	if (fopen_s(&pFile, path, "r") != 0) {
-		perror("Error opening file \n");
-		return;
-	}
-
-	// Variables used while reading the file
-	vector<vec3> positions;		// Positions from the file
-	vector<vec3> normals;		// Normals from the file
-	vector<vec2> uvs;			// UVs from the file
-
-	uint16_t vertCounter = 0;       // Count of vertices/indices
-	char chars[100];                // String for line reading
-
-	while (!feof(pFile))			// Still have data left?
-	{
-		if (fgets(chars, 100, pFile) == NULL)
-			break;
-
-		// Check the type of line
-		if (chars[0] == 'v' && chars[1] == 'n')
-		{
-			// Read the 3 numbers directly into an XMFLOAT3
-			vec3 norm;
-			sscanf_s(
-				chars,
-				"vn %f %f %f",
-				&norm.x, &norm.y, &norm.z);
-
-			// Add to the list of normals
-			normals.push_back(norm);
-		}
-		else if (chars[0] == 'v' && chars[1] == 't')
-		{
-			// Read the 2 numbers directly into an XMFLOAT2
-			vec2 uv;
-			sscanf_s(
-				chars,
-				"vt %f %f",
-				&uv.x, &uv.y);
-
-			// Add to the list of uv's
-			uvs.push_back(uv);
-		}
-		else if (chars[0] == 'v')
-		{
-			// Read the 3 numbers directly into an XMFLOAT3
-			vec3 pos;
-			sscanf_s(
-				chars,
-				"v %f %f %f",
-				&pos.x, &pos.y, &pos.z);
-
-			// Add to the positions
-			positions.push_back(pos);
-		}
-		else if (chars[0] == 'f')
-		{
-			// Read the face indices into an array
-			unsigned int i[12];
-			int facesRead = sscanf_s(
-				chars,
-				"f %d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d",
-				&i[0], &i[1], &i[2],
-				&i[3], &i[4], &i[5],
-				&i[6], &i[7], &i[8],
-				&i[9], &i[10], &i[11]);
-
-			// - Create the verts by looking up
-			//    corresponding data from vectors
-			// - OBJ File indices are 1-based, so
-			//    they need to be adusted
-			Vertex v1;
-			v1.Position = positions[i[0] - 1];
-			v1.UV = uvs[i[1] - 1];
-			v1.Normal = normals[i[2] - 1];
-
-			Vertex v2;
-			v2.Position = positions[i[3] - 1];
-			v2.UV = uvs[i[4] - 1];
-			v2.Normal = normals[i[5] - 1];
-
-			Vertex v3;
-			v3.Position = positions[i[6] - 1];
-			v3.UV = uvs[i[7] - 1];
-			v3.Normal = normals[i[8] - 1];
-
-			// The model is most likely in a right-handed space,
-			// especially if it came from Maya.  We want to convert
-			// to a left-handed space for DirectX.  This means we 
-			// need to:
-			//  - Invert the Z position
-			//  - Invert the normal's Z
-			//  - Flip the winding order
-			// We also need to flip the UV coordinate since DirectX
-			// defines (0,0) as the top left of the texture, and many
-			// 3D modeling packages use the bottom left as (0,0)
-
-			// Flip the UV's since they're probably "upside down"
-			v1.UV.y = 1.0f - v1.UV.y;
-			v2.UV.y = 1.0f - v2.UV.y;
-			v3.UV.y = 1.0f - v3.UV.y;
-
-			// Flip Z (LH vs. RH)
-			v1.Position.z *= -1.0f;
-			v2.Position.z *= -1.0f;
-			v3.Position.z *= -1.0f;
-
-			// Flip normal Z
-			v1.Normal.z *= -1.0f;
-			v2.Normal.z *= -1.0f;
-			v3.Normal.z *= -1.0f;
-
-			// Add the verts to the vector (flipping the winding order)
-			verts.push_back(v1);
-			verts.push_back(v3);
-			verts.push_back(v2);
-
-			// Add three more indices
-			indices.push_back(vertCounter); vertCounter += 1;
-			indices.push_back(vertCounter); vertCounter += 1;
-			indices.push_back(vertCounter); vertCounter += 1;
-
-			// Was there a 4th face?
-			if (facesRead == 12)
-			{
-				// Make the last vertex
-				Vertex v4;
-				v4.Position = positions[i[9] - 1];
-				v4.UV = uvs[i[10] - 1];
-				v4.Normal = normals[i[11] - 1];
-
-				// Flip the UV, Z pos and normal
-				v4.UV.y = 1.0f - v4.UV.y;
-				v4.Position.z *= -1.0f;
-				v4.Normal.z *= -1.0f;
-
-				// Add a whole triangle (flipping the winding order)
-				verts.push_back(v1);
-				verts.push_back(v4);
-				verts.push_back(v3);
-
-				// Add three more indices
-				indices.push_back(vertCounter); vertCounter += 1;
-				indices.push_back(vertCounter); vertCounter += 1;
-				indices.push_back(vertCounter); vertCounter += 1;
-			}
-		}
-	}
-
-	// Close the file and create the actual buffers
-	fclose(pFile);
-	// - At this point, "verts" is a vector of Vertex structs, and can be used
-	//    directly to create a vertex buffer:  &verts[0] is the address of the first vert
-	//
-	// - The vector "indices" is similar. It's a vector of unsigned ints and
-	//    can be used directly for the index buffer: &indices[0] is the address of the first int
-	//
-	// - "vertCounter" is BOTH the number of vertices and the number of indices
-	// - Yes, the indices are a bit redundant here (one per vertex)
-}
-
-// --------------------------------------------------------
-//Calculate the tangents of the vertices in a mesh
-// --------------------------------------------------------
-void Mesh::CalculateTangents(Vertex* verts, uint16_t numVerts, uint16_t* indices, uint16_t numIndices)
-{
-	// Reset tangents
-	for (size_t i = 0; i < numVerts; i++)
-	{
-		verts[i].Tangent = vec3(0, 0, 0);
-	}
-
-	// Calculate tangents one whole triangle at a time
-	for (size_t i = 0; i < numVerts;)
-	{
-		// Grab indices and vertices of first triangle
-		size_t i1 = indices[i++];
-		size_t i2 = indices[i++];
-		size_t i3 = indices[i++];
-		Vertex* v1 = &verts[i1];
-		Vertex* v2 = &verts[i2];
-		Vertex* v3 = &verts[i3];
-
-		// Calculate vectors relative to triangle positions
-		float x1 = v2->Position.x - v1->Position.x;
-		float y1 = v2->Position.y - v1->Position.y;
-		float z1 = v2->Position.z - v1->Position.z;
-
-		float x2 = v3->Position.x - v1->Position.x;
-		float y2 = v3->Position.y - v1->Position.y;
-		float z2 = v3->Position.z - v1->Position.z;
-
-		// Do the same for vectors relative to triangle uv's
-		float s1 = v2->UV.x - v1->UV.x;
-		float t1 = v2->UV.y - v1->UV.y;
-
-		float s2 = v3->UV.x - v1->UV.x;
-		float t2 = v3->UV.y - v1->UV.y;
-
-		// Create vectors for tangent calculation
-		float r = 1.0f / (s1 * t2 - s2 * t1);
-
-		float tx = (t2 * x1 - t1 * x2) * r;
-		float ty = (t2 * y1 - t1 * y2) * r;
-		float tz = (t2 * z1 - t1 * z2) * r;
-
-		// Adjust tangents of each vert of the triangle
-		v1->Tangent.x += tx;
-		v1->Tangent.y += ty;
-		v1->Tangent.z += tz;
-
-		v2->Tangent.x += tx;
-		v2->Tangent.y += ty;
-		v2->Tangent.z += tz;
-
-		v3->Tangent.x += tx;
-		v3->Tangent.y += ty;
-		v3->Tangent.z += tz;
-	}
-
-	// Ensure all of the tangents are orthogonal to the normals
-	for (int i = 0; i < numVerts; i++)
-	{
-		// Grab the two vectors
-		vec3 normal = verts[i].Normal;
-		vec3 tangent = verts[i].Tangent;
-
-		// Use Gram-Schmidt orthogonalize
-		tangent = normalize(
-			tangent - normal * dot(normal, tangent));
-
-		// Store the tangent
-		verts[i].Tangent = tangent;
-	}
 }
 
 bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
@@ -307,8 +75,10 @@ bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
 	m_Entries.resize(pScene->mNumMeshes);
 	//m_Textures.resize(pScene->mNumMaterials);
 
-	unsigned int NumVertices = 0;
-	unsigned int NumIndices = 0;
+	if (m_pScene->mAnimations) {
+		hasAnimation = true;
+	}
+	vertexSize = CalculateVertexSize();
 
 	// Count the number of vertices and indices
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
@@ -322,67 +92,75 @@ bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
 	}
 
 	// Reserve space in the vectors for the vertex attributes and indices
-	verts.reserve(NumVertices);
-	bones.resize(NumVertices);
+	verts = malloc(vertexSize * NumVertices);
 	indices.reserve(NumIndices);
 	
-	// Initialize the meshes in the scene one by one
-	for (unsigned int i = 0; i < m_Entries.size(); i++) {
-		const aiMesh* paiMesh = pScene->mMeshes[i];
-		InitMesh(i, paiMesh, verts, bones, indices);
-	}
+	// Initialize the meshes in the scene
+	InitMeshes(pScene);
 
-	//if (!InitMaterials(pScene, Filename)) {
-	//	return false;
-	//}
-
-	if (m_NumBones == 0) {
-		bones.resize(0);
-		BoneTransforms.resize(0);
+	if (!InitMaterials(pScene, Filename)) {
+		return false;
 	}
 
 	return true;
 }
 
-void Mesh::InitMesh(
-	unsigned int MeshIndex,
-	const aiMesh* paiMesh,
-	vector<Vertex>& Vertices,
-	vector<VertexBoneData>& Bones,
-	vector<uint16_t>& Indices)
+uint32_t Mesh::CalculateVertexSize() const
+{
+	uint32_t vertexSize = sizeof(Vertex);
+
+	if (hasAnimation == 1)
+	{
+		vertexSize += sizeof(VertexBoneData); // bone ids + bone weights
+	}
+
+	return vertexSize;
+}
+
+void Mesh::InitMeshes(const aiScene* pScene)
 {
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 
-	Vertex vertex;
+	Vertex *vertex = reinterpret_cast<Vertex*>(verts);
+	VertexBoneData *bone;
 
-	// Populate the vertex attribute vectors
-	for (unsigned int i = 0; i < paiMesh->mNumVertices; i++) {
-		const aiVector3D* pPos = &(paiMesh->mVertices[i]);
-		const aiVector3D* pNormal = &(paiMesh->mNormals[i]);
-		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
-		const aiVector3D* pTangents = &(paiMesh->mTangents[i]);
+	// Initialize the meshes in the scene one by one
+	for (unsigned int i = 0; i < m_Entries.size(); i++) {
+		const aiMesh* paiMesh = pScene->mMeshes[i];
 
-		vertex.Position = vec3(pPos->x, pPos->y, pPos->z);
-		vertex.Normal = vec3(pNormal->x, pNormal->y, pNormal->z);
-		vertex.UV = vec2(pTexCoord->x, pTexCoord->y);
-		vertex.Tangent = vec3(pTangents->x, pTangents->y, pTangents->z);
+		// Populate the vertex attribute vectors
+		for (unsigned int i = 0; i < paiMesh->mNumVertices; i++) {
+			vertex = new(vertex) Vertex();
+			vertex->Position = aiToGlm(paiMesh->mVertices[i]);
+			vertex->UV = aiToGlm(paiMesh->HasTextureCoords(0) ? paiMesh->mTextureCoords[0][i] : Zero3D).xy;
+			vertex->Normal = aiToGlm(paiMesh->mNormals[i]);
+			vertex->Tangent = aiToGlm(paiMesh->mTangents[i]);
 
-		Vertices.push_back(vertex);
-	}
+			vertex += 1;
 
-	LoadBones(MeshIndex, paiMesh, Bones);
+			// reserve space for bone info
+			if (hasAnimation) {
+				bone = new(vertex) VertexBoneData();
+				vertex = reinterpret_cast<Vertex*>(bone + 1);
+			}
+		}
 
-	// Populate the index buffer
-	for (unsigned int i = 0; i < paiMesh->mNumFaces; i++) {
-		const aiFace& Face = paiMesh->mFaces[i];
-		assert(Face.mNumIndices == 3);
-		Indices.push_back(Face.mIndices[0]);
-		Indices.push_back(Face.mIndices[1]);
-		Indices.push_back(Face.mIndices[2]);
+		if (hasAnimation) {
+			LoadBones(i, paiMesh);
+		}
+
+		// Populate the index buffer
+		for (unsigned int i = 0; i < paiMesh->mNumFaces; i++) {
+			const aiFace& Face = paiMesh->mFaces[i];
+			assert(Face.mNumIndices == 3);
+			indices.push_back(Face.mIndices[0]);
+			indices.push_back(Face.mIndices[1]);
+			indices.push_back(Face.mIndices[2]);
+		}
 	}
 }
 
-void Mesh::LoadBones(unsigned int MeshIndex, const aiMesh* pMesh, vector<VertexBoneData>& Bones)
+void Mesh::LoadBones(unsigned int MeshIndex, const aiMesh* pMesh)
 {
 	for (unsigned int i = 0; i < pMesh->mNumBones; i++) {
 		unsigned int BoneIndex = 0;
@@ -394,46 +172,100 @@ void Mesh::LoadBones(unsigned int MeshIndex, const aiMesh* pMesh, vector<VertexB
 			m_NumBones++;
 			BoneInfo bi;
 			m_BoneInfo.push_back(bi);
-			//m_BoneInfo[BoneIndex].BoneOffset = pMesh->mBones[i]->mOffsetMatrix;
-			m_BoneInfo[BoneIndex].BoneOffset = mat4(reinterpret_cast<mat4&>(pMesh->mBones[i]->mOffsetMatrix));
-			m_BoneInfo[BoneIndex].BoneOffset = transpose(m_BoneInfo[BoneIndex].BoneOffset);
 
+			m_BoneInfo[BoneIndex].BoneOffset = aiToGlm(pMesh->mBones[i]->mOffsetMatrix);
 			m_BoneMapping[BoneName] = BoneIndex;
 		}
 		else {
 			BoneIndex = m_BoneMapping[BoneName];
 		}
+		
+		Vertex *vertex = reinterpret_cast<Vertex*>(verts);
+		VertexBoneData *bone;
 
 		for (unsigned int j = 0; j < pMesh->mBones[i]->mNumWeights; j++) {
 			unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + pMesh->mBones[i]->mWeights[j].mVertexId;
 			float Weight = pMesh->mBones[i]->mWeights[j].mWeight;
-			Bones[VertexID].AddBoneData(BoneIndex, Weight);
+
+			VertexBoneData *bone = reinterpret_cast<VertexBoneData*>((char*)verts + VertexID * vertexSize + sizeof(Vertex));
+			bone->AddBoneData(BoneIndex, Weight);
 		}
 	}
 }
 
-void Mesh::BoneTransform(float TimeInSeconds)
+bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 {
-	if (m_pScene->mAnimations == nullptr) {
-		return;
+	// Extract the directory part from the file name
+	string::size_type SlashIndex = Filename.find_last_of("/");
+	string Dir;
+
+	if (SlashIndex == string::npos) {
+		Dir = ".";
+	}
+	else if (SlashIndex == 0) {
+		Dir = "/";
+	}
+	else {
+		Dir = Filename.substr(0, SlashIndex);
 	}
 
-	mat4 Identity(1.0f);
+	bool Ret = true;
+
+	// Initialize the materials
+	for (uint i = 0; i < pScene->mNumMaterials; i++) {
+		const aiMaterial* pMaterial = pScene->mMaterials[i];
+
+		//m_Textures[i] = NULL;
+
+		if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+			aiString Path;
+
+			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+				string p(Path.data);
+
+				if (p.substr(0, 2) == ".\\") {
+					p = p.substr(2, p.size() - 2);
+				}
+
+				string FullPath = Dir + "/" + p;
+
+				/*m_Textures[i] = new Texture(GL_TEXTURE_2D, FullPath.c_str());
+
+				if (!m_Textures[i]->Load()) {
+					printf("Error loading texture '%s'\n", FullPath.c_str());
+					delete m_Textures[i];
+					m_Textures[i] = NULL;
+					Ret = false;
+				}
+				else {
+					printf("%d - loaded texture '%s'\n", i, FullPath.c_str());
+				}*/
+			}
+		}
+	}
+	return Ret;
+}
+
+void Mesh::BoneTransform(float TimeInSeconds)
+{
+	if (!hasAnimation)
+		return;
+
+	AnimationTime += TimeInSeconds;
 
 	float TicksPerSecond = m_pScene->mAnimations[0]->mTicksPerSecond != 0 ?
 		m_pScene->mAnimations[0]->mTicksPerSecond : 25.0f;
-	float TimeInTicks = TimeInSeconds * TicksPerSecond;
+	float TimeInTicks = AnimationTime * TicksPerSecond;
 	float AnimationTime = fmod(TimeInTicks, m_pScene->mAnimations[0]->mDuration);
 
-	ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, Identity);
+	ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, mat4(1.0f));
 
 	// FIXME: size constant
 	BoneTransforms.resize(100);
 
+	// TODO: Memcpy
 	for (unsigned int i = 0; i < m_NumBones; i++) {
-		//BoneTransforms[i] = m_BoneInfo[i].FinalTransformation;
-		//BoneTransforms[i] = transpose(m_BoneInfo[i].FinalTransformation);
-		BoneTransforms[i] = mat4(0.25f);
+		BoneTransforms[i] = transpose(m_BoneInfo[i].FinalTransformation);
 	}
 }
 
@@ -443,44 +275,37 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const mat
 
 	const aiAnimation* pAnimation = m_pScene->mAnimations[0];
 
-	mat4 NodeTransformation(reinterpret_cast<const mat4&>(pNode->mTransformation));
-	NodeTransformation = transpose(NodeTransformation);
+	mat4 NodeTransformation = aiToGlm(pNode->mTransformation);
 
 	const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
 
 	if (pNodeAnim) {
-
 		mat4 local = mat4(1.0f);
 
 		// Interpolate scaling and generate scaling transformation matrix
 		aiVector3D Scaling;
 		CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
-		mat4 ScalingM = scale(local, vec3(Scaling.x, Scaling.y, Scaling.z));
-		//ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
-
+		mat4 ScalingM = scale(local, aiToGlm(Scaling));
+	
 		// Interpolate rotation and generate rotation transformation matrix
 		aiQuaternion RotationQ;
 		CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim);
-		mat4 RotationM = toMat4(quat(RotationQ.w, RotationQ.x, RotationQ.y, RotationQ.z));
+		mat4 RotationM = toMat4(aiToGlm(RotationQ));
 
 		// Interpolate translation and generate translation transformation matrix
 		aiVector3D Translation;
 		CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
-		mat4 TranslationM = translate(local, vec3(Translation.x, Translation.y, Translation.z));
-		//TranslationM.InitTranslationTransform(Translation.x, Translation.y, Translation.z);
-
+		mat4 TranslationM = translate(local, aiToGlm(Translation));
+		
 		// Combine the above transformations
-		//NodeTransformation = TranslationM * RotationM * ScalingM;
-		//NodeTransformation = local;
+		NodeTransformation = TranslationM * RotationM * ScalingM;
 	}
 
 	mat4 GlobalTransformation = ParentTransform * NodeTransformation;
-	//mat4 GlobalTransformation = mat4(1.0f);
 
 	if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
 		unsigned int BoneIndex = m_BoneMapping[NodeName];
-		m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation *
-			m_BoneInfo[BoneIndex].BoneOffset;
+		m_BoneInfo[BoneIndex].FinalTransformation = GlobalTransformation * m_BoneInfo[BoneIndex].BoneOffset;
 	}
 
 	for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
@@ -513,7 +338,6 @@ unsigned int Mesh::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim
 	return 0;
 }
 
-
 unsigned int Mesh::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumRotationKeys > 0);
@@ -527,7 +351,6 @@ unsigned int Mesh::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim
 	assert(0);
 	return 0;
 }
-
 
 unsigned int Mesh::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
@@ -562,7 +385,6 @@ void Mesh::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const 
 	Out = Start + Factor * Delta;
 }
 
-
 void Mesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	// we need at least two values to interpolate...
@@ -583,7 +405,6 @@ void Mesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, cons
 	Out = Out.Normalize();
 }
 
-
 void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	if (pNodeAnim->mNumScalingKeys == 1) {
@@ -603,9 +424,9 @@ void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const a
 	Out = Start + Factor * Delta;
 }
 
-std::vector<Vertex> Mesh::GetVertices()
+uint32_t Mesh::getVertexSize()
 {
-	return verts;
+	return vertexSize;
 }
 
 std::vector<uint16_t> Mesh::GetIndices()
@@ -616,11 +437,6 @@ std::vector<uint16_t> Mesh::GetIndices()
 void** Mesh::GetVertexBuffer()
 {
 	return &vertBuffer;
-}
-
-void** Mesh::GetVertexBuffer2()
-{
-	return &vertBuffer2;
 }
 
 void* Mesh::GetIndexBuffer()

@@ -31,7 +31,7 @@ struct VertexShaderInput
 	float2 uv			: TEXCOORD;
 	float3 normal		: NORMAL;
 	float3 tangent		: TANGENT;
-	float4 boneIDs		: BONEIDS;
+	uint4 boneIDs		: BONEIDS;
 	float4 weights		: WEIGHTS;
 };
 
@@ -70,16 +70,6 @@ VertexToPixel main(VertexShaderInput input)
 	BoneTransform += gBones[input.boneIDs[2]] * input.weights[2];
 	BoneTransform += gBones[input.boneIDs[3]] * input.weights[3];
 
-	//matrix test =
-	//{
-	//	{ 0.5, 0, 0, 0 },
-	//	{ 0, 0.5, 0, 0 },
-	//	{ 0, 0, 0.5, 0 },
-	//	{ 0, 0, 0, 0.5 }
-	//};
-
-	//BoneTransform = test;
-
 	// The vertex's position (input.position) must be converted to world space,
 	// then camera space (relative to our 3D camera), then to proper homogenous 
 	// screen-space coordinates.  This is taken care of by our world, view and
@@ -94,7 +84,11 @@ VertexToPixel main(VertexShaderInput input)
 	//
 	// The result is essentially the position (XY) of the vertex on our 2D 
 	// screen and the distance (Z) from the camera (the "depth" of the pixel)
-	output.position = mul(mul(float4(input.position, 1.0f), BoneTransform), worldViewProj);
+	output.position = mul(float4(input.position, 1.0f), BoneTransform);
+	
+	// secure w to 1.0
+	//output.position = mul(float4(output.position.xyz, 1.0f), worldViewProj);
+	output.position = mul(output.position, worldViewProj);
 
 	output.normal = mul(mul(input.normal, (float3x3)BoneTransform), (float3x3)world);
 

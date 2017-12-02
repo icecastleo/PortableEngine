@@ -277,7 +277,7 @@ void SceneBuilder::SetupScenes()
 
 	// Test
 	fbx = Engine::ioSystem->loadMesh(L"test");
-	Entity *test = new Entity(fbx, moonMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, +0.0f, +0.0f), glm::vec3(+0.05f, +0.05f, +0.05f));
+	Entity *test = new Entity(fbx, moonMat, glm::vec3(1.0f, 0, 0), glm::vec3(+0.0f, 180.0f, +0.0f), glm::vec3(+0.03f, +0.03f, +0.03f));
 	scene2->entities.push_back(test);
 
 

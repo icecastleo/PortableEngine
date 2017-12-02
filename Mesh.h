@@ -45,65 +45,62 @@ class Mesh
 public:
 	Mesh(char *path);
 	~Mesh();
-
-	// Test
-	std::vector<VertexBoneData> bones;
+	
+	// TODO: Encapsulation
 	std::vector<MeshEntry> m_Entries;
 	//vector<Texture*> m_Textures;
 
-	std::map<std::string, uint16_t> m_BoneMapping; // maps a bone name to its index
-	uint16_t m_NumBones;
-	std::vector<BoneInfo> m_BoneInfo;
-	glm::mat4 m_GlobalInverseTransform;
+	bool hasAnimation = false;
 
 	std::vector<glm::mat4> BoneTransforms;
-
-	const aiScene* m_pScene;
-	Assimp::Importer m_Importer;
-
 	void BoneTransform(float TimeInSeconds);
 	
-	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const glm::mat4 & ParentTransform);
-
-	const aiNodeAnim * FindNodeAnim(const aiAnimation * pAnimation, const std::string NodeName);
-
-	unsigned int FindPosition(float AnimationTime, const aiNodeAnim * pNodeAnim);
-
-	unsigned int FindRotation(float AnimationTime, const aiNodeAnim * pNodeAnim);
-
-	unsigned int FindScaling(float AnimationTime, const aiNodeAnim * pNodeAnim);
-
-	void CalcInterpolatedPosition(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
-
-	void CalcInterpolatedRotation(aiQuaternion & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
-
-//	========
-
-	void CalcInterpolatedScaling(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
-
-	std::vector<Vertex> GetVertices();
+	uint32_t getVertexSize();
 	std::vector<uint16_t> GetIndices();
 
 	void** GetVertexBuffer();
-	void** GetVertexBuffer2();
 	void* GetIndexBuffer();
 
 protected:
 	void* vertBuffer;
-	void* vertBuffer2;
 	void* indBuffer;
 
-	bool hasNormalMap;
+	void* verts;
 
-	std::vector<Vertex> verts;
+	unsigned int NumVertices = 0;
+	unsigned int NumIndices = 0;
+
+	uint32_t vertexSize;
+
 	std::vector<uint16_t> indices;
 
 private:
-	void loadVertices(char *path);
-	void CalculateTangents(Vertex*, uint16_t, uint16_t*, uint16_t);
+	const aiScene* m_pScene;
+	Assimp::Importer m_Importer;
+
+	std::map<std::string, uint16_t> m_BoneMapping; // maps a bone name to its index
+	uint16_t m_NumBones;
+	std::vector<BoneInfo> m_BoneInfo;
+
+	uint32_t CalculateVertexSize() const;
+
+	float AnimationTime = 0.f;
 
 	bool InitFromScene(const aiScene * pScene, const std::string & Filename);
-	void InitMesh(unsigned int MeshIndex, const aiMesh * paiMesh, std::vector<Vertex>& vertices, std::vector<VertexBoneData>& Bones, std::vector<uint16_t>& Indices);
-	void LoadBones(unsigned int MeshIndex, const aiMesh * pMesh, std::vector<VertexBoneData>& Bones);
+	void InitMeshes(const aiScene* pScene);
+	void LoadBones(unsigned int MeshIndex, const aiMesh * pMesh);
+
+	bool InitMaterials(const aiScene * pScene, const std::string & Filename);
+
+	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const glm::mat4 & ParentTransform);
+	const aiNodeAnim * FindNodeAnim(const aiAnimation * pAnimation, const std::string NodeName);
+
+	unsigned int FindPosition(float AnimationTime, const aiNodeAnim * pNodeAnim);
+	unsigned int FindRotation(float AnimationTime, const aiNodeAnim * pNodeAnim);
+	unsigned int FindScaling(float AnimationTime, const aiNodeAnim * pNodeAnim);
+
+	void CalcInterpolatedPosition(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
+	void CalcInterpolatedRotation(aiQuaternion & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
+	void CalcInterpolatedScaling(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
 };
 

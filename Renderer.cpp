@@ -97,7 +97,7 @@ void Renderer::Draw()
 	// Set buffers in the input assembler
 	//  - Do this ONCE PER OBJECT you're drawing, since each object might
 	//    have different geometry.
-	UINT stride = sizeof(Vertex);
+	UINT stride;
 	UINT offset = 0;
 	
 	D3D11Material *material;
@@ -118,7 +118,7 @@ void Renderer::Draw()
 			vShader = vertexShader;
 			pShader = pixelShader;
 
-			if (entity->GetMesh()->bones.size() > 0) {
+			if (entity->GetMesh()->hasAnimation) {
 				vShader = skinnedMeshVS;
 			}
 		}
@@ -133,15 +133,10 @@ void Renderer::Draw()
 
 		SetPixelShaderUp(pShader, material);
 
-		stride = sizeof(Vertex);
+		stride = entity->GetMesh()->getVertexSize();
 		offset = 0;
 
 		context->IASetVertexBuffers(0, 1, reinterpret_cast<ID3D11Buffer**>(entity->GetMesh()->GetVertexBuffer()), &stride, &offset);
-
-		if (entity->GetMesh()->bones.size() > 0) {
-			context->IASetVertexBuffers(1, 1, reinterpret_cast<ID3D11Buffer**>(entity->GetMesh()->GetVertexBuffer2()), &stride, &offset);
-		}
-
 		context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(entity->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
 
 		// Finally do the actual drawing
@@ -161,6 +156,8 @@ void Renderer::Draw()
 	if (currentScene->skybox)
 	{
 		Entity *entity = currentScene->skybox;
+
+		stride = entity->GetMesh()->getVertexSize();
 
 		context->IASetVertexBuffers(0, 1, reinterpret_cast<ID3D11Buffer**>(entity->GetMesh()->GetVertexBuffer()), &stride, &offset);
 		context->IASetIndexBuffer(static_cast<ID3D11Buffer*>(entity->GetMesh()->GetIndexBuffer()), DXGI_FORMAT_R16_UINT, 0);
@@ -203,7 +200,7 @@ void Renderer::Draw()
 		material->PrepareMaterial(entity->GetWorldMat(), camera->GetViewMatrix(), camera->GetProjectionMatrix(), entity->GetMesh()->BoneTransforms, vShader, pShader);
 		SetPixelShaderUp(pShader, material);
 
-		stride = sizeof(Vertex);
+		stride = entity->GetMesh()->getVertexSize();
 		offset = 0;
 
 		context->IASetVertexBuffers(0, 1, reinterpret_cast<ID3D11Buffer**>(entity->GetMesh()->GetVertexBuffer()), &stride, &offset);
