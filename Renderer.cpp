@@ -148,7 +148,7 @@ void Renderer::Draw()
 			context->DrawIndexed(
 				entry.NumIndices,	// The number of indices to use (we could draw a subset if we wanted)
 				entry.BaseIndex,	// Offset to the first index we want to use
-				entry.BaseVertex);	// Offset to add to each index when looking up vertices
+				0);	// Offset to add to each index when looking up vertices
 		}
 	}
 

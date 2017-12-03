@@ -150,12 +150,12 @@ void Mesh::InitMeshes(const aiScene* pScene)
 		}
 
 		// Populate the index buffer
-		for (unsigned int i = 0; i < paiMesh->mNumFaces; i++) {
-			const aiFace& Face = paiMesh->mFaces[i];
+		for (unsigned int j = 0; j < paiMesh->mNumFaces; j++) {
+			const aiFace& Face = paiMesh->mFaces[j];
 			assert(Face.mNumIndices == 3);
-			indices.push_back(Face.mIndices[0]);
-			indices.push_back(Face.mIndices[1]);
-			indices.push_back(Face.mIndices[2]);
+			indices.push_back(Face.mIndices[0] + m_Entries[i].BaseVertex);
+			indices.push_back(Face.mIndices[1] + m_Entries[i].BaseVertex);
+			indices.push_back(Face.mIndices[2] + m_Entries[i].BaseVertex);
 		}
 	}
 }
@@ -180,14 +180,13 @@ void Mesh::LoadBones(unsigned int MeshIndex, const aiMesh* pMesh)
 			BoneIndex = m_BoneMapping[BoneName];
 		}
 		
-		Vertex *vertex = reinterpret_cast<Vertex*>(verts);
 		VertexBoneData *bone;
 
 		for (unsigned int j = 0; j < pMesh->mBones[i]->mNumWeights; j++) {
 			unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + pMesh->mBones[i]->mWeights[j].mVertexId;
 			float Weight = pMesh->mBones[i]->mWeights[j].mWeight;
 
-			VertexBoneData *bone = reinterpret_cast<VertexBoneData*>((char*)verts + VertexID * vertexSize + sizeof(Vertex));
+			bone = reinterpret_cast<VertexBoneData*>((char*)verts + VertexID * vertexSize + sizeof(Vertex));
 			bone->AddBoneData(BoneIndex, Weight);
 		}
 	}

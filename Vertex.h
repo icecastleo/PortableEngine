@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glm\glm.hpp"
+#include <cstring>
 
 #define kVertexMaxBoneWeight 4
 
