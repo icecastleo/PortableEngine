@@ -126,35 +126,24 @@ void SceneBuilder::BuildLights()
 	//This light is for a no light place holder to be used if a dir light was used before
 	//and you don't need one in the current scene.
 	dirLight = new DirectionalLight();
-	/*dirLight->DiffuseColor = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	dirLight->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
 	dirLight->DiffuseColor = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	//dirLight->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 	dirLight->Direction = glm::vec3(1.0f, 0.0f, 0.0f);
 
 	dirLight2 = new DirectionalLight();
-	/*dirLight2->DiffuseColor = XMFLOAT4(.3f, .3f, .3f, 1);
-	dirLight2->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
 	dirLight2->DiffuseColor = glm::vec4(.3f, .3f, .3f, 1);
 	dirLight2->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	dirLight3 = new DirectionalLight();
-	/*dirLight3->DiffuseColor = XMFLOAT4(.6f, .6f, .6f, 1.0f);
-	dirLight3->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
 	dirLight3->DiffuseColor = glm::vec4(.6f, .6f, .6f, 1.0f);
 	dirLight3->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	dirLight4 = new DirectionalLight();
-	/*dirLight4->DiffuseColor = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	dirLight4->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);*/
 	dirLight4->DiffuseColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	dirLight4->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	//Point Lights
 	//-----------------------------------------------------------
 	pointLight = new PointLight();
-	/*pointLight->DiffuseColor = XMFLOAT4(0.6f, 1.0f, 1.0f, 1.0f);
-	pointLight->Position = XMFLOAT3(20.0f, 20.0f, 20.0f);*/
 	//pointLight->DiffuseColor = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
 	pointLight->DiffuseColor = glm::vec4(0.6f, 1.0f, 1.0f, 1.0f);
 	//pointLight->Position = glm::vec3(20.0f, 20.0f, 20.0f);
@@ -163,11 +152,6 @@ void SceneBuilder::BuildLights()
 	//Spot Lights
 	//-----------------------------------------------------------
 	spotLight = new SpotLight();
-	/*spotLight->DiffuseColor = XMFLOAT4(0.8f, 0.3f, 0.0f, 1);
-	spotLight->Direction = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	spotLight->phi = 0.0f;
-	spotLight->Position = XMFLOAT3(0.0f, 15.0f, 0.0f);
-	spotLight->theta = 90.0f;*/
 	spotLight->DiffuseColor = glm::vec4(0.8f, 0.3f, 0.0f, 1);
 	spotLight->Direction = glm::vec3(0.0f, 0.0f, 1.0f);
 	//spotLight->phi = 0.0f;
