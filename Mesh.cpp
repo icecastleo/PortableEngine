@@ -67,7 +67,7 @@ Mesh::Mesh(char *path)
 }
 
 Mesh::~Mesh() {
-
+	free(verts);
 }
 
 bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
@@ -98,9 +98,9 @@ bool Mesh::InitFromScene(const aiScene* pScene, const string& Filename)
 	// Initialize the meshes in the scene
 	InitMeshes(pScene);
 
-	if (!InitMaterials(pScene, Filename)) {
+	/*if (!InitMaterials(pScene, Filename)) {
 		return false;
-	}
+	}*/
 
 	return true;
 }
